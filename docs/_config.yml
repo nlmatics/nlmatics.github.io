@@ -18,9 +18,9 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: Your awesome title
+title: NLmatics
 email: your-email@example.com
-description: >- # this means to ignore newlines until "baseurl:"
+description: # this means to ignore newlines until "baseurl:"
   This is a collection of blogs on various topics 
   including Natural Language Understanding, etc. 
 baseurl: "" # the subpath of your site, e.g. /blog
@@ -32,6 +32,9 @@ github_username:  jekyll
 theme: minima
 plugins:
   - jekyll-feed
+
+#keep_files:
+    #- _site/
 
 # Exclude from processing.
 # The following items will not be processed, by default.
