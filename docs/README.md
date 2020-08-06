@@ -52,7 +52,10 @@ For a further look into when and when not to use asynchronous programming, check
 | Syntax | Description / Example |
 | --- | --- |
 | async | Used to indicate which methods are going to be run asynchronously <br> - These new methods are called coroutines. |
-| |```Python async def p(): print("Hello World") ```|
+| |```Python 
+async def p(): 
+    print("Hello World") 
+```|
 await
 Used to run a coroutine once an asynchronous event loop has already started running
 await can only be used inside a coroutine
