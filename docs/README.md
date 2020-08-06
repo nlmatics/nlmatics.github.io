@@ -1,7 +1,6 @@
 # Speed up requests: Asyncio for Requests in Python
 
 #### Don’t be like this.
-<br></br>
 ![](https://memegenerator.net/img/instances/78137468/my-code-cant-run-slow-if-i-never-write-it.jpg)
 
 As you have probably already noticed because you decided to visit this page, requests can take forever to run, so here's a nice blog written while I was an intern at NLMatics to show you how to use <span style="font-family:monospace">asyncio </span> to speed them up.
@@ -11,7 +10,7 @@ It is a Python library that uses the async/await syntax to make code run asynchr
 ### What does it mean to run asynchronously?
 #### Synchronous (normal) vs. Asynchronous (using asyncio)
 - **Synchronous:** you must wait for the completion of the first task before starting another task.<br>
-![](/Users/conniexu/Documents/NLMatics/Asyncio\ Blog\ Post/images/synchronous.png)
+![](connie_post_images/synchronous.png)
 - **Asynchronous:** you can start another task before the completion of the first task.
 
 
