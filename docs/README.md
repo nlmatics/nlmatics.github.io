@@ -5,7 +5,7 @@
 
 As you have probably already noticed because you decided to visit this page, requests can take forever to run, so here's a nice blog written while I was an intern at NLMatics to show you how to use <span style="font-family:monospace">asyncio </span> to speed them up.
 
-## What is asyncio?
+## What is ```asyncio```?
 It is a Python library that uses the async/await syntax to make code run asynchronously.
 ### What does it mean to run asynchronously?
 #### Synchronous (normal) vs. Asynchronous (using asyncio)
