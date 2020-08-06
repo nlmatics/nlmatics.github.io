@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Speed up requests asyncio for requests in python | nlmatics.github.io</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="Speed up requests asyncio for requests in python" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="layout: page title: “Speed up requests: Asyncio for Requests in Python” date: 2020-01-01 00:00:00 -0000 categories: CATEGORY-1 CATEGORY-2" />
+<meta property="og:description" content="layout: page title: “Speed up requests: Asyncio for Requests in Python” date: 2020-01-01 00:00:00 -0000 categories: CATEGORY-1 CATEGORY-2" />
+<link rel="canonical" href="http://localhost:4000/2020/01/01/Speed-up-requests-Asyncio-for-requests-in-python.html" />
+<meta property="og:url" content="http://localhost:4000/2020/01/01/Speed-up-requests-Asyncio-for-requests-in-python.html" />
+<meta property="og:site_name" content="nlmatics.github.io" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-01-01T00:00:00-05:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","dateModified":"2020-01-01T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/01/01/Speed-up-requests-Asyncio-for-requests-in-python.html"},"url":"http://localhost:4000/2020/01/01/Speed-up-requests-Asyncio-for-requests-in-python.html","headline":"Speed up requests asyncio for requests in python","description":"layout: page title: “Speed up requests: Asyncio for Requests in Python” date: 2020-01-01 00:00:00 -0000 categories: CATEGORY-1 CATEGORY-2","datePublished":"2020-01-01T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="nlmatics.github.io" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="header-logo" rel="author" href="/"><img src="site files/Header.png"></a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+
+            
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="https://nlmatics.com"> <h3><u> go to nlmatics.com </u></h3></a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Speed up requests   asyncio for requests in python</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2020-01-01T00:00:00-05:00" itemprop="datePublished">Jan 1, 2020
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>layout: page 
+title: “Speed up requests: Asyncio for Requests in Python” 
+date: 2020-01-01 00:00:00 -0000
+categories: CATEGORY-1 CATEGORY-2</p>
+
+<h1 id="speed-up-requests-asyncio-for-requests-in-python">Speed up requests: Asyncio for Requests in Python</h1>
+
+<h4 id="dont-be-like-this">Don’t be like this.</h4>
+<p><img src="https://memegenerator.net/img/instances/78137468/my-code-cant-run-slow-if-i-never-write-it.jpg" alt="" /></p>
+
+<p>As you have probably already noticed because you decided to visit this page, requests can take forever to run, so here’s a nice blog written while I was an intern at NLMatics to show you how to use <code class="language-plaintext highlighter-rouge">asyncio</code> to speed them up.</p>
+
+<h2 id="what-is-asyncio">What is <code class="language-plaintext highlighter-rouge">asyncio</code>?</h2>
+<p>It is a Python library that uses the <code class="language-plaintext highlighter-rouge">async/await</code> syntax to make code run asynchronously.</p>
+<h3 id="what-does-it-mean-to-run-asynchronously">What does it mean to run asynchronously?</h3>
+<h4 id="synchronous-normal-vs-asynchronous-using-asyncio">Synchronous (normal) vs. Asynchronous (using <code class="language-plaintext highlighter-rouge">asyncio</code>)</h4>
+<ul>
+  <li><strong>Synchronous:</strong> you must wait for the completion of the first task before starting another task.</li>
+  <li><strong>Asynchronous:</strong> you can start another task before the completion of the first task.</li>
+</ul>
+
+<p><img src="/_posts/connie_post_images/synchronous.png" alt="" />
+<img src="/_posts/connie_post_images/asynchronous.png" alt="" /></p>
+
+<p>For more information on the distinction between concurrency, parallelism, threads, sync, and async, check out this <a href="https://medium.com/swift-india/concurrency-parallelism-threads-processes-async-and-sync-related-39fd951bc61d">Medium article</a>.</p>
+
+<h3 id="simple-analogy">Simple analogy</h3>
+<h4 id="brick-and-mortar">Brick and Mortar</h4>
+
+<p><img src="/_posts/connie_post_images/brick-and-mortar.jpg" alt="" /></p>
+
+<p>Simon and Ash are building 5 walls of brick.</p>
+<ul>
+  <li>Simon builds one wall and waits for it to set before starting to build the next wall (synchronous).</li>
+  <li>Ash, on the other hand, starts building the next wall before the first one sets (asynchronous).  <br />&lt;/br&gt;
+Ash starts the next task whereas Simon <strong>waits</strong>, so Ash (asynchronous) will finish faster.
+The lack of waiting is the key to why asynchronous programming provides a performance boost.</li>
+</ul>
+
+<p>To compare, here’s an example where asynchronous programming does not provide any benefits.<br />&lt;/br&gt;
+Simone and Asher are laying down bricks to build 1 wall.</p>
+<ul>
+  <li>Simone applies mortar to a brick and then sticks it in place, working through each brick one at a time (inefficient synchronous).</li>
+  <li>Asher, on the other hand, lathers mortar across the entire row of bricks, then sticks a row of bricks on top (efficient synchronous). <br />&lt;/br&gt;
+It may seem like Asher is taking an asynchronous approach since she starts lathering the mortar of the next brick before finishing sticking the first brick. However, the concept of an asynchronous approach requires that there is <strong>waiting</strong> involved, and there is no waiting in this case. Simone and Asher are just constantly lathering mortar and laying bricks down.</li>
+</ul>
+
+<p>The coding equivalent of this is that Simon and Ash doing API calls (waiting) whereas Simone and Asher are mathematical calculations (no-waiting).</p>
+
+<p>As you can see from the second example, it is possible that an asynchronous approach (asyncio) does not necessarily benefit your code, so be aware.</p>
+
+<p>Moreover, be wary that an asynchronous approach does not provide any performance boost when all the tasks are <strong>dependent</strong> on each other.</p>
+
+<p><img src="/_posts/connie_post_images/laundry.jpg" alt="" /></p>
+
+<p>For example, if you are washing and drying clothes, you must wait for the clothes to finish washing first before drying them no matter what, because drying clothes is dependent on the output of the washing. In this laundry example, there is indeed <strong><em>waiting</em></strong>. However, the existence of a dependent relationship causes the asynchronous pipeline to be the same as the synchronous pipeline, so there is no use in using an asynchronous approach.</p>
+
+<p>The coding equivalent of this laundry example is when the output of your current request is used as the input of the next request.</p>
+
+<p>For a further look into when and when not to use asynchronous programming, check out this <a href="https://stackify.com/when-to-use-asynchronous-programming/">Stackify thread</a>.</p>
+<h2 id="what-syntax-do-i-need-to-know">What syntax do I need to know?</h2>
+<p>| Syntax | Description / Example |
+| — | — |
+| async | Used to indicate which methods are going to be run asynchronously <br /> &lt;p&gt;	 → These new methods are called <strong>coroutines</strong>. <br />&lt;/br&gt; <code>async def p(): <br />&lt;/br&gt; &#9;print("Hello World") </code> &lt;/p&gt;|
+| await | Used to run a coroutine once an asynchronous event loop has already started running <br /> → <code>await</code> can only be used inside a coroutine <br /> → Coroutines must be called with <code class="language-plaintext highlighter-rouge">await</code>, otherwise there will be a <code>RuntimeWarning</code> about enabling <code>tracemalloc</code>. <br />&lt;/br&gt; <code>async def r(): await p()<code>|
+asyncio.run()
+Used to start running an asynchronous event loop from a normal program
+asyncio.run() cannot be called in a nested fashion. You have to use await instead.
+asyncio.run() cannot be used if you are running the Python file in a Jupyter Notebook because Jupyter Notebook already has a running asynchronous event loop. You have to use await. (More on this in the Running the Code section)</code></code></p>
+
+<p>async def pun():
+   await p()</p>
+
+<p>def run():
+    asyncio.run(pun())
+asyncio.create_task()
+Used to schedule a coroutine execution
+Does not need to be awaited
+Allows you to line things up without actually running them first.</p>
+
+<p>tasks = []
+task = asyncio.create_task(p())
+tasks.append(task)
+asyncio.gather()
+Used to run the scheduled executions
+Needs to be awaited
+This is vital to the asynchronous program, because you let it know which is the next task it can pick up before finishing the previous one.</p>
+
+<p>await asyncio.gather(*tasks)</p>
+
+<p>If you are thirsting for more in-depth knowledge on asyncio, check out these links: 
+Async IO in Python: A Complete Walkthrough
+asyncio - Python Documentation</p>
+
+<p>But with that, let’s jump straight into the code.</p>
+
+<p>Follow along with the Python file and Jupyter Notebook in my github!
+https://github.com/clxxu/asyncio4requests</p>
+<h2 id="code">Code</h2>
+<h3 id="preliminary">Preliminary</h3>
+<p>Get imports and generate the list of urls to get requests from. Here, I use this placeholder url. Don’t forget to do pip install -r requirements.txt in the terminal for all the modules that you don’t have. Keep in mind that normal requests cannot be awaited, so you will need to import requests_async.</p>
+
+<p>import requests, requests_async, asyncio, time</p>
+
+<p>itr = 200
+tag = ‘https://jsonplaceholder.typicode.com/todos/’
+urls = []
+for i in range(1, itr):
+    urls.append(tag + str(i))
+Synchronous
+This is what a typical Python code for requests would look like.
+def synchronous(urls):
+    for url in urls:
+        r = requests.get(url)
+        print(r.json())</p>
+
+<p>Asynchronous
+Incorrect Alteration 
+async def asynchronous_fail(urls):
+    for url in urls:
+        r = await requests_async.get(url)
+        print(r.json())</p>
+
+<p>This is an understandable but bad alteration to the synchronous code. The runtime for this is the same as the runtime for the synchronous method. This is because you have not created a list of tasks that the program knows it needs to execute together, thus you essentially still have synchronous code.
+Correct Alteration
+async def asynchronous(urls):
+    tasks = []
+    for url in urls:
+        task = asyncio.create_task(requests_async.get(url))
+        tasks.append(task)
+    responses = await asyncio.gather(*tasks)
+    for response in responses:
+        print(response.json())</p>
+
+<p>Here, we created a list of tasks, and then ran all of them together using asyncio.gather(). 
+Running the Code
+Python
+Simply add these three lines to the bottom of your Python file and run it.
+starttime = time.time()
+asyncio.run(asynchronous(urls))
+print(time.time() - starttime)</p>
+
+<p>If you try to run this same code in Jupyter Notebook, you will get this error:
+RuntimeError: asyncio.run() cannot be called from a running event loop</p>
+
+<p>This happens because Jupyter is already running an event loop. More info here. You need to use the following:
+Jupyter Notebook
+starttime = time.time()
+await asynchronous(urls)
+print(time.time() - starttime)</p>
+
+<p>Ordering
+Asynchronous running can cause your responses to be out of order. If this is an issue, create your own responses list and fill it up, rather than receiving the output from asyncio.gather().</p>
+
+<p>async def asynchronous_ordered(urls):
+    responses = [None] * len(urls)
+    tasks = []
+    for i in range(len(urls)):
+        url = urls[i]
+        task = asyncio.create_task(fetch(url, responses, i))
+        tasks.append(task)
+    await asyncio.gather(*tasks)
+    for response in responses:
+        print(response.json())</p>
+
+<p>async def fetch(url, responses, i):
+    response = await requests.get(url)
+    responses[i] = response</p>
+
+<p>Batching
+Sometimes running too many requests concurrently can cause timeout errors in your resource. In my own experience, MongoDB had timeout errors. Create tasks in batches and gather them separately to avoid the issue. Change the batch_size to fit your purposes.</p>
+
+<p>async def asynchronous_ordered_batched(urls, batch_size=10):
+    responses = [None] * len(urls)
+    kiterations = int(len(urls) / batch_size) + 1
+    for k in range(0, kiterations):
+        tasks = []
+        m = min((k + 1) * batch_size, len(urls))
+        for i in range(k * batch_size, m):
+            url = urls[i]
+            task = asyncio.create_task(fetch(url, responses, i))
+            tasks.append(task)
+        await asyncio.gather(*tasks)
+    for response in responses:
+        print(response.json())</p>
+
+<p>Runtime Results</p>
+
+<p>Synchronous and asynchronous_fail have similar runtimes because the asynchronous_fail method was not implemented correctly and is in reality synchronous code.
+Asynchronous, asynchronous_ordered, and asynchronous_ordered_batched have noticeably better runtimes in comparison to synchronous code - up to 4 times as fast.</p>
+
+<p>In general, asynchronous ordered batched gives fast and stable code, so use that if you are going for consistency. However, the runtimes of asynchronous and asynchronous ordered can sometimes be better than asynchronous ordered batched, depending on your database and servers. So, I would recommend using asynchronous first and then adding extra things (order and batch) as necessary.
+Summary
+Overall, asyncio is a helpful tool that can greatly boost your runtime if you are running a lot of independent API requests. It’s also very easy to implement when compared to threading, so you should definitely try it out!</p>
+
+<p>Now I must conclude by saying that using asyncio improperly implemented can cause many bugs, so sometimes it is not worth the hassle. If you really must, use my guide and use it  s p a r i n g l y.</p>
+
+<p>Further Resources
+Concurrency, parallelism, threads, sync, and async:
+Medium article
+When/when not to use asynchronous programming:
+Stackify thread
+More knowledge on asyncio:
+Async IO in Python: A Complete Walkthrough
+asyncio - Python Documentation</p>
+
+  </div><a class="u-url" href="/2020/01/01/Speed-up-requests-Asyncio-for-requests-in-python.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">nlmatics.github.io</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">nlmatics.github.io</li><li><a class="u-email" href="mailto:your-email@example.com">your-email@example.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/nlmatics"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">nlmatics</span></a></li><li><a href="https://www.twitter.com/nlmatics"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">nlmatics</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>This is a collection of blogs on various topics including Natural Language Understanding, etc.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
