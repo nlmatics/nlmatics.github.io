@@ -52,8 +52,7 @@ For a further look into when and when not to use asynchronous programming, check
 | Syntax | Description / Example |
 | --- | --- |
 | async | Used to indicate which methods are going to be run asynchronously <br> <p>&#9; &#8594; These new methods are called **coroutines**. <br></br> <code>async def p(): <br></br> &#9;print("Hello World") </code> </p>|
-| await | Used to run a coroutine once an asynchronous event loop has already started running <br> &#8594; <code>await</code> can only be used inside a coroutine <br> &#8594; Coroutines must be called with ```await```, otherwise there will be a <code>RuntimeWarning</code> about enabling <code>tracemalloc</code>. <br></br> <code>async def r():
-    await p()<code>|
+| await | Used to run a coroutine once an asynchronous event loop has already started running <br> &#8594; <code>await</code> can only be used inside a coroutine <br> &#8594; Coroutines must be called with ```await```, otherwise there will be a <code>RuntimeWarning</code> about enabling <code>tracemalloc</code>. <br></br> <code>async def r(): await p()<code>|
 asyncio.run()
 Used to start running an asynchronous event loop from a normal program
 asyncio.run() cannot be called in a nested fashion. You have to use await instead.
