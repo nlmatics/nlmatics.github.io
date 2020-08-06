@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-06T15:36:31-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><subtitle>This is a collection of blogs on various topics including Natural Language Understanding, etc.</subtitle><entry><title type="html">Speed up requests asyncio for requests in python</title><link href="http://localhost:4000/2020/01/01/Speed-up-requests-Asyncio-for-requests-in-python.html" rel="alternate" type="text/html" title="Speed up requests   asyncio for requests in python" /><published>2020-01-01T00:00:00-05:00</published><updated>2020-01-01T00:00:00-05:00</updated><id>http://localhost:4000/2020/01/01/Speed%20up%20requests%20-%20Asyncio%20for%20requests%20in%20python</id><content type="html" xml:base="http://localhost:4000/2020/01/01/Speed-up-requests-Asyncio-for-requests-in-python.html">&lt;p&gt;layout: page 
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-06T15:41:41-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><subtitle>This is a collection of blogs on various topics including Natural Language Understanding, etc.</subtitle><entry><title type="html">Speed up requests asyncio for requests in python</title><link href="http://localhost:4000/2020/01/01/Speed-up-requests-Asyncio-for-requests-in-python.html" rel="alternate" type="text/html" title="Speed up requests   asyncio for requests in python" /><published>2020-01-01T00:00:00-05:00</published><updated>2020-01-01T00:00:00-05:00</updated><id>http://localhost:4000/2020/01/01/Speed%20up%20requests%20-%20Asyncio%20for%20requests%20in%20python</id><content type="html" xml:base="http://localhost:4000/2020/01/01/Speed-up-requests-Asyncio-for-requests-in-python.html">&lt;p&gt;layout: page 
 title: “Speed up requests: Asyncio for Requests in Python” 
 date: 2020-01-01 00:00:00 -0000
 categories: CATEGORY-1 CATEGORY-2&lt;/p&gt;
@@ -19,15 +19,15 @@ categories: CATEGORY-1 CATEGORY-2&lt;/p&gt;
   &lt;li&gt;&lt;strong&gt;Asynchronous:&lt;/strong&gt; you can start another task before the completion of the first task.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;/_posts/connie_post_images/synchronous.png&quot; alt=&quot;&quot; /&gt;
-&lt;img src=&quot;/_posts/connie_post_images/asynchronous.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/site_files/connie_post_images/synchronous.png&quot; alt=&quot;&quot; /&gt;
+&lt;img src=&quot;/site_files/connie_post_images/asynchronous.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;For more information on the distinction between concurrency, parallelism, threads, sync, and async, check out this &lt;a href=&quot;https://medium.com/swift-india/concurrency-parallelism-threads-processes-async-and-sync-related-39fd951bc61d&quot;&gt;Medium article&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h3 id=&quot;simple-analogy&quot;&gt;Simple analogy&lt;/h3&gt;
 &lt;h4 id=&quot;brick-and-mortar&quot;&gt;Brick and Mortar&lt;/h4&gt;
 
-&lt;p&gt;&lt;img src=&quot;/_posts/connie_post_images/brick-and-mortar.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/site_files/connie_post_images/brick-and-mortar.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Simon and Ash are building 5 walls of brick.&lt;/p&gt;
 &lt;ul&gt;
@@ -51,7 +51,7 @@ It may seem like Asher is taking an asynchronous approach since she starts lathe
 
 &lt;p&gt;Moreover, be wary that an asynchronous approach does not provide any performance boost when all the tasks are &lt;strong&gt;dependent&lt;/strong&gt; on each other.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/_posts/connie_post_images/laundry.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/site_files/connie_post_images/laundry.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;For example, if you are washing and drying clothes, you must wait for the clothes to finish washing first before drying them no matter what, because drying clothes is dependent on the output of the washing. In this laundry example, there is indeed &lt;strong&gt;&lt;em&gt;waiting&lt;/em&gt;&lt;/strong&gt;. However, the existence of a dependent relationship causes the asynchronous pipeline to be the same as the synchronous pipeline, so there is no use in using an asynchronous approach.&lt;/p&gt;
 
