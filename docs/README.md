@@ -1,7 +1,7 @@
 # Speed up requests: Asyncio for Requests in Python
 
 #### Don’t be like this.
-<br>
+<br></br>
 ![](https://memegenerator.net/img/instances/78137468/my-code-cant-run-slow-if-i-never-write-it.jpg)
 
 As you have probably already noticed because you decided to visit this page, requests can take forever to run, so here's a nice blog written while I was an intern at NLMatics to show you how to use <span style="font-family:monospace">asyncio </span> to speed them up.
