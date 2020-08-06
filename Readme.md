@@ -20,7 +20,11 @@ date: YYYY-MM-DD hh:mm:ss -0000
 categories: CATEGORY-1 CATEGORY-2
 ```
 
-4. Below the frontmatter, add your post's content. 
+4. Below the frontmatter, add your post's content. Place your images in the following folder
+```
+/sitefiles/your_post_name/
+
+```
 
 
 
