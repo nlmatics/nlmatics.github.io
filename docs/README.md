@@ -5,43 +5,50 @@
 
 As you have probably already noticed because you decided to visit this page, requests can take forever to run, so here's a nice blog written while I was an intern at NLMatics to show you how to use <span style="font-family:monospace">asyncio </span> to speed them up.
 
-### What is asyncio?
+## What is asyncio?
 It is a Python library that uses the async/await syntax to make code run asynchronously.
 ### What does it mean to run asynchronously?
 #### Synchronous (normal) vs. Asynchronous (using asyncio)
-- **Synchronous:** you must wait for the completion of the first task before starting another task.<br>
-![](connie_post_images/synchronous.png)
+- **Synchronous:** you must wait for the completion of the first task before starting another task.
 - **Asynchronous:** you can start another task before the completion of the first task.
 
+![](connie_post_images/synchronous.png)
+![](connie_post_images/asynchronous.png)
 
 
+For more information on the distinction between concurrency, parallelism, threads, sync, and async, check out this [Medium article](https://medium.com/swift-india/concurrency-parallelism-threads-processes-async-and-sync-related-39fd951bc61d).
 
-For more information on the distinction between concurrency, parallelism, threads, sync, and async, check out this Medium article.
-Simple analogy
-Brick and Mortar
+### Simple analogy
+#### Brick and Mortar
 
-Simon and Ash are building 5 walls of brick. Simon builds one wall and waits for it to set before starting to build the next wall (synchronous). 
-Ash, on the other hand, starts building the next wall before the first one sets (asynchronous). 
+![](connie_post_images/brick-and-mortar.png)
 
-Ash starts the next task whereas Simon waits.
+Simon and Ash are building 5 walls of brick. 
+- Simon builds one wall and waits for it to set before starting to build the next wall (synchronous). 
+- Ash, on the other hand, starts building the next wall before the first one sets (asynchronous). 
+Ash starts the next task whereas Simon **waits**, so Ash (asynchronous) will finish faster.
 The lack of waiting is the key to why asynchronous programming provides a performance boost.
 
-Here’s another example of where asynchronous programming does not provide any benefits.
+To compare, here’s an example where asynchronous programming does not provide any benefits.
 Simone and Asher are laying down bricks to build a wall. 
-Simone applies mortar to a brick and then sticks it in place, working through each brick one at a time (inefficient synchronous).
-Asher, on the other hand, lathers mortar across the entire row of bricks, then sticks a row of bricks on top (efficient synchronous). 
-It may seem like Asher is taking an asynchronous approach since she starts lathering the mortar of the next brick before finishing sticking the first brick. However, the concept of an asynchronous approach requires that there is waiting involved, and there is no waiting in this case. Simone and Asher are just constantly lathering mortar and laying bricks down.
+- Simone applies mortar to a brick and then sticks it in place, working through each brick one at a time (inefficient synchronous).
+- Asher, on the other hand, lathers mortar across the entire row of bricks, then sticks a row of bricks on top (efficient synchronous). 
+It may seem like Asher is taking an asynchronous approach since she starts lathering the mortar of the next brick before finishing sticking the first brick. However, the concept of an asynchronous approach requires that there is **waiting** involved, and there is no waiting in this case. Simone and Asher are just constantly lathering mortar and laying bricks down.
 
-The coding equivalent of this is when you are simply doing mathematical calculations (no-waiting) rather than doing API calls (waiting).
+The coding equivalent of this is that Simon and Ash doing API calls (waiting) whereas Simone and Asher are mathematical calculations (no-waiting).
 
 As you can see from the second example, it is possible that an asynchronous approach (asyncio) does not necessarily benefit your code, so be aware. 
 
-In particular, be wary that an asynchronous approach does not provide any performance boost when all the tasks are dependent on each other. For example, if you are washing and drying clothes, you must wait for the clothes to finish washing first before drying them no matter what, because drying clothes is dependent on the output of the washing. In this laundry example, there is indeed waiting. However, the existence of a dependent relationship causes the asynchronous pipeline to be the same as the synchronous pipeline, so there is no use in using an asynchronous approach.
+Moreover, be wary that an asynchronous approach does not provide any performance boost when all the tasks are **dependent** on each other. 
 
-The coding equivalent of this laundry example is when the output of your request is used as the input in the following request.
+![](connie_post_images/laundry.png)
 
-For a further look into when and when not to use asynchronous programming, check out this Stackify thread.
-What syntax do I need to know?
+For example, if you are washing and drying clothes, you must wait for the clothes to finish washing first before drying them no matter what, because drying clothes is dependent on the output of the washing. In this laundry example, there is indeed waiting. However, the existence of a dependent relationship causes the asynchronous pipeline to be the same as the synchronous pipeline, so there is no use in using an asynchronous approach.
+
+The coding equivalent of this laundry example is when the output of your current request is used as the input of the next request.
+
+For a further look into when and when not to use asynchronous programming, check out this [Stackify thread](https://stackify.com/when-to-use-asynchronous-programming/).
+## What syntax do I need to know?
 
 async
 Used to indicate which methods are going to be run asynchronously
