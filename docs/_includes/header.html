@@ -3,7 +3,7 @@
   <div class="wrapper">
     {%- assign default_paths = site.pages | map: "path" -%}
     {%- assign page_paths = site.header_pages | default: default_paths -%}
-    <a class="header-logo" rel="author" href="{{ "/" | relative_url }}"><img src="site files/Header.png" ></a>
+    <a class="header-logo" rel="author" href="{{ "/" | relative_url }}"><img src="Assets/Header.png" ></a>
 
 
     {%- if page_paths -%}
@@ -20,7 +20,7 @@
           {%- for path in page_paths -%}
             {%- assign my_page = site.pages | where: "path", path | first -%}
             {%- if my_page.title -%}
-            <a class="page-link" href="https://nlmatics.com"> <h3> Go to NLmatics.com </h3>
+            <a class="page-link" href="https://nlmatics.com"> <u> Go to NLmatics.com </u></a>
             {%- endif -%}
           {%- endfor -%}
         </div>
