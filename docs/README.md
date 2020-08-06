@@ -3,12 +3,12 @@
 #### Don’t be like this.
 ![](https://memegenerator.net/img/instances/78137468/my-code-cant-run-slow-if-i-never-write-it.jpg)
 
-As you have probably already noticed because you decided to visit this page, requests can take forever to run, so here's a nice blog written while I was an intern at NLMatics to show you how to use <span style="font-family:monospace">asyncio </span> to speed them up.
+As you have probably already noticed because you decided to visit this page, requests can take forever to run, so here's a nice blog written while I was an intern at NLMatics to show you how to use ```asyncio```asyncio to speed them up.
 
 ## What is ```asyncio```?
-It is a Python library that uses the async/await syntax to make code run asynchronously.
+It is a Python library that uses the ```async/await``` syntax to make code run asynchronously.
 ### What does it mean to run asynchronously?
-#### Synchronous (normal) vs. Asynchronous (using asyncio)
+#### Synchronous (normal) vs. Asynchronous (using ```asyncio```)
 - **Synchronous:** you must wait for the completion of the first task before starting another task.
 - **Asynchronous:** you can start another task before the completion of the first task.
 
@@ -54,7 +54,7 @@ For a further look into when and when not to use asynchronous programming, check
 | async | Used to indicate which methods are going to be run asynchronously <br> <p>&#9; &#8594; These new methods are called **coroutines**. <br></br> <code>async def p(): <br></br> &#9;print("Hello World") </code> </p>|
 | await | Used to run a coroutine once an asynchronous event loop has already started running
 await can only be used inside a coroutine |
-Coroutines must be called with await, otherwise there will be a tracemalloc error.
+Coroutines must be called with ```await```, otherwise there will be a <code> RuntimeWarning </code> about enabling <code>tracemalloc</code>.
 
 async def r():
     await p()
