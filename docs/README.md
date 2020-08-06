@@ -51,7 +51,7 @@ For a further look into when and when not to use asynchronous programming, check
 ## What syntax do I need to know?
 | Syntax | Description / Example |
 | --- | --- |
-| async | Used to indicate which methods are going to be run asynchronously <br> U+02192 These new methods are called coroutines. |
+| async | Used to indicate which methods are going to be run asynchronously <br> &#8594 These new methods are called coroutines. |
 | |```Python 
 async def p(): 
     print("Hello World") 
