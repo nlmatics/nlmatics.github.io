@@ -21,18 +21,18 @@ For more information on the distinction between concurrency, parallelism, thread
 ### Simple analogy
 #### Brick and Mortar
 
-![](connie_post_images/brick-and-mortar.png)
+![](connie_post_images/brick-and-mortar.jpg)
 
 Simon and Ash are building 5 walls of brick. 
 - Simon builds one wall and waits for it to set before starting to build the next wall (synchronous). 
-- Ash, on the other hand, starts building the next wall before the first one sets (asynchronous). 
+- Ash, on the other hand, starts building the next wall before the first one sets (asynchronous).  <br></br>
 Ash starts the next task whereas Simon **waits**, so Ash (asynchronous) will finish faster.
 The lack of waiting is the key to why asynchronous programming provides a performance boost.
 
-To compare, here’s an example where asynchronous programming does not provide any benefits.
+To compare, here’s an example where asynchronous programming does not provide any benefits.<br></br>
 Simone and Asher are laying down bricks to build a wall. 
 - Simone applies mortar to a brick and then sticks it in place, working through each brick one at a time (inefficient synchronous).
-- Asher, on the other hand, lathers mortar across the entire row of bricks, then sticks a row of bricks on top (efficient synchronous). 
+- Asher, on the other hand, lathers mortar across the entire row of bricks, then sticks a row of bricks on top (efficient synchronous). <br></br>
 It may seem like Asher is taking an asynchronous approach since she starts lathering the mortar of the next brick before finishing sticking the first brick. However, the concept of an asynchronous approach requires that there is **waiting** involved, and there is no waiting in this case. Simone and Asher are just constantly lathering mortar and laying bricks down.
 
 The coding equivalent of this is that Simon and Ash doing API calls (waiting) whereas Simone and Asher are mathematical calculations (no-waiting).
@@ -41,7 +41,7 @@ As you can see from the second example, it is possible that an asynchronous appr
 
 Moreover, be wary that an asynchronous approach does not provide any performance boost when all the tasks are **dependent** on each other. 
 
-![](connie_post_images/laundry.png)
+![](connie_post_images/laundry.jpg)
 
 For example, if you are washing and drying clothes, you must wait for the clothes to finish washing first before drying them no matter what, because drying clothes is dependent on the output of the washing. In this laundry example, there is indeed waiting. However, the existence of a dependent relationship causes the asynchronous pipeline to be the same as the synchronous pipeline, so there is no use in using an asynchronous approach.
 
@@ -49,13 +49,10 @@ The coding equivalent of this laundry example is when the output of your current
 
 For a further look into when and when not to use asynchronous programming, check out this [Stackify thread](https://stackify.com/when-to-use-asynchronous-programming/).
 ## What syntax do I need to know?
-
-async
-Used to indicate which methods are going to be run asynchronously
-These new methods are called coroutines.
-
+| async | Used to indicate which methods are going to be run asynchronously - These new methods are called coroutines. ```Python
 async def p():
    print("Hello World")
+```|
 await
 Used to run a coroutine once an asynchronous event loop has already started running
 await can only be used inside a coroutine
@@ -96,8 +93,8 @@ But with that, let’s jump straight into the code.
 
 Follow along with the Python file and Jupyter Notebook in my github!
 https://github.com/clxxu/asyncio4requests
-Code
-Preliminary
+## Code
+### Preliminary
 Get imports and generate the list of urls to get requests from. Here, I use this placeholder url. Don’t forget to do pip install -r requirements.txt in the terminal for all the modules that you don’t have. Keep in mind that normal requests cannot be awaited, so you will need to import requests_async.
 
 import requests, requests_async, asyncio, time
