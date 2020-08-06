@@ -51,14 +51,9 @@ For a further look into when and when not to use asynchronous programming, check
 ## What syntax do I need to know?
 | Syntax | Description / Example |
 | --- | --- |
-| async | Used to indicate which methods are going to be run asynchronously <br> <p>&#8594; These new methods are called coroutines.</p> |
-| |```Python 
-async def p(): 
-    print("Hello World") 
-```|
-await
-Used to run a coroutine once an asynchronous event loop has already started running
-await can only be used inside a coroutine
+| async | Used to indicate which methods are going to be run asynchronously <br> <p>&#9; &#8594; These new methods are called **coroutines**. <br> <code>async def p(): <br>&#9;print("Hello World") </code> </p>|
+| await | Used to run a coroutine once an asynchronous event loop has already started running
+await can only be used inside a coroutine |
 Coroutines must be called with await, otherwise there will be a tracemalloc error.
 
 async def r():
