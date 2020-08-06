@@ -14,4 +14,4 @@ Remember to use the title tag so that the post shows up as a blog post.
 
 
 
-We are using Jekyll (https://jekyllrb.com/) to generate a static site from the blog posts. Check out the documentation to get a better idea of the folder structure used!
+We are using Jekyll (https://jekyllrb.com/) to generate a static site from the blog posts. Check out the documentation of the directory structure here (https://jekyllrb.com/docs/structure/) 
