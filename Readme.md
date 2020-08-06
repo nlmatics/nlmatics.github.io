@@ -1,4 +1,4 @@
-# NLMatics blog!
+# NLMatics blog
 
 
 
@@ -20,7 +20,10 @@ date: YYYY-MM-DD hh:mm:ss -0000
 categories: CATEGORY-1 CATEGORY-2
 ```
 
+4. Below the frontmatter, add your post's content. 
+
+
 
 ------------------------
 
-We are using Jekyll (https://jekyllrb.com/) to generate a static site from the blog posts. Check out the documentation of the directory structure here (https://jekyllrb.com/docs/structure/) 
+We are using Jekyll (https://jekyllrb.com/) to generate a static site from the blog posts.
