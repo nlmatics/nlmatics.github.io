@@ -18,7 +18,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 
-title: NLmatics
+#title: NLmatics
 email: your-email@example.com
 description: # this means to ignore newlines until "baseurl:"
   This is a collection of blogs on various topics 
@@ -33,8 +33,11 @@ theme: minima
 plugins:
   - jekyll-feed
 
-#keep_files:
-    #- _site/
+keep_files:
+   - _site/index.HTML
+
+include:
+  - _site
 
 # Exclude from processing.
 # The following items will not be processed, by default.
