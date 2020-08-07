@@ -4,9 +4,9 @@ title: "How to Extract Keyphrases and Visualize Text"
 date: 2020-08-07 10:30:00 -0000
 categories: KEYPHRASE-EXTRACTION VISUALIZATION TEXT NLP PYTHON JAVASCRIPT KEPPLER-MAPPER D3
 
-<h1> How to Extract Keyphrases and Visualize Text using Python, JavaScript, Keppler Mapper, d3</h1><hr>
+<h1> How to Extract Keyphrases and Visualize Text using Python, JavaScript, Keppler Mapper, d3</h1>
 
-<p>By Cheyenne Zhang</p>
+<p>By Cheyenne Zhang</p><hr>
 
 <div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif"></div>
 
@@ -31,9 +31,9 @@ In this piece, I’ll walk through a simplified version of the process I went th
 
 ### KEYPHRASE EXTRACTION
 #### INTRO. TO RAKE AND YAKE
-Keyphrase extraction is not an easy task for a computer; it’s not even easy for humans! Take this sentence for example (taken from the [Harry Potter Wikipedia page](https://en.wikipedia.org/wiki/Harry_Potter)):
+Keyphrase extraction is not an easy task for a computer; it’s not even easy for humans! Take this sentence from the [Harry Potter Wikipedia page](https://en.wikipedia.org/wiki/Harry_Potter) for example:
 
-<div align="center">“The central character in the series is Harry Potter, a boy who lives in the fictional town of Little Whinging, Surrey with his aunt, uncle, and cousin.”</div>
+<div align="center">“The central character in the series is Harry Potter, a boy who lives in the fictional town of Little Whinging, Surrey with his aunt, uncle, and cousin.”</div><br>
 
 What are the important keyphrases here? Are they the proper nouns—“Harry Potter” and “Little Whinging, Surrey”? Or are they people—“boy,” “aunt,” “uncle,” and “cousin”? Or are the book-related terms most important—”central character”, “series”, “fictional”? As you can see, there are many different interpretations of what makes a keyphrase “meaningful,” even to human judgement. This makes keyphrase extraction a very interesting area of NLP research. [This paper](https://arxiv.org/pdf/1905.05044.pdf), published in July 2019, provides a very thorough overview of the unsupervised and supervised methods currently in the field. Additionally, [this paper](https://www.aclweb.org/anthology/P14-1119.pdf) from 2014 is also a very prominent literature review, if a bit outdated.
 
@@ -184,17 +184,17 @@ We’ll be using a subset of the entire dataset and cleaning it up a little bit,
 
 <div align="center">“<b>The</b> central character <b>in the</b> series <b>is</b> Harry Potter, <b>a</b> boy <b>who</b> lives <b>in the</b> fictional town <b>of</b> Little Whinging, Surrey <b>with his</b> aunt, uncle, <b>and</b> cousin.”</div>
 
-Out of the 27 words in the sentences, 12 of them are stopwords (bolded above). That’s almost half of the words that essentially add no meaning to the sentence!
+Out of the 27 words in the sentences, 12 of them are stopwords (bolded above). That’s almost half (!!!) of the words that essentially add no meaning to the sentence!
 
 What we’ll do to overcome this is create “sentences” from our extracted keyphrases; i.e. stringing together all of the keyphrases for a given entry. This will emphasize the meaningful bits in it and de-emphasize the not-so-meaningful ones. Let’s use a shorter example; the sentence:
 
-<div align="center">“There is a big black cat”</div>
+<div align="center">“There is a big black cat.”</div>
 
  gets the keyphrases:
 
 <div align="center">“big black cat”, “black cat”</div><br>
 
-when passed in to our `get_keyphrases` function above. The joined “sentence” would then become “big black cat black cat,” essentially boiling the sentence down into its core meaning. We will use this for our projections. The below code will print an example from our dataset.
+when passed in to our `get_keyphrases` function above. The joined “sentence” would then become “big black cat black cat,” essentially boiling the sentence down into its core meaning. We will use this for our projections. The below code will print an example from our dataset:
 
 	extracted_phrases_joined = [" ".join(phrase) for phrase in extracted_phrases]
     print("SAMPLE ORIGINAL SENTENCE: ", data_formatted[0])
@@ -239,7 +239,7 @@ As you can see, I had to zoom out much more to fit all of the points in with the
     from sklearn import cluster
     graph = mapper.map(projected_X, clusterer=cluster.DBSCAN(eps=0.5, min_samples=3))
 
-Next, we’re going to get TF-IDF wordgrams (1-3) to help us identify each cluster. Essentially, we’ll find the phrases of one to three words that are not too common but at the same time not too uncommon (hence the min and max df, ie document frequency, parameters) and later the Kepler Mapper code will calculate some statistics on it that you’ll see in the side info panel.
+Next, we’re going to get TF-IDF wordgrams (1-3) to help us identify each cluster. Essentially, we’ll find the phrases of one to three words that are not too common but at the same time not too uncommon (hence the `min_df` and `max_df` parameters, representing the cut-offs for document frequency values) and later the Kepler Mapper code will calculate some statistics on it that you’ll see in the side info panel.
 
     # Get counts of phrases from data (to be used for the label and for cluster statistics)
     vec = TfidfVectorizer(analyzer="word",
@@ -265,7 +265,7 @@ Finally, we’ll put it all together by using the `visualize()` function. It wil
                         path_html="newsgroups20.html",
                         lens=projected_X,
                         lens_names=["ISOMAP1", "ISOMAP2"],
-                        title="Newsgroups20: Latent Semantic Char-gram Analysis with Isometric Embedding",                        custom_tooltips=np.array([category_names[ys] for ys in category]),
+                        title="Visualizing Text - Newsgroup20",                        custom_tooltips=np.array([category_names[ys] for ys in category]),
                         color_function=category)
 
 The very last cell also gives you the option to open the file in the notebook.
@@ -274,7 +274,7 @@ The very last cell also gives you the option to open the file in the notebook.
     from kmapper import jupyter
     jupyter.display(path_html="newsgroups20.html")
 
-That’s it! If you’re following along in the repository, the screenshot below is the outcome of this process. If you’re creating your own file from scratch with these code blocks, go ahead and run the whole kernel (it may take a while due to the clustering and projection), and you should see something like this at the bottom (or, if you prefer, open “newsgroups20” in the web browser):
+That’s it! If you’re following along in the repository, the screenshot below is the outcome of the process so far. If you’re creating your own file from scratch with these code blocks, go ahead and run the whole kernel (it may take a while due to the clustering and projection), and you should see something like this at the bottom. Or, if you prefer, you can open `newgroup20.html` in your web browser:
 
 <div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/unmodifiedkm.png"></div>
 
