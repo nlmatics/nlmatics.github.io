@@ -3,7 +3,7 @@
 layout: page 
 title: "A Comprehensive Guide to Training a Machine Learning Model for Question Answering" 
 date: 2020-08-06 10:30:00 -0000
-author: Batya Stein & Nick Greenspan
+author: Batya Stein & Nicholas Greenspan
 categories: CATEGORY-1 CATEGORY-2
 
 ---
