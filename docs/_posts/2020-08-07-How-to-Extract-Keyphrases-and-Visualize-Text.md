@@ -8,8 +8,6 @@ categories: KEYPHRASE-EXTRACTION VISUALIZATION TEXT NLP PYTHON JAVASCRIPT KEPPLE
 
 ## Cheyenne Zhang
 
-![Clustered 20 newsgroup.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif)
-
 <div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif"></div>
 
 <div align="center"><i>The end product of following this article on the 20 newsgroup dataset. Clusters represent related phrases, and each cluster is labeled with a representative phrase.</i></div>
@@ -18,9 +16,9 @@ categories: KEYPHRASE-EXTRACTION VISUALIZATION TEXT NLP PYTHON JAVASCRIPT KEPPLE
 
 Imagine that you’ve just gotten a huge dataset; for example, the [20 newsgroup dataset](http://qwone.com/~jason/20Newsgroups/), which has 11,314 entries, an example of which is shown below. What would you do to try to understand the data as a whole? Maybe you would look at some entries and their categorization. Maybe you would search the dataset for certain keywords or topics.
 
-![20 newsgroup example.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/20newsgroupexample.png)
+<div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/20newsgroupexample.png"></div>
 
-*The first entry in the newsgroup20 dataset.*
+<div align="center"><i>The first entry in the newsgroup20 dataset.</i></div>
 
 These approaches will take reading through a large amount of data—maybe even the whole dataset—to gain an understanding of what is going on. However, if we were somehow able to find a way to visualize it, perhaps that might allow us to condense meaning into something we can view in a short amount of time. That’s the goal of the visualization approach—to provide information at a glance, as well as new ways of interacting with this information.
 
@@ -41,25 +39,24 @@ What are the important keyphrases here? Are they the proper nouns—“Harry Pot
 
 For this demonstration, we will focus on a couple of automatic methods (i.e. no training of a model required), namely [RAKE](https://www.researchgate.net/profile/Stuart_Rose/publication/227988510_Automatic_Keyword_Extraction_from_Individual_Documents/links/55071c570cf27e990e04c8bb.pdf) (Rapid Automatic Keyword Extraction) and [YAKE!](https://github.com/LIAAD/yake) (Yet Another Keyphrase Extraction). The reason I chose these two methods is because they are very fast while still producing decent results. At NLMatics, there is often a large number of long documents to be searched by the clients, so speed is most definitely a primary concern. Because of this need for speed and thus the relative simplicity of the algorithms, it is important to note that these methods may cut off phrases in the wrong places, return some not-so-relevant phrases, or miss important phrases entirely, etc. At the end of the day though, I think the speed is worth it!
 
-![Plankton Speed Meme.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/speedmeme.png)
+<div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/speedmeme.png"></div>
 
-*This is us when we use RAKE and YAKE.*
+<div align="center"><i>This is us when we use RAKE and YAKE.</i></div>
 
 Another note is that the reason that we are using both RAKE and YAKE is in the hopes that combining the keyphrases extracted through both of these methods on the same text will provide us with more, higher quality keyphrases. You’ll see below how we will use the keyphrases when clustering sentences based on meaning, but suffice to say that combining the two helps preserve meaning by drowning out the irrelevant ones and increasing the number of relevant ones.
 
 
 RAKE is a fairly simple algorithm introduced in 2010 that makes use of the observation that good keyphrases rarely include stopwords. First, it uses stopwords and phrase delimiters to split up the text into potential keyphrases. Then, a score is calculated by taking the ratio of degree (defined as the sum of how many times it occurs next to other words in the text) to word frequency for every word in the phrase and summing them to get the phrase’s overall score. Here, I used the [RAKE-NLTK](https://github.com/csurfer/rake-nltk) implementation, which takes advantage of the power of NLTK.
 
+<div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/rakeexample.png"></div>
 
-![RAKE Example.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/rakeexample.png)
-
-*An example of RAKE-extracted keyphrases and their scores. High scores represent high relevance.*
+<div align="center"><i>An example of RAKE-extracted keyphrases and their scores. High scores represent high relevance.</i></div>
 
 YAKE is another keyword extraction technique (YAKE literally stands for “Yet Another Keyphrase Extractor”) which makes use of a few more word features to calculate a score. YAKE starts by calculating a score for each individual word using this set of five features: casing (ratio of uppercase and lowercase to overall count), position (favors words near beginning of document), relatedness to context (computes number of terms to the left/right), sentence difference (how often the word appears in different sentences). A sliding window of 3-grams (i.e. three-word-long phrases) is then used to determine the lowest scoring (i.e. most meaningful) possible keyphrases.
 
-![YAKE Example.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/yakeexample.png)
+<div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/yakeexample.png"></div>
 
-*An example of YAKE-extracted keyphrases and their scores. Low scores represent high relevance.*
+<div align="center"><i>An example of YAKE-extracted keyphrases and their scores. Low scores represent high relevance.</i></div>
 
 USING RAKE AND YAKE
 I would recommend following along in `notebook.ipynb` from the repository above. Alternatively, you can copy and paste these code blocks into your own new notebook. First, you can install and import these two libraries:
@@ -228,14 +225,13 @@ Then, we’ll start the process of projecting these meaningful “sentences.” 
 
 Now that we have `projected_X`, a list of 2D representations of each of our sentences, we’re going to cluster the sentences. The clustering algorithm is pretty important here, as different algorithms are suited for different purposes; you can learn more about scikit’s different clustering algorithms [here](https://scikit-learn.org/stable/modules/clustering.html). KeplerMapper uses AgglomerativeClustering in their example, but that ends up with a large number of clusters which is hard to look at and visually take in. Feel free to play around with the algorithms to see what best suits your needs, but here we’ll be using [DBSCAN](https://scikit-learn.org/stable/modules/clustering.html#dbscan), which is characterized by uneven clusters and non-flat geometry (i.e. shapes that aren’t just circles or squares). Here’s a comparison of AgglomerativeClustering vs. DBSCAN on our data.
 
+<div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/dbscan.png"></div>
 
-![DBSCAN on 20 newsgroup.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/dbscan.png)
+<div align="center"><i>DBSCAN on the newsgroup20 dataset.</i></div>
 
-*DBSCAN on the newsgroup20 dataset.*
+<div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/agglomerative.png"></div>
 
-![Agglomerative on 20 newsgroup.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/agglomerative.png)
-
-*AgglomerativeClustering on the newsgroup20 dataset.*
+<div align="center"><i>AgglomerativeClustering on the newsgroup20 dataset.</i></div>
 
 As you can see, I had to zoom out much more to fit all of the points in with the AgglomerativeClustering version. DBSCAN seems to be a lot more manageable for our purposes of wanting to see information at a glance. So here is the DBSCAN clustering code:
 
@@ -280,9 +276,9 @@ The very last cell also gives you the option to open the file in the notebook.
 
 That’s it! If you’re following along in the repository, the screenshot below is the outcome of this process. If you’re creating your own file from scratch with these code blocks, go ahead and run the whole kernel (it may take a while due to the clustering and projection), and you should see something like this at the bottom (or, if you prefer, open “newsgroups20” in the web browser):
 
-![Unmodified Keppler Mapper on 20 newsgroup.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/unmodifiedkm.png)
+<div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/unmodifiedkm.png"></div>
 
-*Default Kepler Mapper on the newsgroup20 dataset using DBSCAN clustering.*
+<div align="center"><i>Default Kepler Mapper on the newsgroup20 dataset using DBSCAN clustering.</i></div>
 
 It already looks really cool! Feel free to play around with it; zoom in and out, open the toggles in the navigation bar, hover on nodes, etc.
 
@@ -403,10 +399,9 @@ To this:
 And that’s it! Refresh your kernel and run all cells, and you should get something like this (or just go ahead and run all of them if you’re using my `notebook.ipynb`). A colorful, interactive way of visualizing the most meaningful clusters of your data.
 
 
-![Clustered 20 newsgroup.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif)
+<div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif"></div>
 
-
-*Again, here’s the link to a [repository with the relevant code](https://github.com/cznlm/visualize-keyphrases) if you wish to download and run directly.*
+<div align="center"><i>Again, here’s the link to a <a href="https://github.com/cznlm/visualize-keyphrases">repository with the relevant code</a> if you wish to download and run directly.</i></div>
 
 ### FURTHER DIRECTIONS
 There are a couple of clear directions from here, namely working on reducing noise and experimenting more with/fine-tuning the clustering algorithm. As you can see from the demo GIF, the labels themselves are far from perfect. It would be great to have a representative keyphrase of an entire cluster as opposed to just the top feature. However, it seems that the automatic keyphrase extraction techniques we were using are not suited for this purpose, so looking into perhaps unsupervised and supervised techniques would be a great future direction as well.
