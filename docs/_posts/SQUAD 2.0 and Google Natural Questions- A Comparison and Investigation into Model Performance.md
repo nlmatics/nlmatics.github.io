@@ -14,11 +14,11 @@ SQuAD 2.0 and Google Natural Questions are two of the most prominent datasets in
 
 ## Overviews from the Dataset Websites
 
-![](/site_files/nick_post/squad_image)
+![](/site_files/nick_post/squad_image.png)
 
 [SQuAD 2.0](https://rajpurkar.github.io/SQuAD-explorer/): “SQuAD is a reading comprehension dataset, consisting of questions posed by crowdworkers on a set of Wikipedia articles, where the answer to every question is a segment of text, or span, from the corresponding reading passage, or the question might be unanswerable.”
 
-![](/site_files/nick_post_nq_image)
+![](/site_files/nick_post_nq_image.png)
 
 [Google Natural Questions](https://ai.google.com/research/NaturalQuestions): “The NQ corpus contains questions from real users, and it requires QA systems to read and comprehend an entire Wikipedia article that may or may not contain the answer to the question.”
 
@@ -49,13 +49,13 @@ Google Natural Questions:
 
 ## Datapoint Examples
 
-In version 2 of the dataset, SQuAD 2.0 examples have two formats –
+In version 2 of the dataset, SQuAD 2.0 examples have two formats –\
 For answerable questions:
- 	 `{ "question": "In what country is Normandy located?", "id": "56ddde6b9a695914005b9628", "answers": [ { "text": "France", "answer_start": 159 } ], "is_impossible": false }`, 
+ 	 `{ "question": "In what country is Normandy located?", "id": "56ddde6b9a695914005b9628", "answers": [ { "text": "France", "answer_start": 159 } ], "is_impossible": false }` \
 For impossible questions:
  `{ "plausible_answers": [ { "text": "Normans", "answer_start": 4 } ], "question": "Who gave their name to Normandy in the 1000's and 1100's", "id": "5ad39d53604f3c001a3fe8d1", "answers": [], "is_impossible": true }`
 
-Google Natural Questions (abbreviated due to length of document html and tokens):
+Google Natural Questions (abbreviated due to length of document html and tokens):\
 `{"annotations":[{"annotation_id":6782080525527814293,"long_answer":{"candidate_index":92,"end_byte":96948,"end_token":3538,"start_byte":82798,"start_token":2114},"short_answers":[{"end_byte":96731,"end_token":3525,"start_byte":96715,"start_token":3521}],"yes_no_answer":"NONE"}],"document_html":</HTML>\n","document_title":"The Walking Dead (season 8)","document_tokens":[{"end_byte":95,"html_token":false,"start_byte":92,"token":"The"},{"end_byte":103,"html_token":false,"start_byte":96,"token":"Walking"},{"end_byte":108,"html_token":false,"start_byte":104,"token":"Dead"},
 …], 
 document_url":"https://en.wikipedia.org//w/index.php?title=The_Walking_Dead_(season_8)&amp;oldid=828222625","example_id":4549465242785278785,"long_answer_candidates":[{"end_byte":57620,"end_token":216,"start_byte":53609,"start_token":24,"top_level":true},{"end_byte":53883,"end_token":36,"start_byte":53666,"start_token":25,"top_level":false},{"end_byte":54388,"end_token":42,"start_byte":53884,"start_token":36,"top_level":false},…],
@@ -104,7 +104,7 @@ One limitation we came across that caused us to change our training methods slig
 
 ### Results
 
-Dataset model trained on on the y axis, and evaluation dataset on the x axis.
+Dataset model was trained on as the rows, and evaluation dataset as the columns.
 
 | | GNQ| SQuAD|
 |---|---|---|
@@ -136,7 +136,6 @@ Hopefully this article gave you further insight into whether SQuAD 2.0 or Google
 ## Sources
 [SQuAD Website](https://rajpurkar.github.io/SQuAD-explorer/)\
 [SQuAD Paper](https://ai.google.com/research/NaturalQuestions)\
-[Google Natural Questions Website](https://arxiv.org/pdf/1806.03822.pdf)
+[Google Natural Questions Website](https://arxiv.org/pdf/1806.03822.pdf)\
 [Google Natural Questions Paper](https://storage.googleapis.com/pub-tools-public-publication-data/pdf/1f7b46b5378d757553d3e92ead36bda2e4254244.pdf)
-
 
