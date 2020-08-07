@@ -6,13 +6,13 @@ categories: KEYPHRASE-EXTRACTION VISUALIZATION TEXT NLP PYTHON JAVASCRIPT KEPPLE
 
 <h1> How to Extract Keyphrases and Visualize Text using Python, JavaScript, Keppler Mapper, d3</h1>
 
-<p>By Cheyenne Zhang</p><hr>
+<h6>By Cheyenne Zhang</h6>
 
 <div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif"></div>
 
 <div align="center"><i>The end product of following this article on the 20 newsgroup dataset. Clusters represent related phrases, and each cluster is labeled with a representative phrase.</i></div>
 
-### INTRODUCTION
+## INTRODUCTION
 
 Imagine that you’ve just gotten a huge dataset; for example, the [20 newsgroup dataset](http://qwone.com/~jason/20Newsgroups/), which has 11,314 entries, an example of which is shown below. What would you do to try to understand the data as a whole? Maybe you would look at some entries and their categorization. Maybe you would search the dataset for certain keywords or topics.
 
@@ -24,18 +24,18 @@ These approaches will take reading through a large amount of data—maybe even t
 
 In this article, we’ll see some quick but successful ways to extract meaningful keyphrases from text and how we can use that to produce helpful visualizations.
 
-### MOTIVATION
+## MOTIVATION
 Over the course of about four weeks during my internship at NLMatics, I worked on creating a visualization of search results from the NLMatics engine. Currently, asking a question to our system provides a textual list of possible answers. While this is very useful in many cases, there is an opportunity to add another lens through which to view information by displaying it in a more intuitive manner, and to guide the user to see what is important about this particular document. With visualization, there are so many possibilities for expressing connections and relationships among the data--color-coding, relative size, text labels, link lengths, link colors...the list goes on! We’ll explore some of these ideas throughout this article.
 
 In this piece, I’ll walk through a simplified version of the process I went through and also some of what I learned from this project. There are two main steps: Keyphrase Extraction, i.e. getting the most meaningful phrases from our text, and then Visualization, which involves clustering based on those phrases and displaying these clusters in an aesthetically appealing manner. If you just want to see the final product, I have set up a [repository](https://github.com/cznlm/visualize-keyphrases) that you can just download and run. It provides a notebook with all of the code from the both steps as well as the modified kmapper code from the Visualization section.
 
-### KEYPHRASE EXTRACTION
-#### INTRO. TO RAKE AND YAKE
+## KEYPHRASE EXTRACTION
+### INTRO. TO RAKE AND YAKE
 Keyphrase extraction is not an easy task for a computer; it’s not even easy for humans! Take this sentence from the [Harry Potter Wikipedia page](https://en.wikipedia.org/wiki/Harry_Potter) for example:
 
 <div align="center">“The central character in the series is Harry Potter, a boy who lives in the fictional town of Little Whinging, Surrey with his aunt, uncle, and cousin.”</div><br>
 
-What are the important keyphrases here? Are they the proper nouns—“Harry Potter” and “Little Whinging, Surrey”? Or are they people—“boy,” “aunt,” “uncle,” and “cousin”? Or are the book-related terms most important—”central character”, “series”, “fictional”? As you can see, there are many different interpretations of what makes a keyphrase “meaningful,” even to human judgement. This makes keyphrase extraction a very interesting area of NLP research. [This paper](https://arxiv.org/pdf/1905.05044.pdf), published in July 2019, provides a very thorough overview of the unsupervised and supervised methods currently in the field. Additionally, [this paper](https://www.aclweb.org/anthology/P14-1119.pdf) from 2014 is also a very prominent literature review, if a bit outdated.
+What are the important keyphrases here? Are they the proper nouns—“Harry Potter” and “Little Whinging, Surrey”? Or are they people—“boy,” “aunt,” “uncle,” and “cousin”? Or are the book-related terms most important—”central character”, “series”, “fictional”? As you can see, there are many different interpretations of what makes a keyphrase “meaningful,” even to human judgement. This makes keyphrase extraction a very interesting area of NLP research. For background, [this paper](https://arxiv.org/pdf/1905.05044.pdf), published in July 2019, provides a very thorough overview of the unsupervised and supervised methods currently in the field. Additionally, [this paper](https://www.aclweb.org/anthology/P14-1119.pdf) from 2014 is also a very prominent literature review, if a bit outdated.
 
 For this demonstration, we will focus on a couple of automatic methods (i.e. no training of a model required), namely [RAKE](https://www.researchgate.net/profile/Stuart_Rose/publication/227988510_Automatic_Keyword_Extraction_from_Individual_Documents/links/55071c570cf27e990e04c8bb.pdf) (Rapid Automatic Keyword Extraction) and [YAKE!](https://github.com/LIAAD/yake) (Yet Another Keyphrase Extraction). The reason I chose these two methods is because they are very fast while still producing decent results. At NLMatics, there is often a large number of long documents to be searched by the clients, so speed is most definitely a primary concern. Because of this need for speed and thus the relative simplicity of the algorithms, it is important to note that these methods may cut off phrases in the wrong places, return some not-so-relevant phrases, or miss important phrases entirely, etc. At the end of the day though, I think the speed is worth it!
 
@@ -58,7 +58,7 @@ YAKE is another keyword extraction technique (YAKE literally stands for “Yet A
 
 <div align="center"><i>An example of YAKE-extracted keyphrases and their scores. Low scores represent high relevance.</i></div>
 
-#### USING RAKE AND YAKE
+### USING RAKE AND YAKE
 I would recommend following along in `notebook.ipynb` from the repository above. Alternatively, you can copy and paste these code blocks into your own new notebook. First, install and import these two libraries:
 
 	!pip install rake_nltk
@@ -118,8 +118,8 @@ It’s that simple! As you can see, the keyphrases aren’t perfect. To help get
 
 A bit better! There are still some inconsistencies that we would be able to fix up with different heuristics, but for now, I think that the keyphrases give an acceptable overview of our example text.
 
-### VISUALIZATION
-#### KEPPLER MAPPER WITHOUT MODIFICATIONS
+## VISUALIZATION
+### KEPPLER MAPPER WITHOUT MODIFICATIONS
 
 Next, we’ll move onto visualization of these extracted keyphrases. We’ll be using [Kepler Mapper](https://kepler-mapper.scikit-tda.org/), a scikit library that provides the functionality to project data visually, to cluster it, and to create connections between it. This project is inspired by [this Kepler Mapper & NLP example](https://kepler-mapper.scikit-tda.org/notebooks/KeplerMapper-Newsgroup20-Pipeline.html).
 
@@ -152,11 +152,11 @@ Make sure to move the `kepler-mapper/kmapper` folder (you won’t need any other
     print("SAMPLE CATEGORY: ", category[0])
     print("SAMPLE CATEGORY NAME: ", category_names[category[0]])
 
-We have extracted 3 lists named X, category, and category_names.
+We have extracted three lists named `X`, `category`, and `category_names`.
 
-* From the “SAMPLE ENTRY” line, you can see what X, our dataset, looks like--various emails with headers.
+* From the “SAMPLE ENTRY” line, you can see what `X`, our dataset, looks like--various emails with headers.
 * The “SHAPE” line shows that the dataset is quite large, with 11,314 entries.
-* The “CATEGORY” is simply an integer ID for each category that is used to index category_names which has the category stored as a string; for example, category 7 is “rec.autos” means that it’s a recreational email about automobiles.
+* The “CATEGORY” is simply an integer ID for each category that is used to index `category_names` which has the category stored as a string; for example, category 7 is “rec.autos” means that it’s a recreational email about automobiles.
 
 We’ll be using a subset of the entire dataset and cleaning it up a little bit, including removing the header from these emails. Then, we’ll run the `get_keyphrases` function we created above on the data to get our RAKE and YAKE phrases.
 
@@ -194,13 +194,13 @@ What we’ll do to overcome this is create “sentences” from our extracted ke
 
 <div align="center">“big black cat”, “black cat”</div><br>
 
-when passed in to our `get_keyphrases` function above. The joined “sentence” would then become “big black cat black cat,” essentially boiling the sentence down into its core meaning. We will use this for our projections. The below code will print an example from our dataset:
+when passed in to our `get_keyphrases` function above. The joined “sentence” would then become “big black cat black cat,” essentially boiling the sentence down into its core meaning. We will use these for our projections. The below code will print an example from our dataset:
 
 	extracted_phrases_joined = [" ".join(phrase) for phrase in extracted_phrases]
     print("SAMPLE ORIGINAL SENTENCE: ", data_formatted[0])
     print("SAMPLE JOINED SENTENCE: ", extracted_phrases_joined[0])
 
-Then, we’ll start the process of projecting these meaningful “sentences.” We’ll use TfidfVectorizer to convert our documents into a matrix of TF-IDF features, then perform dimensionality reduction with TruncatedSVD and Isomap. Finally, MinMaxScaler scales them to an appropriate size.
+Then, we’ll start the process of projecting these meaningful “sentences.” We’ll use `TfidfVectorizer` to convert our documents into a matrix of TF-IDF features, then perform dimensionality reduction with `TruncatedSVD` and `Isomap`. Finally, `MinMaxScaler` scales them to an appropriate size.
 
     # Project all of the "sentences" down into a 2D representation
     from sklearn.feature_extraction.text import TfidfVectorizer
@@ -223,7 +223,7 @@ Then, we’ll start the process of projecting these meaningful “sentences.” 
 
     print("SHAPE",projected_X.shape)
 
-Now that we have `projected_X`, a list of 2D representations of each of our sentences, we’re going to cluster the sentences. The clustering algorithm is pretty important here, as different algorithms are suited for different purposes; you can learn more about scikit’s different clustering algorithms [here](https://scikit-learn.org/stable/modules/clustering.html). KeplerMapper uses AgglomerativeClustering in their example, but that ends up with a large number of clusters which is hard to look at and visually take in. Feel free to play around with the algorithms to see what best suits your needs, but here we’ll be using [DBSCAN](https://scikit-learn.org/stable/modules/clustering.html#dbscan), which is characterized by uneven clusters and non-flat geometry (i.e. shapes that aren’t just circles or squares). Here’s a comparison of AgglomerativeClustering vs. DBSCAN on our data.
+Now that we have `projected_X`, a list of 2D representations of each of our sentences, we’re going to cluster the sentences. The clustering algorithm is pretty important here, as different algorithms are suited for different purposes; you can learn more about scikit’s different clustering algorithms [here](https://scikit-learn.org/stable/modules/clustering.html). KeplerMapper uses `AgglomerativeClustering` in their example, but that ends up with a large number of clusters which is hard to look at and visually take in. Feel free to play around with the algorithms to see what best suits your needs, but here we’ll be using [`DBSCAN`](https://scikit-learn.org/stable/modules/clustering.html#dbscan), which is characterized by uneven clusters and non-flat geometry (i.e. shapes that aren’t just circles or squares). Here’s a comparison of `AgglomerativeClustering` vs. `DBSCAN` on our data.
 
 <div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/dbscan.png"></div>
 
@@ -233,7 +233,7 @@ Now that we have `projected_X`, a list of 2D representations of each of our sent
 
 <div align="center"><i>AgglomerativeClustering on the newsgroup20 dataset.</i></div><br>
 
-As you can see, I had to zoom out much more to fit all of the points in with the AgglomerativeClustering version. DBSCAN seems to be a lot more manageable for our purposes of wanting to see information at a glance. So here is the DBSCAN clustering code:
+As you can see, I had to zoom out much more to fit all of the points in with the `AgglomerativeClustering` version. `DBSCAN` seems to be a lot more manageable for our purposes of wanting to see information at a glance. So here is the `DBSCAN` clustering code:
 
 	# Cluster the projected data
     from sklearn import cluster
@@ -265,7 +265,8 @@ Finally, we’ll put it all together by using the `visualize()` function. It wil
                         path_html="newsgroups20.html",
                         lens=projected_X,
                         lens_names=["ISOMAP1", "ISOMAP2"],
-                        title="Visualizing Text - Newsgroup20",                        custom_tooltips=np.array([category_names[ys] for ys in category]),
+                        title="Visualizing Text - Newsgroup20",
+												custom_tooltips=np.array([category_names[ys] for ys in category]),
                         color_function=category)
 
 The very last cell also gives you the option to open the file in the notebook.
@@ -274,7 +275,7 @@ The very last cell also gives you the option to open the file in the notebook.
     from kmapper import jupyter
     jupyter.display(path_html="newsgroups20.html")
 
-That’s it! If you’re following along in the repository, the screenshot below is the outcome of the process so far. If you’re creating your own file from scratch with these code blocks, go ahead and run the whole kernel (it may take a while due to the clustering and projection), and you should see something like this at the bottom. Or, if you prefer, you can open `newgroup20.html` in your web browser:
+That’s it! If you’re following along in the repository, the screenshot below is the outcome of the process so far. If you’re creating your own file from scratch with these code blocks, go ahead and run the whole kernel (it may take a while due to the clustering and projection), and you should see something like this at the bottom. Or, if you prefer, you can open `newgroup20.html` in your preferred web browser.
 
 <div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/unmodifiedkm.png"></div>
 
@@ -282,7 +283,7 @@ That’s it! If you’re following along in the repository, the screenshot below
 
 It already looks really cool! Feel free to play around with it; zoom in and out, open the toggles in the navigation bar, hover on nodes, etc.
 
-#### KEPLER MAPPER WITH MODIFICATIONS
+### KEPLER MAPPER WITH MODIFICATIONS
 
 However, one drawback is that you can’t really get much information at a glance from this screen. It’s hard to glean any sort of relationship between the data without knowing what the nodes represent! What we’re going to do next is modify the Kepler Mapper code in the `kmapper` folder so that each node above retains its relative size to other nodes (based on how many members are in the cluster) and also make it big enough so that a defining label for each node can fit.
 
@@ -314,9 +315,9 @@ The nodes would appear bigger, but still at a good relative ratio with each othe
             .charge(-1200)
             .size([w,h]);
 
-For this dataset, I’ve found that changing the [gravity](http://bl.ocks.org/sathomas/191a8a302a363ac6a4b0) from 0.2 to 0.1 and [charge](http://bl.ocks.org/sathomas/1ca23ee9588580d768aa) from -1200 to -1800 repels the clusters enough to mostly get rid of the overlap problem. As a side note, Keppler Mapper actually runs on an outdated version of d3, so I wouldn’t worry too much about understanding the forces because in the most current release, these are basically deprecated anyways and there’s a cool function called [forceManyBody()](https://www.d3indepth.com/force-layout/#forcemanybody) that just gets rid of all overlap! But generally, a negative charge represents more repelling of nodes, and gravity closer to 0 allows the nodes to wander apart further.
+For this dataset, I’ve found that changing the [gravity](http://bl.ocks.org/sathomas/191a8a302a363ac6a4b0) from 0.2 to 0.1 and [charge](http://bl.ocks.org/sathomas/1ca23ee9588580d768aa) from -1200 to -1800 repels the clusters enough to mostly get rid of the overlap problem. As a side note, Keppler Mapper actually runs on an outdated version of d3, so I wouldn’t worry too much about understanding the forces because in the most current release, these are basically deprecated anyways and there’s a cool function called [forceManyBody()](https://www.d3indepth.com/force-layout/#forcemanybody) that just gets rid of all overlap! But generally, a negative charge represents more repelling of nodes, and gravity closer to 0 allows the nodes to wander further apart.
 
-Next, we’ll add the label of the top feature, i.e. most common phrase, to each node. Find the format_mapper_data function around line 166, which formats the data to be passed to the HTML template. You can see that each node has this information:
+Next, we’ll add the label of the top feature, i.e. most common phrase, to each node. Find the `format_mapper_data` function around line 166, which formats the data that will be passed to the HTML template. You can see that each node has this information:
 
 	n = {
             "id": "",
@@ -342,7 +343,7 @@ We’re going to add a field called `feature` which represents the top occurring
             "feature": f
         }
 
-`cluster_stats[‘above’]` is a list of the “above-average features”, meaning the features i.e. phrases that occur more than an average amount of times. We’re feeding in the top one to the frontend.
+`cluster_stats[‘above’]` is a list of the “above-average features”, meaning the features i.e. phrases that occur more than an average amount of times. We’re taking the most common one and feeding it into the frontend.
 
 Now, we can go into the JavaScript and make the feature appear. Kepler Mapper was built using [d3](https://d3js.org/), which is a JavaScript library that “helps you bring data to life using HTML, SVG, and CSS.” In terms of this application, it is taking care of a lot of the interactivity, the physics, etc. The creator of d3 has a very thorough [tutorial](https://observablehq.com/collection/@d3/learn-d3) (it’s also interactive!) if you want to learn it from the ground up, but we won’t need to know much about it for this. I would recommend looking into it because you can make some really beautiful visualizations.
 
@@ -378,7 +379,7 @@ This is the code that creates the visual nodes we see. It gives each a size (not
 To break this chunk of code down:
 
 * The first line adds text to each node.
-* The second centers it vertically; “em” is a unit of measurement which is equal to the point size of the current font, i.e. in size 12 font an em would be 12 pixels. Basically, it centers vertically for your current font size.
+* The second centers it vertically; “em” is a unit of measurement which is equal to the point size of the current font, i.e. in size 12 font an em would be 12 pixels. Basically, this line centers vertically for your current font size.
 * Then we make it white, Roboto, and adjust its weight, i.e. its boldness.
 * Then, we add the text itself by returning the property called feature that we just added for each node.
 * All that’s left is the font size, which is a bit trickier but nothing crazy. The idea is that we have the size of each node that was passed in from the backend, which when multiplied by 50 (in line 197 if you recall from above, not sure why they designed it this way but it works I suppose) is the area it takes up in pixels, as well as the length of our text label, also in pixels. We then find the diameter of the node, subtract 18 to account for padding from the shadow on the outside of the pixel, then use the ratio of that available diameter to the length of our text as the em value for our font size.
@@ -396,18 +397,18 @@ To this:
           .attr("height", height)
           .attr("text-anchor", "middle");
 
-And that’s it! Refresh your kernel and run all cells, and you should get something like this (or just go ahead and run all of them if you’re using my `notebook.ipynb`). A colorful, interactive way of visualizing the most meaningful clusters of your data.
+And that’s it! Refresh your kernel and run all cells, and you should get something like this (or just go ahead and run without refreshing if you’re using my `notebook.ipynb`). A colorful, interactive way of visualizing the most meaningful clusters of your data.
 
 
 <div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif"></div><br>
 
 <i>Again, here’s the link to a <a href="https://github.com/cznlm/visualize-keyphrases">repository with the relevant code</a> if you wish to download and run directly.</i>
 
-### FURTHER DIRECTIONS
-There are a couple of clear directions from here, namely working on reducing noise and experimenting more with/fine-tuning the clustering algorithm. As you can see from the demo GIF, the labels themselves are far from perfect. It would be great to have a representative keyphrase of an entire cluster as opposed to just the top feature. However, it seems that the automatic keyphrase extraction techniques we were using are not suited for this purpose, so looking into perhaps unsupervised and supervised techniques would be a great future direction as well.
+## FURTHER DIRECTIONS
+There are a few of clear directions from here, namely working on reducing noise, fine-tuning the clustering algorithm, and improving the label quality. There are a lot of "junk" keyphrases that we get from RAKE and YAKE, so looking into a more advanced technique might be useful. The choice of clustering algorithm is also relatively arbitrary, and it would be great if we could find one which better suits our purposes. Finally, as you can see from the demo GIF, the labels themselves are far from perfect. It would be great to have a representative keyphrase of an entire cluster as opposed to just the top feature. However, it seems that the speedy automatic keyphrase extraction techniques we were using are not suited for this purpose, so looking into perhaps unsupervised and supervised techniques would be a great future direction as well.
 
 
-### RESOURCES COMPILED
+## RESOURCES COMPILED
 * [20 Newsgroup Dataset](http://qwone.com/~jason/20Newsgroups/)
 * [A 2019 Keyphrase Extraction Literature Review](https://arxiv.org/pdf/1905.05044.pdf)
 * [A 2014 Keyphrase Extraction Literature Review](https://www.aclweb.org/anthology/P14-1119.pdf)
