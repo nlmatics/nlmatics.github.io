@@ -165,6 +165,7 @@ Next, we’ll edit the run_squad.py script to integrate wandb logging. (You can 
 Now that you’ve added wandb statements into your script, you can watch your training progress from the wandb project dashboard. Two particularly helpful sections are the charts, where you can see loss and evaluation metrics, and the logs, where you can see the output of your script as it runs to track what percent complete your training is.
 
 ![](/site_files/nick-batya-post-imgs/wandb_charts.png)
+
 _Wandb charts from our Google Natural Questions training_
 
 ## PART 2: DOWNLOADING AND FORMATTING DATA
@@ -179,6 +180,7 @@ Both [SQuAD](https://rajpurkar.github.io/SQuAD-explorer/) and [Google Natural Qu
 However, there are also some interesting differences between the two datasets that made us want to experiment with training a model on Google Natural Questions instead of SQuAD. To start, Google Natural questions has about twice the amount of training data as SQuAD does. SQuAD gives paragraphs from Wikipedia articles as context for its answers and has multiple questions per article, while Google Natural Questions gives entire Wikipedia articles for context, and only has one question per article. Additionally, all of SQuAD’s answers are short (about a sentence long), but Google Natural Questions has some questions with short answers, some with long answers, some with yes-no answers, and some with combinations of all of the above. 
 
 Example of a SQuAD 2.0 datapoint:
+
 ![](/site_files/nick-batya-post-imgs/squad_datapoint.png)
 
 Answer_start indicates the character count where the answer is located in the context.
@@ -344,7 +346,7 @@ _Annoyed you have to start from the beginning after your model training failed? 
 
 After every 500 examples that the model trains on, it will output a “model checkpoint” that is a representation of the model at that point in training. The model checkpoints can be found in the output folder, and each one is stored in a folder called “checkpoint-x” where x is the number of examples the model had looked at when that checkpoint was generated. Resuming training from a checkpoint can save you a lot of time and convenience. 
 
-![](/site_files/nick-batya-post-imgs/scheckpoints.png)
+![](/site_files/nick-batya-post-imgs/checkpoints.png)
 
 If you encounter an error and want to pick up the training where you left off, or just want to resume training from a checkpoint for any other reason, here’s how to do it. 
 
