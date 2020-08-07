@@ -23,7 +23,7 @@ Daniel Ye
 
 7. [Conclusion](#bookmark=id.ouhqmef3a5d5)
 
-## 1. Introduction
+## Introduction
 
 I am a rising junior majoring in computer science and minoring in operations research and information engineering at Cornell Engineering. This summer, I interned at NLMatics, and one of the projects I worked on was implementing a [Smooth Inverse Frequency](https://openreview.net/pdf?id=SyK00v5xx#page=12&zoom=100,110,217) model using Golang. This is able to calculate sentence embeddings from sequences of words in the form of vectors, which mathematically represent the meaning of the sentence. We use it to encode documents and queries into embeddings which are then processed further using other natural language processing models to get search results. However, our original Python implementation was fairly slow at calculating these embeddings, and it scaled poorly with increasing document sizes or concurrent requests, so we needed to find a way to speed up the service. 
 
