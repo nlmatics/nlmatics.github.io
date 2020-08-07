@@ -1,5 +1,6 @@
 # A Comprehensive Guide to Training a Machine Learning Model for Question Answering:
 ## Fine-tuning ALBERT on Google Natural Questions
+By Nicholas Greenspan and Batya Stein
 
 ### Contents:
 **1. Setting up the EC2 Instance**
