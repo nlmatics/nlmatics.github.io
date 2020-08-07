@@ -111,11 +111,11 @@ It is important to note that this structure does not enforce the order in which 
 
 Our API allowed for clients to send multiple sentences at a time to be encoded by the SIF, often many at a time, and implementing the SIF in Golang allowed us to leverage powerful concurrency to speed up our calculations. My first iteration of the SIF server used [Golang’s http package](https://golang.org/pkg/net/http/) to host the model on an HTTP 1.0 server. I compared it with  our old system, as well as the original Python implementation. I used three different independent variables to benchmark how the performance scaled up: total words per ‘sentence’ to be embedded, total number of calls with fixed number of concurrent requests, and number of concurrent requests with fixed total number of calls. These benchmarks were made using [Apache Benchmark](https://httpd.apache.org/docs/2.4/programs/ab.html), a software that allows you to make many concurrent requests to a server and reports significant timing data.
 
-![image alt text](https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_4.png)
-
-![image alt text](https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_5.png)
-
-![image alt text](https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_6.png)
+<p align="center">
+	<img src="https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_4.png" width="600"/>
+	<img src="https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_5.png" width="600"/>
+	<img src="https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_6.png" width="600"/>
+</p>
 
 The results were impressive, to say the least. At a sentence level, around 10-100 words, the new implementation outperforms the old by up to **30x** and at a document level, around 1000-10000+ words, it is still **10x**** **faster in almost every scenario. The improved speed for sentence level embeddings is really useful, since it means that we can embed at lower levels of granularity much more easily. For example, if you were searching "who was Mozart" and only had embeddings for each document, your system might flag a document about Joseph Haydn, friend and mentor of Mozart, as relevant. As you descend levels of granularity of embeddings however, you can much more easily locate relevant information about your query. Perhaps it allows you to find a paragraph detailing their time in Vienna together, or a specific sentence about the pieces of music they worked on together. 
 
@@ -201,7 +201,9 @@ You can then use the protoc command to compile your service into any of [gRPC’
 
 Due to how gRPC buffers data being received and sent, we no longer had to worry about size limits on requests to our server. gRPC servers also have a very helpful feature in that connections between client and server are maintained across multiple requests, whereas with HTTP requests, a new connection has to be established for every POST. As a result, I saw more improvements in performance as this overhead was removed from the new system:
 
-![image alt text](https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_7.png)
+<p align="center">
+	<img src="https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_7.png" width="600"/>
+</p>
 
 The largest improvements are seen when requests have very small payloads, so the majority of time is spent on overhead from connecting to the server. However, once you get to larger payloads, the times converge to become about equal.
 
