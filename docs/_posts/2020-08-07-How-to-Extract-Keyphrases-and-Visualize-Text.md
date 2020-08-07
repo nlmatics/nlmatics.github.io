@@ -260,14 +260,14 @@ Finally, we’ll put it all together by using the `visualize()` function. It wil
 
     # Visualize data!
     html = mapper.visualize(graph,
-						X=interpretable_inverse_X,
-						X_names=interpretable_inverse_X_names,
-						path_html="newsgroups20.html",
-						lens=projected_X,
-						lens_names=["ISOMAP1", "ISOMAP2"],
-						title="Visualizing Text - Newsgroup20",
-						custom_tooltips=np.array([category_names[ys] for ys in category]),
-						color_function=category)
+		X=interpretable_inverse_X,
+		X_names=interpretable_inverse_X_names,
+		path_html="newsgroups20.html",
+		lens=projected_X,
+		lens_names=["ISOMAP1", "ISOMAP2"],
+		title="Visualizing Text - Newsgroup20",
+	  custom_tooltips=np.array([category_names[ys] for ys in category]),
+		color_function=category)
 
 The very last cell also gives you the option to open the file in the notebook.
 
