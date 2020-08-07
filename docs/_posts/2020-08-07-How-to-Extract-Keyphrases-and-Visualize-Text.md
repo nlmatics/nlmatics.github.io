@@ -4,9 +4,9 @@ title: "How to Extract Keyphrases and Visualize Text"
 date: 2020-08-07 10:30:00 -0000
 categories: KEYPHRASE-EXTRACTION VISUALIZATION TEXT NLP PYTHON JAVASCRIPT KEPPLER-MAPPER D3
 
-# How to Extract Keyphrases and Visualize Text using Python, JavaScript, Keppler Mapper, d3
+<h1> How to Extract Keyphrases and Visualize Text using Python, JavaScript, Keppler Mapper, d3</h1><hr>
 
-## Cheyenne Zhang
+<p>By Cheyenne Zhang</p>
 
 <div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif"></div>
 
