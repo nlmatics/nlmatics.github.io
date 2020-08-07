@@ -3,11 +3,11 @@ title: "Smooth Inverse Frequency Frequency (SIF) Embeddings in Golang"
 date: 2020-08-07 09:45:00 -0000
 categories: NLP Sentence-Embeddings
 
-**Smooth Inverse Frequency (SIF) Embeddings in Golang**
+# Smooth Inverse Frequency (SIF) Embeddings in Golang
 
 Daniel Ye
 
-**Table of Contents**
+## Table of Contents
 
 1. [Introduction ](#bookmark=id.uv0gxlx5wixm) 
 
@@ -23,7 +23,7 @@ Daniel Ye
 
 7. [Conclusion](#bookmark=id.ouhqmef3a5d5)
 
-**1. Introduction **
+**1. Introduction**
 
 I am a rising junior majoring in computer science and minoring in operations research and information engineering at Cornell Engineering. This summer, I interned at NLMatics, and one of the projects I worked on was implementing a [Smooth Inverse Frequency](https://openreview.net/pdf?id=SyK00v5xx#page=12&zoom=100,110,217) model using Golang. This is able to calculate sentence embeddings from sequences of words in the form of vectors, which mathematically represent the meaning of the sentence. We use it to encode documents and queries into embeddings which are then processed further using other natural language processing models to get search results. However, our original Python implementation was fairly slow at calculating these embeddings, and it scaled poorly with increasing document sizes or concurrent requests, so we needed to find a way to speed up the service. 
 
@@ -41,15 +41,15 @@ Word embeddings are one of the most important developments in the field of moder
 
 A natural next step in the field was the development of sentence embeddings, or being able to extract meaning from a sequence of words. Early methods include:
 
-* **[TF-ID**F](https://en.wikipedia.org/wiki/Tf%E2%80%93idf)** **
+* **[TF-IDF](https://en.wikipedia.org/wiki/Tf%E2%80%93idf)**
 
-* **[Paragram Phrase (PP**)](https://arxiv.org/pdf/1511.08198.pdf)
+* **[Paragram Phrase (PP)](https://arxiv.org/pdf/1511.08198.pdf)**
 
-* **[Recurrent Neural Network (RNN**)](https://en.wikipedia.org/wiki/Recurrent_neural_network)
+* **[Recurrent Neural Network (RNN)](https://en.wikipedia.org/wiki/Recurrent_neural_network)**
 
-* **[Long Short-Term Memory Networks (LSTM**)](https://arxiv.org/pdf/1503.00075.pdf)
+* **[Long Short-Term Memory Networks (LSTM)](https://arxiv.org/pdf/1503.00075.pdf)**
 
-* **[Deep Averaging Network (DAN**)](https://people.cs.umass.edu/~miyyer/pubs/2015_acl_dan.pdf)
+* **[Deep Averaging Network (DAN)](https://people.cs.umass.edu/~miyyer/pubs/2015_acl_dan.pdf)**
 
 In 2017, Arora et. al proposed SIF, or [Smooth Inverse Frequency](https://openreview.net/pdf?id=SyK00v5xx#page=12&zoom=100,110,217), a weighting scheme to improve performance of sentence embeddings. When encoding a sentence, it is important to identify which words in the sentence are more significant. For example, if calculating the embedding of the sentence "who was Mozart?" the word “was” doesn’t add much meaning; looking for sentences or documents relating to the word “was” will not yield any useful results for the original question. It’s clear that “Mozart” holds the most meaning in the question from a human standpoint, but how do you program a machine to identify that? SIF operates under the assumption that the most important words tend to also be used less frequently. If you counted all the words in Wikipedia, the word “was” would most likely appear much more frequently than in “Mozart”. Weights of a word *w* are computed by *a/(a + p(w))* where a is a parameter and p(w) is the word frequency of w, which can be estimated by scraping a large corpus.* *The hyperparameter *a* adjusts which words are quantitatively “common” and “uncommon.” Here is the formal algorithm:
 
@@ -71,32 +71,35 @@ GoLang however, has no such restrictions and also provides built-in structures f
 
 <table>
   <tr>
-    <td>func main() {
-    jobs := make(chan int, 100)
-    results := make(chan int, 100)
-    for i := 0; i < 4; i++ {
-        go worker(jobs, results)
-    }
-    for i := 0; i < 100; i++ {
-        jobs <- i
-    }
-    close(jobs)
-    for j := 0; j < 100; j++ {
-        fmt.Println(<-results)
-    }
-}
-func worker(jobs <-chan int, results chan<- int) {
-    for n := range jobs {
-        results <- fib(n)
-    }
-}
+    <td>
+	    
+	func main() {
+	    jobs := make(chan int, 100)
+	    results := make(chan int, 100)
+	    for i := 0; i < 4; i++ {
+		go worker(jobs, results)
+	    }
+	    for i := 0; i < 100; i++ {
+		jobs <- i
+	    }
+	    close(jobs)
+	    for j := 0; j < 100; j++ {
+		fmt.Println(<-results)
+	    }
+	}
+	func worker(jobs <-chan int, results chan<- int) {
+	    for n := range jobs {
+		results <- fib(n)
+	    }
+	}
 
-func fib(n int) int {
-    if n <= 1 {
-        return n
-    }
-    return fib(n-1) + fib(n-2)
-}</td>
+	func fib(n int) int {
+	    if n <= 1 {
+		return n
+	    }
+	    return fib(n-1) + fib(n-2)
+	}
+</td>
   </tr>
 </table>
 
@@ -123,24 +126,26 @@ Developed by Google, gRPC is an open source Remote Procedure Call framework and 
 
 <table>
   <tr>
-    <td>syntax = "proto3"
-option go_package = “greeter”
-package main
-// The greeter service definition.
-service Greeter {
-  // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply) {}
-}
+    <td>
 
-// The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
-}
+	syntax = "proto3"
+	option go_package = “greeter”
+	package main
+	// The greeter service definition.
+	service Greeter {
+	  // Sends a greeting
+	  rpc SayHello (HelloRequest) returns (HelloReply) {}
+	}
 
-// The response message containing the greetings
-message HelloReply {
-  string message = 1;
-}
+	// The request message containing the user's name.
+	message HelloRequest {
+	  string name = 1;
+	}
+
+	// The response message containing the greetings
+	message HelloReply {
+	  string message = 1;
+	}
 </td>
   </tr>
 </table>
@@ -150,42 +155,44 @@ You can then use the protoc command to compile your service into any of [gRPC’
 
 <table>
   <tr>
-    <td>// Code generated by protoc-gen-go. DO NOT EDIT.
-// versions:
-//  protoc-gen-go v1.23.0
-//  protoc        v3.6.1
-// source: greeter.proto
+    <td>
 
-package greeter
+	// Code generated by protoc-gen-go. DO NOT EDIT.
+	// versions:
+	//  protoc-gen-go v1.23.0
+	//  protoc        v3.6.1
+	// source: greeter.proto
+	
+	package greeter
 
-import (
-    proto "github.com/golang/protobuf/proto"
-    protoreflect "google.golang.org/protobuf/reflect/protoreflect"
-    protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-    reflect "reflect"
-    sync "sync"
-)
+	import (
+	    proto "github.com/golang/protobuf/proto"
+	    protoreflect "google.golang.org/protobuf/reflect/protoreflect"
+	    protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	    reflect "reflect"
+	    sync "sync"
+	)
 
-const (
-    // Verify that this generated code is sufficiently up-to-date.
-    _ = protoimpl.EnforceVersion(20 - protoimpl.MinVersion)
-    // Verify that runtime/protoimpl is sufficiently up-to-date.
-    _ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
-)
+	const (
+	    // Verify that this generated code is sufficiently up-to-date.
+	    _ = protoimpl.EnforceVersion(20 - protoimpl.MinVersion)
+	    // Verify that runtime/protoimpl is sufficiently up-to-date.
+	    _ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
+	)
 
-// This is a compile-time assertion that a sufficiently up-to-date version
-// of the legacy proto package is being used.
-const _ = proto.ProtoPackageIsVersion4
+	// This is a compile-time assertion that a sufficiently up-to-date version
+	// of the legacy proto package is being used.
+	const _ = proto.ProtoPackageIsVersion4
 
-// The request message containing the user's name.
-type HelloRequest struct {
-    state         protoimpl.MessageState
-    sizeCache     protoimpl.SizeCache
-    unknownFields protoimpl.UnknownFields
+	// The request message containing the user's name.
+	type HelloRequest struct {
+	    state         protoimpl.MessageState
+	    sizeCache     protoimpl.SizeCache
+	    unknownFields protoimpl.UnknownFields
 
-    Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-}
-//... excess code has been left out</td>
+	    Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	}
+	//... excess code has been left out</td>
   </tr>
 </table>
 
@@ -206,89 +213,90 @@ Python’s Numpy and sklearn packages have all the built-in tools needed to impl
 
 <table>
   <tr>
-    <td>import numpy as np
-from sklearn.decomposition import PCA
-import argparse
+    <td>
 
+	import numpy as np
+	from sklearn.decomposition import PCA
+	import argparse
 
-parser = argparse.ArgumentParser(description='postprocess word embeddings')
-parser.add_argument("file", help="file containing embeddings to be processed")
-args = parser.parse_args()
-N = 2
-embedding_file = args.file
-embs = []
+	parser = argparse.ArgumentParser(description='postprocess word embeddings')
+	parser.add_argument("file", help="file containing embeddings to be processed")
+	args = parser.parse_args()
+	N = 2
+	embedding_file = args.file
+	embs = []
 
-#map indexes of word vectors in matrix to their corresponding words
-idx_to_word = dict()
-dimension = 0
-#append each vector to a 2-D matrix and calculate average vector
-with open(embedding_file, 'rb') as f:
-    first_line = []
-    for line in f: 
-        first_line = line.rstrip().split()
-        dimension = len(first_line) - 1
-        if dimension < 100 :
-            continue
-        print("dimension: ", dimension)
-        
-        break
-    avg_vec = [0] * dimension
-    vocab_size = 0
-    word = str(first_line[0].decode("utf-8"))
-    word = word.split("_")[0]
-    # print(word)
-    idx_to_word[vocab_size] = word
-    vec = [float(x) for x in first_line[1:]]
-    avg_vec = [vec[i] + avg_vec[i] for i in range(len(vec))]
-    vocab_size += 1
-    embs.append(vec)
-    for line in f:
-        line = line.rstrip().split()
-        word = str(line[0].decode("utf-8"))
-        word = word.split("_")[0]
-        idx_to_word[vocab_size] = word
-        vec = [float(x) for x in line[1:]]
-        avg_vec = [vec[i] + avg_vec[i] for i in range(len(vec))]
-        vocab_size += 1
-        embs.append(vec)
-    avg_vec = [x / vocab_size for x in avg_vec]
-# convert to numpy array
-embs = np.array(embs)
+	#map indexes of word vectors in matrix to their corresponding words
+	idx_to_word = dict()
+	dimension = 0
+	#append each vector to a 2-D matrix and calculate average vector
+	with open(embedding_file, 'rb') as f:
+	    first_line = []
+	    for line in f: 
+		first_line = line.rstrip().split()
+		dimension = len(first_line) - 1
+		if dimension < 100 :
+		    continue
+		print("dimension: ", dimension)
 
-#subtract average vector from each vector
-for i in range(len(embs)):
-    new_vec = [embs[i][j] - avg_vec[j] for j in range(len(avg_vec))]
-    embs[i] = np.array(new_vec)
+		break
+	    avg_vec = [0] * dimension
+	    vocab_size = 0
+	    word = str(first_line[0].decode("utf-8"))
+	    word = word.split("_")[0]
+	    # print(word)
+	    idx_to_word[vocab_size] = word
+	    vec = [float(x) for x in first_line[1:]]
+	    avg_vec = [vec[i] + avg_vec[i] for i in range(len(vec))]
+	    vocab_size += 1
+	    embs.append(vec)
+	    for line in f:
+		line = line.rstrip().split()
+		word = str(line[0].decode("utf-8"))
+		word = word.split("_")[0]
+		idx_to_word[vocab_size] = word
+		vec = [float(x) for x in line[1:]]
+		avg_vec = [vec[i] + avg_vec[i] for i in range(len(vec))]
+		vocab_size += 1
+		embs.append(vec)
+	    avg_vec = [x / vocab_size for x in avg_vec]
+	#convert to numpy array
+	embs = np.array(embs)
 
-#principal component analysis using sklearn
-pca = PCA()
-pca.fit(embs)
+	#subtract average vector from each vector
+	for i in range(len(embs)):
+	    new_vec = [embs[i][j] - avg_vec[j] for j in range(len(avg_vec))]
+	    embs[i] = np.array(new_vec)
 
-#remove the top N components from each vector
-for i in range(len(embs)):
-    preprocess_sum = [0] * dimension
-    for j in range(N):
-        princip = np.array(pca.components_[j])
-        preprocess = princip.dot(embs[i])
-        preprocess_vec = [princip[k] * preprocess for k in range(len(princip))]
-        preprocess_sum = [preprocess_sum[k] + preprocess_vec[k] for k in range(len(preprocess_sum))]
-    embs[i] = np.array([embs[i][j] - preprocess_sum[j] for j in range(len(preprocess_sum))])
+	#principal component analysis using sklearn
+	pca = PCA()
+	pca.fit(embs)
 
-file = open("postprocessed_embeddings.txt", "w+", encoding="utf-8")
+	#remove the top N components from each vector
+	for i in range(len(embs)):
+	    preprocess_sum = [0] * dimension
+	    for j in range(N):
+		princip = np.array(pca.components_[j])
+		preprocess = princip.dot(embs[i])
+		preprocess_vec = [princip[k] * preprocess for k in range(len(princip))]
+		preprocess_sum = [preprocess_sum[k] + preprocess_vec[k] for k in range(len(preprocess_sum))]
+	    embs[i] = np.array([embs[i][j] - preprocess_sum[j] for j in range(len(preprocess_sum))])
 
-#write back new word vector file
-idx = 0
-for vec in embs:
-    file.write(idx_to_word[idx])
-    file.write(" ")
-    for num in vec:
-        file.write(str(num))
-        file.write(" ")
-    file.write("\n")
-    idx+=1
-file.close()
+	file = open("postprocessed_embeddings.txt", "w+", encoding="utf-8")
 
-print("Wrote: ", len(embs), "word embeddings")</td>
+	#write back new word vector file
+	idx = 0
+	for vec in embs:
+	    file.write(idx_to_word[idx])
+	    file.write(" ")
+	    for num in vec:
+		file.write(str(num))
+		file.write(" ")
+	    file.write("\n")
+	    idx+=1
+	file.close()
+
+	print("Wrote: ", len(embs), "word embeddings")</td>
   </tr>
 </table>
 
@@ -351,32 +359,35 @@ After finishing the code for our new SIF, my final step was to prepare it for pr
 
 <table>
   <tr>
-    <td># Start from the latest golang base image
-FROM golang:latest
+    <td>
+	
+	# Start from the latest golang base image
+	FROM golang:latest
 
-# Add Maintainer Info
-LABEL maintainer="Daniel Ye <daniel.ye@nlmatics.com>"
+	# Add Maintainer Info
+	LABEL maintainer="Daniel Ye <daniel.ye@nlmatics.com>"
 
-# Set the Current Working Directory inside the container
-WORKDIR /app
+	# Set the Current Working Directory inside the container
+	WORKDIR /app
 
-# Copy go mod and sum files
-COPY go.mod go.sum ./
+	# Copy go mod and sum files
+	COPY go.mod go.sum ./
 
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
-RUN go mod download
+	# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+	RUN go mod download
 
-# Copy the source from the current directory to the Working Directory inside the container
-COPY . .
+	# Copy the source from the current directory to the Working Directory inside the container
+	COPY . .
 
-# Build the Go app
-RUN go build -o main .
+	# Build the Go app
+	RUN go build -o main .
 
-# Expose port 8080 to the outside world
-EXPOSE 8080
+	# Expose port 8080 to the outside world
+	EXPOSE 8080
 
-# Command to run the executable
-CMD ["./main"]</td>
+	# Command to run the executable
+	CMD ["./main"]
+</td>
   </tr>
 </table>
 
