@@ -7,7 +7,7 @@ categories: CATEGORY-1 CATEGORY-2
 <h1 align="center"> A Comprehensive Guide to Training a Machine Learning Model for Question Answering: </h1>
 <h2 align="center"> Fine-tuning ALBERT on Google Natural Questions </h2>
 
-By Nicholas Greenspan and Batya Stein
+By Nick Greenspan and Batya Stein
 
 ### Contents:
 1. [Setting up the EC2 Instance](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#part-1-setting-up-the-ec2-instance)
