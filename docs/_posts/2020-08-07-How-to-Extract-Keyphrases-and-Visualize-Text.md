@@ -33,7 +33,7 @@ In this piece, I’ll walk through a simplified version of the process I went th
 #### INTRO. TO RAKE AND YAKE
 Keyphrase extraction is not an easy task for a computer; it’s not even easy for humans! Take this sentence for example (taken from the [Harry Potter Wikipedia page](https://en.wikipedia.org/wiki/Harry_Potter)):
 
-“The central character in the series is Harry Potter, a boy who lives in the fictional town of Little Whinging, Surrey with his aunt, uncle, and cousin.”
+<div align="center">“The central character in the series is Harry Potter, a boy who lives in the fictional town of Little Whinging, Surrey with his aunt, uncle, and cousin.”</div>
 
 What are the important keyphrases here? Are they the proper nouns—“Harry Potter” and “Little Whinging, Surrey”? Or are they people—“boy,” “aunt,” “uncle,” and “cousin”? Or are the book-related terms most important—”central character”, “series”, “fictional”? As you can see, there are many different interpretations of what makes a keyphrase “meaningful,” even to human judgement. This makes keyphrase extraction a very interesting area of NLP research. [This paper](https://arxiv.org/pdf/1905.05044.pdf), published in July 2019, provides a very thorough overview of the unsupervised and supervised methods currently in the field. Additionally, [this paper](https://www.aclweb.org/anthology/P14-1119.pdf) from 2014 is also a very prominent literature review, if a bit outdated.
 
@@ -58,8 +58,8 @@ YAKE is another keyword extraction technique (YAKE literally stands for “Yet A
 
 <div align="center"><i>An example of YAKE-extracted keyphrases and their scores. Low scores represent high relevance.</i></div>
 
-USING RAKE AND YAKE
-I would recommend following along in `notebook.ipynb` from the repository above. Alternatively, you can copy and paste these code blocks into your own new notebook. First, you can install and import these two libraries:
+#### USING RAKE AND YAKE
+I would recommend following along in `notebook.ipynb` from the repository above. Alternatively, you can copy and paste these code blocks into your own new notebook. First, install and import these two libraries:
 
 	!pip install rake_nltk
 	!pip install yake
@@ -182,17 +182,17 @@ We’ll be using a subset of the entire dataset and cleaning it up a little bit,
 
 **Now this is where our keyphrases come in.** We want to preserve as much meaning as possible from the sentence when we project it down into two dimensions and cluster them. In many cases, raw sentences have a lot of junk in them. We can see this even with our example sentence from above:
 
-“**The** central character **in the** series **is** Harry Potter, **a** boy **who** lives **in the** fictional town **of** Little Whinging, Surrey **with his** aunt, uncle, **and** cousin.”
+<div align="center">“**The** central character **in the** series **is** Harry Potter, **a** boy **who** lives **in the** fictional town **of** Little Whinging, Surrey **with his** aunt, uncle, **and** cousin.”</div>
 
 Out of the 27 words in the sentences, 12 of them are stopwords (bolded above). That’s almost half of the words that essentially add no meaning to the sentence!
 
 What we’ll do to overcome this is create “sentences” from our extracted keyphrases; i.e. stringing together all of the keyphrases for a given entry. This will emphasize the meaningful bits in it and de-emphasize the not-so-meaningful ones. Let’s use a shorter example; the sentence:
 
-“There is a big black cat”
+<div align="center">“There is a big black cat”</div>
 
  gets the keyphrases:
 
-“big black cat”, “black cat”
+<div align="center">“big black cat”, “black cat”</div>
 
 when passed in to our `get_keyphrases` function above. The joined “sentence” would then become “big black cat black cat,” essentially boiling the sentence down into its core meaning. We will use this for our projections. The below code will print an example from our dataset.
 
@@ -399,9 +399,9 @@ To this:
 And that’s it! Refresh your kernel and run all cells, and you should get something like this (or just go ahead and run all of them if you’re using my `notebook.ipynb`). A colorful, interactive way of visualizing the most meaningful clusters of your data.
 
 
-<div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif"></div>
+<div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif"></div><br>
 
-<div align="center"><i>Again, here’s the link to a <a href="https://github.com/cznlm/visualize-keyphrases">repository with the relevant code</a> if you wish to download and run directly.</i></div>
+<i>Again, here’s the link to a <a href="https://github.com/cznlm/visualize-keyphrases">repository with the relevant code</a> if you wish to download and run directly.</i>
 
 ### FURTHER DIRECTIONS
 There are a couple of clear directions from here, namely working on reducing noise and experimenting more with/fine-tuning the clustering algorithm. As you can see from the demo GIF, the labels themselves are far from perfect. It would be great to have a representative keyphrase of an entire cluster as opposed to just the top feature. However, it seems that the automatic keyphrase extraction techniques we were using are not suited for this purpose, so looking into perhaps unsupervised and supervised techniques would be a great future direction as well.
