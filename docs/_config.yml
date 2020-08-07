@@ -29,7 +29,7 @@ twitter_username: nlmatics
 github_username:  nlmatics
 
 # Build settings
-theme: minima
+theme: Minima
 plugins:
   - jekyll-feed
 
@@ -37,7 +37,7 @@ plugins:
 
 
 ##Authors
-##in authors yaml file
+
 
 # Exclude from processing.
 # The following items will not be processed, by default.
