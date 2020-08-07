@@ -18,7 +18,7 @@ SQuAD 2.0 and Google Natural Questions are two of the most prominent datasets in
 
 [SQuAD 2.0](https://rajpurkar.github.io/SQuAD-explorer/): “SQuAD is a reading comprehension dataset, consisting of questions posed by crowdworkers on a set of Wikipedia articles, where the answer to every question is a segment of text, or span, from the corresponding reading passage, or the question might be unanswerable.”
 
-![](/site_files/nick_post_nq_image.png)
+![](/site_files/nick_post/nq_image.png)
 
 [Google Natural Questions](https://ai.google.com/research/NaturalQuestions): “The NQ corpus contains questions from real users, and it requires QA systems to read and comprehend an entire Wikipedia article that may or may not contain the answer to the question.”
 
