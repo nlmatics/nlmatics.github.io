@@ -9,7 +9,7 @@ Daniel Ye
 
 ## Table of Contents
 
-1. [Introduction ](#bookmark=id.uv0gxlx5wixm) 
+1. [Introduction ](#introduction) 
 
 2. [Motivation](#bookmark=id.pcgyzkz8chfm)
 
@@ -23,13 +23,13 @@ Daniel Ye
 
 7. [Conclusion](#bookmark=id.ouhqmef3a5d5)
 
-**1. Introduction**
+## 1. Introduction
 
 I am a rising junior majoring in computer science and minoring in operations research and information engineering at Cornell Engineering. This summer, I interned at NLMatics, and one of the projects I worked on was implementing a [Smooth Inverse Frequency](https://openreview.net/pdf?id=SyK00v5xx#page=12&zoom=100,110,217) model using Golang. This is able to calculate sentence embeddings from sequences of words in the form of vectors, which mathematically represent the meaning of the sentence. We use it to encode documents and queries into embeddings which are then processed further using other natural language processing models to get search results. However, our original Python implementation was fairly slow at calculating these embeddings, and it scaled poorly with increasing document sizes or concurrent requests, so we needed to find a way to speed up the service. 
 
 Over the course of about four weeks, I worked on combating this issue by developing a Golang implementation of the model and switching from HTTP 1.0 protocol to gRPC protocol for the server. This increased the amount of concurrent processing we were able to utilize, and reduced overhead for connecting and sending requests to the server, speeding up the service greatly. Ultimately, I was able to build a system that generated more accurate sentence embeddings at much faster speeds.
 
-**2. Motivation**
+## 2. Motivation
 
 	
 
@@ -64,7 +64,7 @@ Arora et. al found that despite its simplicity, SIF worked surprisingly well on 
 
 Due to its effectiveness and simplicity, SIF is an incredibly practical method of embedding sentences for commercial or enterprise products that rely on both accurate and fast results while consuming low amounts of resources. 
 
-**2. Why Golang?**
+## 3. Why Golang?
 
 The [original code](https://github.com/PrincetonML/SIF) corresponding to the paper describing SIF is implemented in Python, which by design has a [Global Interpreter Lock (GIL)](https://wiki.python.org/moin/GlobalInterpreterLock), a mutex that prevents multi threaded processes from utilizing multiple cores of a processor. We hosted our Cython implementation of the SIF embedding model on a cloud service, which provided us with multiple cores of processing power. However, the GIL meant that we could not make use of the full processing power we were paying for. 
 
@@ -121,7 +121,7 @@ The results were impressive, to say the least. At a sentence level, around 10-10
 
 I found that Go works incredibly well for creating a web service capable of handling many concurrent requests efficiently. However, Go’s build in functionality does have a significant limitation of restricting HTTP requests to sizes of 1MB or less, which was not ideal for our use cases where we had to embed large amounts of text in a single request. For example, a legal company looking to process Google’s 2019 environmental and sustainability report would need about 11 MB of payload. Or a stressed-out undergraduate trying to find tips in *Cracking the Coding Interview* would require around 90 MB of allowance. Additionally, every HTTP request requires a new connection to be made between the server and client, which adds a significant amount of overhead to our typical use case which often requires embedding many documents at once and sending many requests.
 
-**3. GRPC Improvements**
+## 4. GRPC Improvements
 
 Developed by Google, gRPC is an open source Remote Procedure Call framework and is what I turned to in order to hopefully remove the size limit and connection overhead problems with Go’s http package. gRPC processes payloads from requests using buffers, so it removes the 1MB size cap on requests. It also maintains connections between individual clients, so a single user can make multiple requests without having to create a connection more than once. It has its own Interface Definition Language called protocol buffers that also serve as a mechanism for serializing structured data and uses HTTP/2 to transport data. gRPC services are defined in .proto files:
 
@@ -205,7 +205,7 @@ Due to how gRPC buffers data being received and sent, we no longer had to worry 
 
 The largest improvements are seen when requests have very small payloads, so the majority of time is spent on overhead from connecting to the server. However, once you get to larger payloads, the times converge to become about equal.
 
-**4. Post-Processing Improvements **
+## 5. Post-Processing Improvements
 
 A coworker sent me this [paper about post-processing word vectors](https://arxiv.org/pdf/1702.01417.pdf) in order to improve their representation of meaning. The algorithm essentially takes a list of pre-computed word vectors and performs principal component analysis on them, and then removes the top N components from every vector via Gram-Schmidt. Here is their formal algorithm:
 
@@ -356,7 +356,7 @@ I benchmarked the system on semantic text similarities tests using  the MSR Para
 
 The post-processed vectors outperformed the original in every case. I also benchmarked our system using a word frequency file generated by fellow intern Connie Xu using a June snapshot of all of Wikipedia. It had a far more comprehensive vocabulary than our current word frequency file, with over 50x as many entries, but performance results were inconclusive. The results do indicate, however, that post-processed word vectors also increase performance of sentence embedding systems.
 
-**5. Productionalizing With Docker**
+## 5. Productionalizing With Docker
 
 After finishing the code for our new SIF, my final step was to prepare it for production, which meant an inevitable encounter with Docker. Here is my Dockerfile, which I got from [this tutorial:](https://www.callicoder.com/docker-golang-image-container-example/)
 
@@ -407,7 +407,7 @@ Most components are fairly self-explanatory. It does require that you use Go mod
 
 5. Run your project with docker run -d -p 8080:8080 <project name>
 
-**6. Conclusion**
+## 6. Conclusion
 
 Improving the SIF implementation was a really interesting project. There were a lot of fun challenges involved like solving the ordering of goroutines and dealing with concurrent writes to map. It was incredibly satisfying to run my own benchmarks and see quantitative improvements in performance go as high as 30x the original speed. Of course, more improvements can still be made. [This paper](https://arxiv.org/pdf/2005.09069.pdf) details how SIF embeddings of documents can be improved by producing and then combining topic vectors. Other models for embedding sentences such as [Universal Sentence Encoder](https://arxiv.org/pdf/1803.11175.pdf) or [Sentence-BERT](https://arxiv.org/pdf/1908.10084.pdf) have been developed in recent years as well and are able to outperform SIF in certain categories of NLP tasks. 
 
