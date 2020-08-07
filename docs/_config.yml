@@ -29,7 +29,7 @@ twitter_username: nlmatics
 github_username:  nlmatics
 
 # Build settings
-theme: minima
+theme: Minima
 plugins:
   - jekyll-feed
 
