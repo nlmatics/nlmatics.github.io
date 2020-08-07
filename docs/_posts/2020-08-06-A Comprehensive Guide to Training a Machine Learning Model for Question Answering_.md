@@ -164,7 +164,7 @@ Next, we’ll edit the run_squad.py script to integrate wandb logging. (You can 
 
 Now that you’ve added wandb statements into your script, you can watch your training progress from the wandb project dashboard. Two particularly helpful sections are the charts, where you can see loss and evaluation metrics, and the logs, where you can see the output of your script as it runs to track what percent complete your training is.
 
-![](/site_files/nick-batya-post-imgs/wandb_charts.png)
+![wandb chart](/site_files/nick-batya-post-imgs/checkpoints.png)
 
 _Wandb charts from our Google Natural Questions training_
 
@@ -288,7 +288,7 @@ Below is a list of parameters that we used for running run_squad.py. Note that n
 
 **Screen command**
 
-_We know you’re waiting to start training, but here are a few helpful commands before jumping in._ 
+_We know you’re probably excited to start training, but here are a few helpful commands before jumping in._ 
 
 Before you start training your model there is one important terminal functionality you should use. Since you don’t want the training process to stop every time your terminal disconnects from the EC2 instance, which will happen after periods of inactivity, you need to disconnect the process of training the model from the EC2 terminal. To do this, go to the terminal logged into your EC2 instance and run the command `screen` which will create a blank terminal screen. Once you have done that you can run the command to start the training. 
 
