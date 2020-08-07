@@ -11,7 +11,7 @@ categories: CATEGORY-1 CATEGORY-2
 <h1 align="center"> A Comprehensive Guide to Training a Machine Learning Model for Question Answering: </h1>
 <h2 align="center"> Fine-tuning ALBERT on Google Natural Questions </h2>
 
-By Nick Greenspan and Batya Stein
+By Nicholas Greenspan and Batya Stein
 
 ### Contents:
 1. [Setting up the EC2 Instance](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#part-1-setting-up-the-ec2-instance)
@@ -56,11 +56,11 @@ To learn more about the datasets we worked with, see the links above or our blog
 ## PART 1: SETTING UP THE EC2 INSTANCE
 
 ## Choosing And Launching An EC2 Instance:
-_To start our model training, we have to choose the right platform (one with much more computing power than a personal computer)_
+_To start our model training, we have to choose the right platform (one with a bit more computing power than a personal computer)_
 
-|![](/site_files/nick-batya-post-imgs/launch_instance.gif)|
-|---| 
-| _Process of launching an EC2 instance (taken August 2020)_|
+|![ec2 instance list](http://www.kodyaz.com/images/aws/aws-ec2-dashboard-to-list-all-ec2-instances.png)|
+|:--:| 
+| _List of instances in EC2 dashboard_|
 
 **What is AWS EC2?**
 
@@ -394,3 +394,4 @@ https://medium.com/@arnab.k/how-to-keep-processes-running-after-ending-ssh-sessi
 https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html -- authorizing inbound traffic to instance\
 https://github.com/huggingface/transformers#run_squadpy-fine-tuning-on-squad-for-question-answering
 https://machinelearningmastery.com/classification-accuracy-is-not-enough-more-performance-measures-you-can-use/ -- meaning of f1 score\
+http://www.kodyaz.com/aws/list-all-amazon-EC2-instances-using-aws-gui-tools.aspx -- EC2 instance dashboard image
