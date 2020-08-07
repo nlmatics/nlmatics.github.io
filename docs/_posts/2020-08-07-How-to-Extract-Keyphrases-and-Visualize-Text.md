@@ -8,9 +8,9 @@ categories: KEYPHRASE-EXTRACTION VISUALIZATION TEXT NLP PYTHON JAVASCRIPT KEPPLE
 
 ## Cheyenne Zhang
 
-<span style="text-align: center">![Clustered 20 newsgroup.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif)</span>
+<span align="center">![Clustered 20 newsgroup.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif)</span>
 
-<span style="text-align: center">*The end product of following this article on the 20 newsgroup dataset. Clusters represent related phrases, and each cluster is labeled with a representative phrase.*</span>
+<span align="center">*The end product of following this article on the 20 newsgroup dataset. Clusters represent related phrases, and each cluster is labeled with a representative phrase.*</span>
 
 ### INTRODUCTION
 
@@ -105,17 +105,17 @@ It’s that simple! As you can see, the keyphrases aren’t perfect. To help get
 	    if text.strip() == "":
              return [""]
 
-    r.extract_keywords_from_text(text)
-    rake_keywords = r.get_ranked_phrases_with_scores()
-    yake_keywords = y.extract_keywords(text)
-    keyphrases = []
-    for kw in rake_keywords:
-        if kw[0] > 3:
-            keyphrases.append(kw[1])
-    for kw in yake_keywords:
-        if kw[0] < 0.4:
-            keyphrases.append(kw[1])
-    return list(set(keyphrases)) # to remove duplicates
+      r.extract_keywords_from_text(text)
+      rake_keywords = r.get_ranked_phrases_with_scores()
+      yake_keywords = y.extract_keywords(text)
+      keyphrases = []
+      for kw in rake_keywords:
+          if kw[0] > 3:
+              keyphrases.append(kw[1])
+      for kw in yake_keywords:
+          if kw[0] < 0.4:
+              keyphrases.append(kw[1])
+      return list(set(keyphrases)) # to remove duplicates
 
 A bit better! There are still some inconsistencies that we would be able to fix up with different heuristics, but for now, I think that the keyphrases give an acceptable overview of our example text.
 
@@ -231,7 +231,7 @@ Now that we have `projected_X`, a list of 2D representations of each of our sent
 
 *DBSCAN on the newsgroup20 dataset.*
 
-![Agglomerative on 20 newsgroup.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/aggolmerative.png)
+![Agglomerative on 20 newsgroup.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/agglomerative.png)
 
 *AgglomerativeClustering on the newsgroup20 dataset.*
 
