@@ -1,8 +1,12 @@
+---
 
 layout: page 
 title: "A Comprehensive Guide to Training a Machine Learning Model for Question Answering" 
 date: 2020-08-06 10:30:00 -0000
+author: Batya Stein & Nicholas Greenspan
 categories: CATEGORY-1 CATEGORY-2
+
+---
 
 <h1 align="center"> A Comprehensive Guide to Training a Machine Learning Model for Question Answering: </h1>
 <h2 align="center"> Fine-tuning ALBERT on Google Natural Questions </h2>
@@ -160,7 +164,7 @@ Next, we’ll edit the run_squad.py script to integrate wandb logging. (You can 
 
 Now that you’ve added wandb statements into your script, you can watch your training progress from the wandb project dashboard. Two particularly helpful sections are the charts, where you can see loss and evaluation metrics, and the logs, where you can see the output of your script as it runs to track what percent complete your training is.
 
-![wandb chart](/site_files/nick-batya-post-imgs/checkpoints.png)
+![](/site_files/nick-batya-post-imgs/checkpoints.png)
 
 _Wandb charts from our Google Natural Questions training_
 
