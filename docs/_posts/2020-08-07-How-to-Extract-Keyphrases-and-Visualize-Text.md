@@ -8,9 +8,9 @@ categories: KEYPHRASE-EXTRACTION VISUALIZATION TEXT NLP PYTHON JAVASCRIPT KEPPLE
 
 ## Cheyenne Zhang
 
-<span align="center">![Clustered 20 newsgroup.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif)</span>
+<div align="center">![Clustered 20 newsgroup.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif)</div>
 
-<span align="center"><i>The end product of following this article on the 20 newsgroup dataset. Clusters represent related phrases, and each cluster is labeled with a representative phrase.</i></span>
+<div align="center"><i>The end product of following this article on the 20 newsgroup dataset. Clusters represent related phrases, and each cluster is labeled with a representative phrase.</i></div>
 
 ### INTRODUCTION
 
