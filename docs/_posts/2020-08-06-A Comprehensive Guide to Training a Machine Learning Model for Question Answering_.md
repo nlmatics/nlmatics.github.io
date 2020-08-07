@@ -112,6 +112,8 @@ _Before we can get started with training, we’ll need to load all the necessary
 **Upload training data**
 
 Prepare for training by connecting to your EC2 instance from the terminal of your choice and creating a directory inside it to store the data files in. (See section II, on downloading and reformatting data, to learn how to get your data into the right format before you start working with it.) Upload your training and dev sets into the directory (in json format). Upload the training script, which can be [found in the Transformers github repo](https://github.com/huggingface/transformers/blob/master/examples/question-answering/run_squad.py), onto the instance. Lastly, create a new directory that will be used to store the evaluations and model checkpoints from the script’s output.
+
+Note that if you've previously trained a model of the same type on your EC2 instance, there will be a cached datafile with a name like "cached_dev_albert-xlarge-v2_384". If you're training on a different dataset than you used in the previous training, make sure to delete the cached file, otherwise the script will automatically load the data from it and you'll end up training on different data then you meant to.
  
 **File transferring**
 
@@ -353,6 +355,8 @@ If you encounter an error and want to pick up the training where you left off, o
 All that is necessary is to run the same command you ran to start the training except `--model_name_or_path` must be set to the path to the folder for the checkpoint you want to resume training from. For example if your output folder is called outputs-2 and you want to resume training from checkpoint-1500 you should have `--model_name_or_path /path_to_outputs_folder/outputs-2/checkpoint-1500`. For consistency, if you're restarting training from the middle, you may want to see what the learning rate was at the checkpoint you're using (on wandb), and use that as the starting learning rate for your new training.
 
 Note that if you do end up stopping your training early due to the metrics leveling off, you will have stopped the script before it reached the evaluation section, so if you want the evaluation results you will have to run the script again with only the --do_eval flag, and not the --do_train flag, and --model_name_or_path should be set to the path to the checkpoint you want to evaluate. 
+
+Also note that if you previously ran an evaluation on a checkpoint, and now you want to evaluate that checkpoint using a different data file than you originally used, be sure to delete the any cached dataset files associated with that checkpoint (which will have names like "cached_dev_checkpoint-7000-v2_384"), so that your evaluation runs on the new data file instead of the old cached data.
 
 ## Understanding Your Model Outputs
 _What’s the point in training a model if we can’t understand what it's telling us? Here is a primer on comprehending model terms._
