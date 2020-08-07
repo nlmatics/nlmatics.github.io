@@ -35,9 +35,9 @@ Over the course of about four weeks, I worked on combating this issue by develop
 
 Word embeddings are one of the most important developments in the field of modern Natural Language Processing. Translating the meaning behind words and the semantic relationships between them into measurable quantities is a crucial step in processing language. Many words, such as "cat" and “dog” or “Mozart” and “Beethoven” have almost no physical characteristics that would reveal their similarities. Instead, modern algorithms like Google’s [Word2Vec](https://arxiv.org/abs/1301.3781) developed in 2013 or Stanford’s [GloVe](https://nlp.stanford.edu/pubs/glove.pdf) essentially count the cooccurrences of words with other words, and condense these values into dense, relatively low-dimensional vectors. Their models train on massive corpora of English text such as all of Wikipedia, and embed words as vectors based on which other words they appear in proximity to. So, if “cat” and “dog” are found together in many sentences or documents, they will have very similar vector values. This method is able to capture not only semantic similarity, but also analogies (woman is to man as king is to __) and the effects of prefixes or suffixes.
 
-![image alt text](https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_0.png?raw=true)
+<p align="center"> <img src="https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_0.png"/>
 
-*semantic relationships represented by Word2Vec and GloVe*
+<p align="center"> <em>semantic relationships represented by Word2Vec and GloVe</em>
 
 A natural next step in the field was the development of sentence embeddings, or being able to extract meaning from a sequence of words. Early methods include:
 
@@ -53,14 +53,16 @@ A natural next step in the field was the development of sentence embeddings, or 
 
 In 2017, Arora et. al proposed SIF, or [Smooth Inverse Frequency](https://openreview.net/pdf?id=SyK00v5xx#page=12&zoom=100,110,217), a weighting scheme to improve performance of sentence embeddings. When encoding a sentence, it is important to identify which words in the sentence are more significant. For example, if calculating the embedding of the sentence "who was Mozart?" the word “was” doesn’t add much meaning; looking for sentences or documents relating to the word “was” will not yield any useful results for the original question. It’s clear that “Mozart” holds the most meaning in the question from a human standpoint, but how do you program a machine to identify that? SIF operates under the assumption that the most important words tend to also be used less frequently. If you counted all the words in Wikipedia, the word “was” would most likely appear much more frequently than in “Mozart”. Weights of a word *w* are computed by *a/(a + p(w))* where a is a parameter and p(w) is the word frequency of w, which can be estimated by scraping a large corpus.* *The hyperparameter *a* adjusts which words are quantitatively “common” and “uncommon.” Here is the formal algorithm:
 
-![image alt text](https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_1.png) 
+<p align="center"> <img src="https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_1.png"/>
 
 Arora et. al found that despite its simplicity, SIF worked surprisingly well on semantic text similarity (STS), entailment, and sentiment tasks. STS tasks involve scoring pairs of sentences from 0-5 based on how similar their meanings are, which are then checked against a golden standard of human generated scores. For example, "The bird is bathing in the sink" and “Birdie is washing itself in the water basin” should receive a 5. Entailment tasks involve identifying if one sentence *entails* that another one is true. For example, if you read the sentence “There is a soccer game with multiple males playing,” you could infer that the sentence “Several men are playing a sport” is true. Thus the first sentence, commonly referred to as the *text* entails the following, also known as the *hypothesis*.
 
-![image alt text](https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_2.png)
-![image alt text](https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_3.png)
+<p align="center"> 
+	<img src="https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_2.png"/>
+	<img src="https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_3.png"/>
+</p>
 
-*Tables detailing SIF performance on various semantic tasks. "GloVe + WR", “PSL + WR”, and “Ours” correspond to SIF systems.*
+<p align="center"> <em>*Tables detailing SIF performance on various semantic tasks. "GloVe + WR", “PSL + WR”, and “Ours” correspond to SIF systems.*</em>
 
 Due to its effectiveness and simplicity, SIF is an incredibly practical method of embedding sentences for commercial or enterprise products that rely on both accurate and fast results while consuming low amounts of resources. 
 
@@ -211,7 +213,9 @@ The largest improvements are seen when requests have very small payloads, so the
 
 A coworker sent me this [paper about post-processing word vectors](https://arxiv.org/pdf/1702.01417.pdf) in order to improve their representation of meaning. The algorithm essentially takes a list of pre-computed word vectors and performs principal component analysis on them, and then removes the top N components from every vector via Gram-Schmidt. Here is their formal algorithm:
 
-![image alt text](https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_8.png)
+<p align="center">
+	<img src="https://github.com/nlmatics/nlmatics.github.io/blob/daniel-blog-post/docs/site_files/daniel-post-images/image_8.png"/>
+</p>
 
 Python’s Numpy and sklearn packages have all the built-in tools needed to implement this algorithm, which you can find the code for [here](https://github.com/daniel-ye137/WordVectorProcessing):
 
