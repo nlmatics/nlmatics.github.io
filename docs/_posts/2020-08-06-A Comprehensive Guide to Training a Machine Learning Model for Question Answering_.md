@@ -4,8 +4,8 @@ title: "A Comprehensive Guide to Training a Machine Learning Model for Question 
 date: 2020-08-06 10:30:00 -0000
 categories: CATEGORY-1 CATEGORY-2
 
-# A Comprehensive Guide to Training a Machine Learning Model for Question Answering:
-## Fine-tuning ALBERT on Google Natural Questions
+<h1 align="center"> A Comprehensive Guide to Training a Machine Learning Model for Question Answering: </h1>
+<h2 align="center"> Fine-tuning ALBERT on Google Natural Questions </h2>
 
 By Nicholas Greenspan and Batya Stein
 
@@ -35,11 +35,11 @@ _Why do I care? What AI can do for you:_
 
 Extracting information from long text documents can be a time consuming, monotonous endeavour. A revolutionary cutting edge technology, NLP Question Answering systems can automate this process, freeing you up to use that information to make decisions to further your business. Given a piece of text and a question, a Question Answering system can tell you where the answer lies in the text, and even tell you if the answer isn't present at all! If this technology interests you, and you want to apply it at a business-level scale, you should definitely check out NLMatics’ product at https://www.nlmatics.com/.
 
-![nlmatics logo](https://static.wixstatic.com/media/97e2b2_df3bf50a5add420faa4f298c5c232584~mv2.png/v1/fill/w_336,h_64,al_c,q_85,usm_0.66_1.00_0.01/logo.webp)
+<p align="center"> <img src="https://static.wixstatic.com/media/97e2b2_df3bf50a5add420faa4f298c5c232584~mv2.png/v1/fill/w_336,h_64,al_c,q_85,usm_0.66_1.00_0.01/logo.webp"></p>
 
 We ran the model training described here during our summer engineering internship at NLMatics. Currently, one of the most popular Question Answering transformer models is trained on the [SQuAD](https://rajpurkar.github.io/SQuAD-explorer/) dataset, and we were curious to see if training on [Google Natural Questions](https://ai.google.com/research/NaturalQuestions/) could give us more effective results. (As of this post, there are no ALBERT models pretrained on Google Natural Questions available for use online.) Along the way, we learned a lot about the ins and outs of model training, memory management, and data-logging.
 
-![huggingface logo](https://raw.githubusercontent.com/huggingface/transformers/master/docs/source/imgs/transformers_logo_name.png)
+<p align="center"> <img src="https://raw.githubusercontent.com/huggingface/transformers/master/docs/source/imgs/transformers_logo_name.png"></p>
 
 Huggingface’s [transformers github repository](https://github.com/huggingface/transformers), an open source resource for training language models, greatly simplifies the training process and puts many essential materials all in one place. Huggingface provides scripts for training models on different datasets, which saves you the labor of writing your own. In order to train on a new dataset while still making use of Huggingface's [run_squad.py script](https://github.com/huggingface/transformers/blob/master/examples/question-answering/run_squad.py) and functions for evaluating SQuAD training metrics, we converted the Google Natural Questions dataset into the same format as SQuAD. For this reason, this guide can help you whether you want to use Google Natural Questions, SQuAD, or any other question answering dataset to train a transformer model. 
 
@@ -54,8 +54,9 @@ To learn more about the datasets we worked with, see the links above or our blog
 ## Choosing And Launching An EC2 Instance:
 _To start our model training, we have to choose the right platform (one with a bit more computing power than a personal computer)_
 
-![ec2 instance list](http://www.kodyaz.com/images/aws/aws-ec2-dashboard-to-list-all-ec2-instances.png)
-_List of EC2 instances in EC2 dashboard_
+|![ec2 instance list](http://www.kodyaz.com/images/aws/aws-ec2-dashboard-to-list-all-ec2-instances.png)|
+|:--:| 
+| _List of instances in EC2 dashboard_|
 
 **What is AWS EC2?**
 
