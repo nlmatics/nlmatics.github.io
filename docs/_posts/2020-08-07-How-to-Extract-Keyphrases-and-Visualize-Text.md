@@ -8,13 +8,13 @@ categories: KEYPHRASE-EXTRACTION VISUALIZATION TEXT NLP PYTHON JAVASCRIPT KEPPLE
 
 ## Cheyenne Zhang
 
-![Clustered 20 newsgroup.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif)
+<span style="text-align: center">![Clustered 20 newsgroup.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif)</span>
 
-*The end product of following this article on the [20 newsgroup dataset](http://qwone.com/~jason/20Newsgroups/). Clusters represent related phrases, and each cluster is labeled with a representative phrase.*
+<span style="text-align: center">*The end product of following this article on the 20 newsgroup dataset. Clusters represent related phrases, and each cluster is labeled with a representative phrase.*</span>
 
 ### INTRODUCTION
 
-Imagine that you’ve just gotten a huge dataset; for example, the 20newsgroup dataset, which has 11,314 entries, an example of which is shown below. What would you do to try to understand the data as a whole? Maybe you would look at some entries and their categorization. Maybe you would search the dataset for certain keywords or topics.
+Imagine that you’ve just gotten a huge dataset; for example, the [20 newsgroup dataset](http://qwone.com/~jason/20Newsgroups/), which has 11,314 entries, an example of which is shown below. What would you do to try to understand the data as a whole? Maybe you would look at some entries and their categorization. Maybe you would search the dataset for certain keywords or topics.
 
 ![20 newsgroup example.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/20newsgroupexample.png)
 
