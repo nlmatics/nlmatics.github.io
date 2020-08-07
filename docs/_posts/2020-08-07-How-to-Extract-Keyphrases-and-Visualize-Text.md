@@ -10,7 +10,7 @@ categories: KEYPHRASE-EXTRACTION VISUALIZATION TEXT NLP PYTHON JAVASCRIPT KEPPLE
 
 <span align="center">![Clustered 20 newsgroup.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif)</span>
 
-<span align="center">*The end product of following this article on the 20 newsgroup dataset. Clusters represent related phrases, and each cluster is labeled with a representative phrase.*</span>
+<span align="center"><i>The end product of following this article on the 20 newsgroup dataset. Clusters represent related phrases, and each cluster is labeled with a representative phrase.</i></span>
 
 ### INTRODUCTION
 
@@ -376,6 +376,8 @@ This is the code that creates the visual nodes we see. It gives each a size (not
             var available = Math.pow((d.size * 50 / Math.PI), 0.5) * 2 - 18; // d.size is the squared area
             return (available / length) + "em";
         });
+
+To break this chunk of code down:
 
 * The first line adds text to each node.
 * The second centers it vertically; “em” is a unit of measurement which is equal to the point size of the current font, i.e. in size 12 font an em would be 12 pixels. Basically, it centers vertically for your current font size.
