@@ -18,7 +18,7 @@ Imagine that you’ve just gotten a huge dataset; for example, the [20 newsgroup
 
 <div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/20newsgroupexample.png"></div>
 
-<div align="center"><i>The first entry in the newsgroup20 dataset.</i></div>
+<div align="center"><i>The first entry in the newsgroup20 dataset.</i></div><br>
 
 These approaches will take reading through a large amount of data—maybe even the whole dataset—to gain an understanding of what is going on. However, if we were somehow able to find a way to visualize it, perhaps that might allow us to condense meaning into something we can view in a short amount of time. That’s the goal of the visualization approach—to provide information at a glance, as well as new ways of interacting with this information.
 
@@ -41,7 +41,7 @@ For this demonstration, we will focus on a couple of automatic methods (i.e. no 
 
 <div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/speedmeme.png"></div>
 
-<div align="center"><i>This is us when we use RAKE and YAKE.</i></div>
+<div align="center"><i>This is us when we use RAKE and YAKE.</i></div><br>
 
 Another note is that the reason that we are using both RAKE and YAKE is in the hopes that combining the keyphrases extracted through both of these methods on the same text will provide us with more, higher quality keyphrases. You’ll see below how we will use the keyphrases when clustering sentences based on meaning, but suffice to say that combining the two helps preserve meaning by drowning out the irrelevant ones and increasing the number of relevant ones.
 
@@ -50,7 +50,7 @@ RAKE is a fairly simple algorithm introduced in 2010 that makes use of the obser
 
 <div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/rakeexample.png"></div>
 
-<div align="center"><i>An example of RAKE-extracted keyphrases and their scores. High scores represent high relevance.</i></div>
+<div align="center"><i>An example of RAKE-extracted keyphrases and their scores. High scores represent high relevance.</i></div><br>
 
 YAKE is another keyword extraction technique (YAKE literally stands for “Yet Another Keyphrase Extractor”) which makes use of a few more word features to calculate a score. YAKE starts by calculating a score for each individual word using this set of five features: casing (ratio of uppercase and lowercase to overall count), position (favors words near beginning of document), relatedness to context (computes number of terms to the left/right), sentence difference (how often the word appears in different sentences). A sliding window of 3-grams (i.e. three-word-long phrases) is then used to determine the lowest scoring (i.e. most meaningful) possible keyphrases.
 
@@ -182,7 +182,7 @@ We’ll be using a subset of the entire dataset and cleaning it up a little bit,
 
 **Now this is where our keyphrases come in.** We want to preserve as much meaning as possible from the sentence when we project it down into two dimensions and cluster them. In many cases, raw sentences have a lot of junk in them. We can see this even with our example sentence from above:
 
-<div align="center">“**The** central character **in the** series **is** Harry Potter, **a** boy **who** lives **in the** fictional town **of** Little Whinging, Surrey **with his** aunt, uncle, **and** cousin.”</div>
+<div align="center">“<b>The</b> central character <b>in the</b> series <b>is</b> Harry Potter, <b>a</b> boy <b>who</b> lives <b>in the</b> fictional town <b>of</b> Little Whinging, Surrey <b>with his</b> aunt, uncle, <b>and</b> cousin.”</div>
 
 Out of the 27 words in the sentences, 12 of them are stopwords (bolded above). That’s almost half of the words that essentially add no meaning to the sentence!
 
@@ -192,7 +192,7 @@ What we’ll do to overcome this is create “sentences” from our extracted ke
 
  gets the keyphrases:
 
-<div align="center">“big black cat”, “black cat”</div>
+<div align="center">“big black cat”, “black cat”</div><br>
 
 when passed in to our `get_keyphrases` function above. The joined “sentence” would then become “big black cat black cat,” essentially boiling the sentence down into its core meaning. We will use this for our projections. The below code will print an example from our dataset.
 
@@ -227,11 +227,11 @@ Now that we have `projected_X`, a list of 2D representations of each of our sent
 
 <div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/dbscan.png"></div>
 
-<div align="center"><i>DBSCAN on the newsgroup20 dataset.</i></div>
+<div align="center"><i>DBSCAN on the newsgroup20 dataset.</i></div><br>
 
 <div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/agglomerative.png"></div>
 
-<div align="center"><i>AgglomerativeClustering on the newsgroup20 dataset.</i></div>
+<div align="center"><i>AgglomerativeClustering on the newsgroup20 dataset.</i></div><br>
 
 As you can see, I had to zoom out much more to fit all of the points in with the AgglomerativeClustering version. DBSCAN seems to be a lot more manageable for our purposes of wanting to see information at a glance. So here is the DBSCAN clustering code:
 
@@ -278,7 +278,7 @@ That’s it! If you’re following along in the repository, the screenshot below
 
 <div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/unmodifiedkm.png"></div>
 
-<div align="center"><i>Default Kepler Mapper on the newsgroup20 dataset using DBSCAN clustering.</i></div>
+<div align="center"><i>Default Kepler Mapper on the newsgroup20 dataset using DBSCAN clustering.</i></div><br>
 
 It already looks really cool! Feel free to play around with it; zoom in and out, open the toggles in the navigation bar, hover on nodes, etc.
 
@@ -301,9 +301,9 @@ Change it to:
 
 If you were to run again at this point, you would see something like the screenshot below.
 
-![Partially modified Keppler Mapper.](../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/halfmodifiedkm.png)
+<div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/halfmodifiedkm.png"></div>
 
-*Kepler Mapper after adjusting node size.*
+<div align="center"><i>Kepler Mapper after adjusting node size.</i></div><br>
 
 The nodes would appear bigger, but still at a good relative ratio with each other. As you can see, one problem is that there’s some overlap between nodes. We can play around with the forces a bit to try to fix this. If you navigate to line 127, you should see the force settings:
 
