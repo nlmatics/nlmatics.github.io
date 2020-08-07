@@ -248,9 +248,9 @@ _Almost time to launch the training!_
 
 Below is a list of parameters that we used for running run_squad.py. Note that not all of the parameters are necessary (only model_type, model_name_or_path and output_dir are needed for the script to run). 
 
-\-\-_model_type_: This is the type of model you are using, the main types are ('distilbert', 'albert', 'bart', 'longformer', 'xlm-roberta', 'roberta', 'bert', 'xlnet', 'flaubert', 'mobilebert', 'xlm', 'electra', 'reformer') we used ‘albert’.
+\-\-_model_type_: This is the type of model you are using. The main types are ('distilbert', 'albert', 'bart', 'longformer', 'xlm-roberta', 'roberta', 'bert', 'xlnet', 'flaubert', 'mobilebert', 'xlm', 'electra', 'reformer'). We used ‘albertxlv2’.
 
-\-\-_model_name_or_path_: This is where you indicate the specific pretrained model you want to use from https://huggingface.co/models, we used albert-xlarge-v2. A list of Huggingface provided pretrained models is here https://huggingface.co/transformers/pretrained_models.html. If you want to load a model from a checkpoint, which we will explain how to do later, you would provide the path to the checkpoint here. 
+|\-\-_model_name_or_path_:| This is where you indicate the specific pretrained model you want to use from https://huggingface.co/models, we used albert-xlarge-v2. A list of Huggingface provided pretrained models is here https://huggingface.co/transformers/pretrained_models.html. If you want to load a model from a checkpoint, which we will explain how to do later, you would provide the path to the checkpoint here. |
 
 \-\-_output dir_: This is where you specify the path to the directory you want the model outputs to go. The directory should be empty.
 
