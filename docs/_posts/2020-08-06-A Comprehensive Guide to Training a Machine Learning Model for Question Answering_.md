@@ -52,11 +52,11 @@ To learn more about the datasets we worked with, see the links above or our blog
 ## PART 1: SETTING UP THE EC2 INSTANCE
 
 ## Choosing And Launching An EC2 Instance:
-_To start our model training, we have to choose the right platform (one with a bit more computing power than a personal computer)_
+_To start our model training, we have to choose the right platform (one with much more computing power than a personal computer)_
 
-|![ec2 instance list](http://www.kodyaz.com/images/aws/aws-ec2-dashboard-to-list-all-ec2-instances.png)|
-|:--:| 
-| _List of instances in EC2 dashboard_|
+|![](/site_files/nick-batya-post-imgs/launch_instance.gif)|
+|---| 
+| _Process of launching an EC2 instance (taken August 2020)_|
 
 **What is AWS EC2?**
 
@@ -390,4 +390,3 @@ https://medium.com/@arnab.k/how-to-keep-processes-running-after-ending-ssh-sessi
 https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html -- authorizing inbound traffic to instance\
 https://github.com/huggingface/transformers#run_squadpy-fine-tuning-on-squad-for-question-answering
 https://machinelearningmastery.com/classification-accuracy-is-not-enough-more-performance-measures-you-can-use/ -- meaning of f1 score\
-http://www.kodyaz.com/aws/list-all-amazon-EC2-instances-using-aws-gui-tools.aspx -- EC2 instance dashboard image
