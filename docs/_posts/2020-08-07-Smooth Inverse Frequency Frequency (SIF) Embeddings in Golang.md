@@ -13,7 +13,7 @@ Daniel Ye
 
 2. [Motivation](#motivation)
 
-3. [Why GoLang?](#why-golang?)
+3. [Why Golang?](#why-golang)
 
 4. [GRPC Improvements](#grpc-improvements)
 
