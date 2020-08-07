@@ -239,7 +239,7 @@ As you can see, I had to zoom out much more to fit all of the points in with the
     from sklearn import cluster
     graph = mapper.map(projected_X, clusterer=cluster.DBSCAN(eps=0.5, min_samples=3))
 
-Next, we’re going to get TF-IDF wordgrams (1-3) to help us identify each cluster. Essentially, we’ll find the phrases of one to three words that are not too common but at the same time not too uncommon (hence the `min_df` and `max_df` parameters, representing the cut-offs for document frequency values) and later the Kepler Mapper code will calculate some statistics on it that you’ll see in the side info panel.
+Next, we’re going to get TF-IDF wordgrams (1-3) to help us identify each cluster. Essentially, we’ll find the phrases of one to three words that are not too common but at the same time not too uncommon (hence the `min_df` and `max_df` parameters, i.e. the cut-offs for document frequency values) and later the Kepler Mapper code will calculate some statistics on it that you’ll see in the side info panel.
 
     # Get counts of phrases from data (to be used for the label and for cluster statistics)
     vec = TfidfVectorizer(analyzer="word",
@@ -266,7 +266,7 @@ Finally, we’ll put it all together by using the `visualize()` function. It wil
                         lens=projected_X,
                         lens_names=["ISOMAP1", "ISOMAP2"],
                         title="Visualizing Text - Newsgroup20",
-												custom_tooltips=np.array([category_names[ys] for ys in category]),
+custom_tooltips=np.array([category_names[ys] for ys in category]),
                         color_function=category)
 
 The very last cell also gives you the option to open the file in the notebook.
@@ -275,7 +275,7 @@ The very last cell also gives you the option to open the file in the notebook.
     from kmapper import jupyter
     jupyter.display(path_html="newsgroups20.html")
 
-That’s it! If you’re following along in the repository, the screenshot below is the outcome of the process so far. If you’re creating your own file from scratch with these code blocks, go ahead and run the whole kernel (it may take a while due to the clustering and projection), and you should see something like this at the bottom. Or, if you prefer, you can open `newgroup20.html` in your preferred web browser.
+That’s it! If you’re following along in the repository, the screenshot below is the outcome of the process so far. If you’re creating your own file from scratch with these code blocks, go ahead and run the whole kernel (it may take a while due to the clustering and projection), and you should see something like this at the bottom. Or, if you prefer, you can open `newsgroup20.html` in your preferred web browser.
 
 <div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/unmodifiedkm.png"></div>
 
