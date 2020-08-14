@@ -3,7 +3,7 @@
 layout: page 
 title: "A Comprehensive Guide to Training a Machine Learning Model for Question Answering" 
 date: 2020-08-06 10:30:00 -0000
-author: Batya Stein & Nick Greenspan
+author: Batya Stein & Nicholas Greenspan
 categories: CATEGORY-1 CATEGORY-2
 excerpt: "Feel like a machine learning question answering system could give your business a boost? Just interested in trying out revolutionary AI tech? You’ve come to the right place."
 image: site_files/MLQAthumb.png
@@ -13,7 +13,7 @@ image: site_files/MLQAthumb.png
 <h1 align="center"> A Comprehensive Guide to Training a Machine Learning Model for Question Answering: </h1>
 <h2 align="center"> Fine-tuning ALBERT on Google Natural Questions </h2>
 
-By Nick Greenspan and Batya Stein
+By Nicholas Greenspan and Batya Stein
 
 ### Contents:
 1. [Setting up the EC2 Instance](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#part-1-setting-up-the-ec2-instance)
@@ -58,11 +58,11 @@ To learn more about the datasets we worked with, see the links above or our blog
 ## PART 1: SETTING UP THE EC2 INSTANCE
 
 ## Choosing And Launching An EC2 Instance:
-_To start our model training, we have to choose the right platform (one with much more computing power than a personal computer)_
+_To start our model training, we have to choose the right platform (one with a bit more computing power than a personal computer)_
 
-|![](/site_files/nick-batya-post-imgs/launch_instance.gif)|
-|---| 
-| _Process of launching an EC2 instance (taken August 2020)_|
+|![ec2 instance list](http://www.kodyaz.com/images/aws/aws-ec2-dashboard-to-list-all-ec2-instances.png)|
+|:--:| 
+| _List of instances in EC2 dashboard_|
 
 **What is AWS EC2?**
 
@@ -114,6 +114,8 @@ _Before we can get started with training, we’ll need to load all the necessary
 **Upload training data**
 
 Prepare for training by connecting to your EC2 instance from the terminal of your choice and creating a directory inside it to store the data files in. (See section II, on downloading and reformatting data, to learn how to get your data into the right format before you start working with it.) Upload your training and dev sets into the directory (in json format). Upload the training script, which can be [found in the Transformers github repo](https://github.com/huggingface/transformers/blob/master/examples/question-answering/run_squad.py), onto the instance. Lastly, create a new directory that will be used to store the evaluations and model checkpoints from the script’s output.
+
+Note that if you've previously trained a model of the same type on your EC2 instance, there will be a cached datafile with a name like "cached_dev_albert-xlarge-v2_384". If you're training on a different dataset than you used in the previous training, make sure to delete the cached file, otherwise the script will automatically load the data from it and you'll end up training on different data then you meant to.
  
 **File transferring**
 
@@ -356,6 +358,8 @@ All that is necessary is to run the same command you ran to start the training e
 
 Note that if you do end up stopping your training early due to the metrics leveling off, you will have stopped the script before it reached the evaluation section, so if you want the evaluation results you will have to run the script again with only the --do_eval flag, and not the --do_train flag, and --model_name_or_path should be set to the path to the checkpoint you want to evaluate. 
 
+Also note that if you previously ran an evaluation on a checkpoint, and now you want to evaluate that checkpoint using a different data file than you originally used, be sure to delete the any cached dataset files associated with that checkpoint (which will have names like "cached_dev_checkpoint-7000-v2_384"), so that your evaluation runs on the new data file instead of the old cached data.
+
 ## Understanding Your Model Outputs
 _What’s the point in training a model if we can’t understand what it's telling us? Here is a primer on comprehending model terms._
 
@@ -396,3 +400,4 @@ https://medium.com/@arnab.k/how-to-keep-processes-running-after-ending-ssh-sessi
 https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html -- authorizing inbound traffic to instance\
 https://github.com/huggingface/transformers#run_squadpy-fine-tuning-on-squad-for-question-answering
 https://machinelearningmastery.com/classification-accuracy-is-not-enough-more-performance-measures-you-can-use/ -- meaning of f1 score\
+http://www.kodyaz.com/aws/list-all-amazon-EC2-instances-using-aws-gui-tools.aspx -- EC2 instance dashboard image
