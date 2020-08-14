@@ -5,6 +5,8 @@ title: "A Comprehensive Guide to Training a Machine Learning Model for Question 
 date: 2020-08-06 10:30:00 -0000
 author: Batya Stein & Nicholas Greenspan
 categories: CATEGORY-1 CATEGORY-2
+excerpt: "Feel like a machine learning question answering system could give your business a boost? Just interested in trying out revolutionary AI tech? You’ve come to the right place."
+image: site_files/MLQAthumb.png
 
 ---
 
