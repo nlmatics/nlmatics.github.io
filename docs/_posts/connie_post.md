@@ -1,17 +1,9 @@
----
-
 layout: page 
 title: "Speed up requests: Asyncio for Requests in Python" 
-author: Connie Xu
 date: 2020-01-01 00:00:00 -0000
 categories: CATEGORY-1 CATEGORY-2
-<<<<<<< HEAD
-excerpt: "As you have probably already noticed because you decided to visit this page, requests can take forever to run, so here's a nice blog written while I was an intern at NLMatics to show you how to use to speed them up."
-image: site_files/Asynciothumb.png
-=======
 
->>>>>>> parent of a3c9da1... Merge pull request #6 from nlmatics/connie-asyncio-post
----
+
 
 
 # Speed up requests: Asyncio for Requests in Python
@@ -28,8 +20,8 @@ It is a Python library that uses the ```async/await``` syntax to make code run a
 - **Synchronous:** you must wait for the completion of the first task before starting another task.
 - **Asynchronous:** you can start another task before the completion of the first task.
 
-![](/site_files/connie_post_images/synchronous.png)
-![](/site_files/connie_post_images/asynchronous.png)
+![](connie_post_images/synchronous.png)
+![](connie_post_images/asynchronous.png)
 
 
 For more information on the distinction between concurrency, parallelism, threads, sync, and async, check out this [Medium article](https://medium.com/swift-india/concurrency-parallelism-threads-processes-async-and-sync-related-39fd951bc61d).
@@ -37,7 +29,7 @@ For more information on the distinction between concurrency, parallelism, thread
 ### Simple analogy
 #### Brick and Mortar
 
-![](/site_files/connie_post_images/brick-and-mortar.jpg)
+![](connie_post_images/brick-and-mortar.jpg)
 
 Simon and Ash are building 5 walls of brick. 
 - Simon builds one wall and waits for it to set before starting to build the next wall (synchronous). 
@@ -57,7 +49,7 @@ As you can see from the second example, it is possible that an asynchronous appr
 
 Moreover, be wary that an asynchronous approach does not provide any performance boost when all the tasks are **dependent** on each other. 
 
-![](/site_files/connie_post_images/laundry.jpg)
+![](connie_post_images/laundry.jpg)
 
 For example, if you are washing and drying clothes, you must wait for the clothes to finish washing first before drying them no matter what, because drying clothes is dependent on the output of the washing. In this laundry example, there is indeed ***waiting***. However, the existence of a dependent relationship causes the asynchronous pipeline to be the same as the synchronous pipeline, so there is no use in using an asynchronous approach.
 

@@ -35,13 +35,13 @@ body {
 .post-row {
   display: flex;
   flex-wrap: wrap;
-  padding: 0 @spacing-unit/20;
+  padding: 0;
 }
 
 .post-row {
 
   flex: 50%;  
-  max-width: 50%
+  max-width: 50%;
   padding: $spacing-unit/80;
   margin-right: $spacing-unit/10;
 }
