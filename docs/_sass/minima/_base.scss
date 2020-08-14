@@ -29,6 +29,7 @@ body {
 }
 
 
+<<<<<<< HEAD
 /***
 *Set layout of individual blog posts on homepage 
 */
@@ -56,6 +57,8 @@ body {
 }
 
 
+=======
+>>>>>>> parent of bd43a4f... theme changes to mundana
 
 /**
  * Set `margin-bottom` to maintain vertical rhythm
@@ -64,7 +67,7 @@ h1, h2, h3, h4, h5, h6,
 p, blockquote, pre,
 ul, ol, dl, figure,
 %vertical-rhythm {
-  margin-bottom: $spacing-unit / 1.5;
+  margin-bottom: $spacing-unit / 2;
 }
 
 

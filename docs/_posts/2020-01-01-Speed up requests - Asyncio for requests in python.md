@@ -6,11 +6,15 @@ author: Connie Xu
 date: 2020-01-01 00:00:00 -0000
 categories: CATEGORY-1 CATEGORY-2
 <<<<<<< HEAD
+<<<<<<< HEAD
 excerpt: "As you have probably already noticed because you decided to visit this page, requests can take forever to run, so here's a nice blog written while I was an intern at NLMatics to show you how to use to speed them up."
 image: site_files/Asynciothumb.png
 =======
 
 >>>>>>> parent of a3c9da1... Merge pull request #6 from nlmatics/connie-asyncio-post
+=======
+
+>>>>>>> parent of bd43a4f... theme changes to mundana
 ---
 
 

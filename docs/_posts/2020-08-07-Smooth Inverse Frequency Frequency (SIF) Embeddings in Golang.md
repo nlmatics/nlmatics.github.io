@@ -4,9 +4,7 @@ layout: page
 title: "Smooth Inverse Frequency Frequency (SIF) Embeddings in Golang" 
 author: Daniel Ye
 date: 2020-08-07 09:45:00 -0000
-categories: NLP Sentence-Embeddings.
-excerpt: "Word embeddings are one of the most important developments in the field of modern Natural Language Processing. Translating the meaning behind words and the semantic relationships between them into measurable quantities..."
-image: site_files/SIFthumb.png
+categories: NLP Sentence-Embeddings
 
 ---
 
