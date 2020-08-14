@@ -29,6 +29,33 @@ body {
 }
 
 
+/***
+*Set layout of individual blog posts on homepage 
+*/
+.post-row {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0 @spacing-unit/20;
+}
+
+.post-row {
+
+  flex: 50%;  
+  max-width: 50%
+  padding: $spacing-unit/80;
+  margin-right: $spacing-unit/10;
+}
+
+
+/***
+* Style post's excerpt on homepage
+*/
+.post-excerpt {
+  font-size: 1.1em;
+  padding-top: 15 px;
+}
+
+
 
 /**
  * Set `margin-bottom` to maintain vertical rhythm
@@ -37,7 +64,7 @@ h1, h2, h3, h4, h5, h6,
 p, blockquote, pre,
 ul, ol, dl, figure,
 %vertical-rhythm {
-  margin-bottom: $spacing-unit / 2;
+  margin-bottom: $spacing-unit / 1.5;
 }
 
 

@@ -5,7 +5,8 @@ title: "Speed up requests: Asyncio for Requests in Python"
 author: Connie Xu
 date: 2020-01-01 00:00:00 -0000
 categories: CATEGORY-1 CATEGORY-2
-
+excerpt: "As you have probably already noticed because you decided to visit this page, requests can take forever to run, so here's a nice blog written while I was an intern at NLMatics to show you how to use to speed them up."
+image: site_files/Asynciothumb.png
 ---
 
 
