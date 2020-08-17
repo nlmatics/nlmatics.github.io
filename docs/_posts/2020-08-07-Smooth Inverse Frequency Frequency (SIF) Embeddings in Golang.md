@@ -5,6 +5,7 @@ title: "Smooth Inverse Frequency Frequency (SIF) Embeddings in Golang"
 author: Daniel Ye
 date: 2020-08-07 09:45:00 -0000
 categories: NLP Sentence-Embeddings
+image: site_files/SIFthumb.png
 
 ---
 
