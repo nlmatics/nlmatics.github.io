@@ -63,8 +63,7 @@ padding-top: $spacing-unit*5;
 
 
 .featured-thumb img
-{
-  
+{  
 padding-right: $spacing-unit*4;
 padding-bottom: $spacing-unit*4;
 }
@@ -72,7 +71,7 @@ padding-bottom: $spacing-unit*4;
 .featured-text
 {
   flex: 0 1 auto;
-
+  flex-wrap: wrap;
 
  
 }
@@ -109,20 +108,19 @@ opacity: 1;
 
 
 .post-container{
-  position: relative;
+
+  display: inline-flex;
 
 }
 
 .post-thumb img {
-position: relative;
-width: 40%;
-padding-right: $spacing-unit*3;
+width: 50%;
 padding-bottom: $spacing-unit*4;
 }
 .post-text {
-  position: absolute;
-  width: $spacing-unit*20;
-  padding-left: $spacing-unit/2;
+ flex: 0 0.1 auto;
+width: 50%;
+  padding-left: $spacing-unit;
 
 }
 

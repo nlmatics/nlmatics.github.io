@@ -15,7 +15,7 @@ main { display: block; /* Default value of `display` of `main` element is 'inlin
 
 .featured-thumb img { padding-right: 120px; padding-bottom: 120px; }
 
-.featured-text { flex: 0 1 auto; }
+.featured-text { flex: 0 1 auto; flex-wrap: wrap; }
 
 .featured-meta { text-align: left; font: Bold 20px/24px Roboto; letter-spacing: 3px; color: #3F298B; opacity: 1; }
 
@@ -24,11 +24,11 @@ main { display: block; /* Default value of `display` of `main` element is 'inlin
 .featured-excerpt { text-align: left; font: Regular 18px/24px Roboto; letter-spacing: 0.43px; color: #1D1D1DDD; opacity: 1; }
 
 /**Post styling: how the individual articles show up **/
-.post-container { position: relative; }
+.post-container { display: inline-flex; }
 
-.post-thumb img { position: relative; width: 40%; padding-right: 90px; padding-bottom: 120px; }
+.post-thumb img { width: 50%; padding-bottom: 120px; }
 
-.post-text { position: absolute; width: 600px; padding-left: 15px; }
+.post-text { flex: 0 0.1 auto; width: 50%; padding-left: 30px; }
 
 .post-meta { text-align: left; font: Medium 14px/17px Roboto; letter-spacing: 1.26px; color: #5B4F85; opacity: 1; }
 
