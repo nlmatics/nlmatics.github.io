@@ -21,14 +21,17 @@ layout: default
             <span class="featured-excerpt">Word embeddings are one of the most important developments in the field of modern Natural Language Processing. Translating the meaning behind words and the semantic relationships between them into measurable quantities is a crucial step in processing language. Many words, such as "cat" and “dog” or “Mozart” and “Beethoven” have almost no physical characteristics ... </span>
             
           </span>
-        </div>
+ </div>
+
+ <br> <br>
         
 
-<div class="divider"></div>
+
 
 
   {%- if site.posts.size > 0 -%}
     <h2 class="post-list-heading">{{ page.list_title | default: "Posts" }}</h2>
+    <div class="divider"></div>
     <ul class="post-list">
       {%- for post in site.posts -%}
       <li>
@@ -36,13 +39,13 @@ layout: default
           <span class="post-thumb"> <img src="{{post.image}}"></span>
           <span class="post-text">
             {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-            <span class="post-meta">{{ post.date | date: date_format }}</span> <br>
-            <span class="post-author"> By {{post.author}} </span>
+            <span class="post-meta">{{ post.date | date: date_format }}</span> <br>            
             <h3>
               <a class="post-link" href="{{ post.url | relative_url }}">
               {{post.title}} 
               </a>
             </h3>
+            <span class="post-author"> By {{post.author}} </span>
           </span>
         </div>
         
