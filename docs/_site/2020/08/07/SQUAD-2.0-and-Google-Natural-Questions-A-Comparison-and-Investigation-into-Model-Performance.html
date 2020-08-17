@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Squad 2.0 and google natural questions a comparison and investigation into model performance | nlmatics.github.io</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="Squad 2.0 and google natural questions a comparison and investigation into model performance" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="layout: page title: “SQUAD 2.0 and Google Natural Questions: A Comparison and Investigation into Model Performance” date: 2020-08-07 13:00:00 -0000 categories: CATEGORY-1 CATEGORY-2" />
+<meta property="og:description" content="layout: page title: “SQUAD 2.0 and Google Natural Questions: A Comparison and Investigation into Model Performance” date: 2020-08-07 13:00:00 -0000 categories: CATEGORY-1 CATEGORY-2" />
+<link rel="canonical" href="http://localhost:4000/2020/08/07/SQUAD-2.0-and-Google-Natural-Questions-A-Comparison-and-Investigation-into-Model-Performance.html" />
+<meta property="og:url" content="http://localhost:4000/2020/08/07/SQUAD-2.0-and-Google-Natural-Questions-A-Comparison-and-Investigation-into-Model-Performance.html" />
+<meta property="og:site_name" content="nlmatics.github.io" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-07T00:00:00-04:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","headline":"Squad 2.0 and google natural questions a comparison and investigation into model performance","datePublished":"2020-08-07T00:00:00-04:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/08/07/SQUAD-2.0-and-Google-Natural-Questions-A-Comparison-and-Investigation-into-Model-Performance.html"},"url":"http://localhost:4000/2020/08/07/SQUAD-2.0-and-Google-Natural-Questions-A-Comparison-and-Investigation-into-Model-Performance.html","description":"layout: page title: “SQUAD 2.0 and Google Natural Questions: A Comparison and Investigation into Model Performance” date: 2020-08-07 13:00:00 -0000 categories: CATEGORY-1 CATEGORY-2","dateModified":"2020-08-07T00:00:00-04:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="nlmatics.github.io" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="header-logo" rel="author" href="/"><img src="http://localhost:4000/site_files/Header.png"></a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+
+            
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="https://nlmatics.com"> <h3><u> go to nlmatics.com </u></h3></a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Squad 2.0 and google natural questions  a comparison and investigation into model performance</h1>
+    <p class="post-meta">
+      <time class="dt-published" datetime="2020-08-07T00:00:00-04:00" itemprop="datePublished">Aug 7, 2020
+      </time></p>
+  </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <p>layout: page 
+title: “SQUAD 2.0 and Google Natural Questions: A Comparison and Investigation into Model Performance” 
+date: 2020-08-07 13:00:00 -0000
+categories: CATEGORY-1 CATEGORY-2</p>
+
+<h1 align="center"> SQUAD 2.0 and Google Natural Questions: </h1>
+<h2 align="center"> A Comparison and Investigation into Model Performance </h2>
+
+<p>By Nick Greenspan</p>
+
+<h2 id="intro">Intro</h2>
+
+<p>SQuAD 2.0 and Google Natural Questions are two of the most prominent datasets in NLP Questioning Answering today. Both include tens of thousands of training examples which consist of a question, context, and an answer span. Though they both have the same general structure, there are many differences, both major and nuanced, that distinguish the two datasets. Whether you want to learn about the datasets for research purposes, or are trying to decide which one to use to train a QA model for your business, this is an in-depth guide to understanding the two datasets, their differences, and their relationships.</p>
+
+<h2 id="overviews-from-the-dataset-websites">Overviews from the Dataset Websites</h2>
+
+<p><img src="/site_files/nick_post/squad_image.png" alt="" /></p>
+
+<p><a href="https://rajpurkar.github.io/SQuAD-explorer/">SQuAD 2.0</a>: “SQuAD is a reading comprehension dataset, consisting of questions posed by crowdworkers on a set of Wikipedia articles, where the answer to every question is a segment of text, or span, from the corresponding reading passage, or the question might be unanswerable.”</p>
+
+<p><img src="/site_files/nick_post/nq_image.png" alt="" /></p>
+
+<p><a href="https://ai.google.com/research/NaturalQuestions">Google Natural Questions</a>: “The NQ corpus contains questions from real users, and it requires QA systems to read and comprehend an entire Wikipedia article that may or may not contain the answer to the question.”</p>
+
+<h2 id="important-takeaways-for-each-dataset">Important takeaways for each dataset</h2>
+
+<p>SQuAD 2.0:</p>
+<ul>
+  <li>Questions generated by hired workers whose task was to write questions about a given article.</li>
+  <li>Sets of questions are from paragraphs in a wikipedia article.
+    <ul>
+      <li>442 different articles.</li>
+    </ul>
+  </li>
+  <li>There are unanswerable questions (33.4% of the dataset is unanswerable), which forces a model to “know what it doesn’t know”.
+    <ul>
+      <li>Ensures there are plausible answers in the paragraph if the question is unanswerable so that model can’t just use superficial clues to determine if an answer is in the paragraph.</li>
+    </ul>
+  </li>
+  <li>All questions end with a question mark.</li>
+  <li>Since there are series of questions that refer to the same article, some of the questions use pronouns such as “where did she grow up?”.</li>
+  <li>There are some ungrammatical sentences such as: “Why political movement was named for Joseph McCarthy?”.</li>
+  <li>There are occasional misspellings.</li>
+</ul>
+
+<p>Google Natural Questions:</p>
+<ul>
+  <li>Real, user generated questions by people who are actually seeking information, not people who were hired for the explicit purpose of writing questions.</li>
+  <li>Requires a model to read a whole Wikipedia article, not just a paragraph, and has two different tasks: identifying a long answer, which is the paragraph or table that the contains the information to answer the question, and the short answer, which is the exact text that provides the answer to the question.
+    <ul>
+      <li>Note that since the article is so long BERT models are unequipped to handle them as they have a max sequence length capped at 512.</li>
+    </ul>
+  </li>
+  <li>All questions aren’t necessarily “questions” per se, some of them are phrase searches like  “benefits of colonial life for single celled organisms”.</li>
+  <li>Questions don’t necessarily have a long answer or short answer, so there is some of the unanswerable functionality that is also present in SQuAD 2.0.</li>
+  <li>If a question has a short answer, it definitely has a long answer, but not the other way around.</li>
+  <li>There is a “Yes or No” answer field which is “Yes” if the answer is yes, “No” if the answer is no, and “None” if there is not a yes or no answer to the question. If the “Yes or No” answer is not “None” then there is no short answer.</li>
+  <li>All questions don’t end with a question mark.</li>
+  <li>Since only one question per article there is more variety of topics of questions.</li>
+  <li>There seem to be less ungrammatical or misspelled sentences.</li>
+</ul>
+
+<h2 id="datapoint-examples">Datapoint Examples</h2>
+
+<p>In version 2 of the dataset, SQuAD 2.0 examples have two formats –\
+For answerable questions:
+ 	 <code class="language-plaintext highlighter-rouge">{ "question": "In what country is Normandy located?", "id": "56ddde6b9a695914005b9628", "answers": [ { "text": "France", "answer_start": 159 } ], "is_impossible": false }</code> \
+For impossible questions:
+ <code class="language-plaintext highlighter-rouge">{ "plausible_answers": [ { "text": "Normans", "answer_start": 4 } ], "question": "Who gave their name to Normandy in the 1000's and 1100's", "id": "5ad39d53604f3c001a3fe8d1", "answers": [], "is_impossible": true }</code></p>
+
+<p>Google Natural Questions (abbreviated due to length of document html and tokens):\
+<code class="language-plaintext highlighter-rouge">{"annotations":[{"annotation_id":6782080525527814293,"long_answer":{"candidate_index":92,"end_byte":96948,"end_token":3538,"start_byte":82798,"start_token":2114},"short_answers":[{"end_byte":96731,"end_token":3525,"start_byte":96715,"start_token":3521}],"yes_no_answer":"NONE"}],"document_html":&lt;/HTML&gt;\n","document_title":"The Walking Dead (season 8)","document_tokens":[{"end_byte":95,"html_token":false,"start_byte":92,"token":"The"},{"end_byte":103,"html_token":false,"start_byte":96,"token":"Walking"},{"end_byte":108,"html_token":false,"start_byte":104,"token":"Dead"},
+…], 
+document_url":"https://en.wikipedia.org//w/index.php?title=The_Walking_Dead_(season_8)&amp;amp;oldid=828222625","example_id":4549465242785278785,"long_answer_candidates":[{"end_byte":57620,"end_token":216,"start_byte":53609,"start_token":24,"top_level":true},{"end_byte":53883,"end_token":36,"start_byte":53666,"start_token":25,"top_level":false},{"end_byte":54388,"end_token":42,"start_byte":53884,"start_token":36,"top_level":false},…],
+"question_text":"when is the last episode of season 8 of the walking dead","question_tokens":["when","is","the","last","episode","of","season","8","of","the","walking","dead"]}</code></p>
+
+<p>Papers for more info on the datasets:\
+<a href="https://arxiv.org/pdf/1806.03822.pdf">SQuAD 2.0</a>\
+<a href="https://storage.googleapis.com/pub-tools-public-publication-data/pdf/1f7b46b5378d757553d3e92ead36bda2e4254244.pdf">Google Natural Questions</a></p>
+
+<h2 id="dataset-statistics">Dataset Statistics</h2>
+
+<p>To find the best dataset for your use case, here are some statistics about the different types of questions in the datasets. Note that this data is approximate, as general rules were used to separate questions into these categories and some may have fallen through the cracks mostly due to the fact that some question start with context and don’t lead or end with the question word such as “in september 1849 where did chopin take up residence?”. The “other” category in the table is made up of all questions that didn’t fall into our general descriptions of the question types, and the fact there are many more questions in the other category for Google Natural Questions vs SQuAD 2.0 is due to both the relative size of the dataset and the increased prevalence of phrase like “questions” such as “benefits of colonial life for single celled organisms”.</p>
+
+<h3 id="question-type-distribution-of-train-sets">Question Type Distribution of Train Sets</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Google Natural Questions</th>
+      <th>SQuAD 2.0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Total Questions</td>
+      <td>307373</td>
+      <td>130319</td>
+    </tr>
+    <tr>
+      <td>What (%, total num)</td>
+      <td>17.1%, 52535</td>
+      <td>59.6%, 77701</td>
+    </tr>
+    <tr>
+      <td>Where (%, total num)</td>
+      <td>10.3%, 31776</td>
+      <td>4.07%, 5303</td>
+    </tr>
+    <tr>
+      <td>When (%, total num)</td>
+      <td>13.6%, 41725</td>
+      <td>6.38%, 8308</td>
+    </tr>
+    <tr>
+      <td>Who (%, total num)</td>
+      <td>25.1%, 77281</td>
+      <td>10.4%, 13533</td>
+    </tr>
+    <tr>
+      <td>Why (%, total num)</td>
+      <td>1.31%, 4041</td>
+      <td>1.44%, 1881</td>
+    </tr>
+    <tr>
+      <td>Which (%, total num)</td>
+      <td>2.83%, 8721</td>
+      <td>6.21%, 8088</td>
+    </tr>
+    <tr>
+      <td>Whom (%, total num)</td>
+      <td>0%, 6</td>
+      <td>0.343%, 447</td>
+    </tr>
+    <tr>
+      <td>How (%, total num)</td>
+      <td>5.87%, 18041</td>
+      <td>9.95%, 12969</td>
+    </tr>
+    <tr>
+      <td>Other (%, total num)</td>
+      <td>22.8%, 70157</td>
+      <td>1.50%, 1954</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Side Note:
+The fact that question distribution is much more balanced for Google Natural Questions vs SQuAD 2.0, is an interesting comment on the types of questions people naturally vs artificially come up with.</p>
+
+<h2 id="cross-training-experiment">Cross Training Experiment</h2>
+
+<p>An interesting research question that we wanted to explore was how a model trained on one dataset would perform when tested on the other dataset. This would possibly allow us to see if one dataset allowed for better generalization to out of domain data, which could help inform a decision of the best dataset for one’s needs.</p>
+
+<p>Since the contexts in the Google Natural Questions (GNQ) dataset consist of whole wikipedia articles, which are much too long for the bert models we wanted to use, we decided to make use of the long answer as context for our training, and use the short answer as the target answer. We used data points which had long answers but not short answers to act as “unanswerable” questions. As there are 152148 data points with long answers in GNQ, our reformatted dataset had 152148 data points, as none of the data points without long answers were used in our reformatted dataset. 29.7% of the GNQ questions that have a long answer don’t have a short answer, which makes it comparable to the 33.4% of SQuAD 2.0 questions in the train data that are unanswerable.</p>
+
+<p>For maximum convenience and fair comparibility, we decided to use Huggingface’s run_squad.py script to train our model on our modified GNQ Dataset, which meant converting the GNQ dataset into the SQuAD 2.0 format, which involved stripping the text of html, finding the correct answer span in the the long answer context, among other things. If you want to do this yourself, or are just curious about the specifics check out part 2 of this guide to model training I helped write:</p>
+
+<p>One limitation we came across that caused us to change our training methods slightly was the amount of time it takes to train a model. Since there are a number of SQuAD 2.0 pretrained models available for <a href="https://huggingface.co/ktrapeznikov/albert-xlarge-v2-squad-v2">public use</a>, we were able to use a model trained on the full SQuAD 2.0 dataset in this comparison. Since the GNQ dataset is very large, we initially choose to just run the training on 1/10th of the reformatted dataset, and then later on decided to train the model that was trained on the first 1/10th on the next 4/10th so that the model ended up being trained on 1/2th of the reformatted GNQ dataset.</p>
+
+<h3 id="results">Results</h3>
+
+<p>Dataset model was trained on as the rows, and evaluation dataset as the columns.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>GNQ</th>
+      <th>SQuAD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GNQ 1/10th Data</td>
+      <td><code class="language-plaintext highlighter-rouge">{'exact': 53.137003841229195, 'f1': 57.66917657734894, 'total': 781, 'HasAns_exact': 40.0, 'HasAns_f1': 46.67854133379154, 'HasAns_total': 530, 'NoAns_exact': 80.87649402390439, 'NoAns_f1': 80.87649402390439, 'NoAns_total': 251, 'best_exact': 53.137003841229195, 'best_exact_thresh': 0.0, 'best_f1': 57.66917657734895, 'best_f1_thresh': 0.0}</code></td>
+      <td><code class="language-plaintext highlighter-rouge">{'exact': 50.61062915859513, 'f1': 51.25986732355112, 'total': 11873, 'HasAns_exact': 12.179487179487179, 'HasAns_f1': 13.479825359737246, 'HasAns_total': 5928, 'NoAns_exact': 88.9318755256518, 'NoAns_f1': 88.9318755256518, 'NoAns_total': 5945, 'best_exact': 50.720121283584604, 'best_exact_thresh': 0.0, 'best_f1': 51.30938713471512, 'best_f1_thresh': 0.0}</code></td>
+    </tr>
+    <tr>
+      <td>GNQ ½ Data</td>
+      <td><code class="language-plaintext highlighter-rouge">{'exact': 57.01398285972034, 'f1': 63.63002288066548, 'total': 2217, 'HasAns_exact': 50.23380093520374, 'HasAns_f1': 60.03190429287585, 'HasAns_total': 1497, 'NoAns_exact': 71.11111111111111, 'NoAns_f1': 71.11111111111111, 'NoAns_total': 720, 'best_exact': 57.01398285972034, 'best_exact_thresh': 0.0, 'best_f1': 63.63002288066556, 'best_f1_thresh': 0.0}</code></td>
+      <td><code class="language-plaintext highlighter-rouge">{'exact': 47.23321822622758, 'f1': 50.06099675107974, 'total': 11873, 'HasAns_exact': 35.27327935222672, 'HasAns_f1': 40.93694575330119, 'HasAns_total': 5928, 'NoAns_exact': 59.158957106812444, 'NoAns_f1': 59.158957106812444, 'NoAns_total': 5945, 'best_exact': 50.08843594710688, 'best_exact_thresh': 0.0, 'best_f1': 50.75645811811136, 'best_f1_thresh': 0.0}</code></td>
+    </tr>
+    <tr>
+      <td>SQuAD 2.0</td>
+      <td><code class="language-plaintext highlighter-rouge">{'exact': 30.985915492957748, 'f1': 35.324918748038996, 'total': 781, 'HasAns_exact': 15.283018867924529, 'HasAns_f1': 21.67690857022349, 'HasAns_total': 530, 'NoAns_exact': 64.14342629482071, 'NoAns_f1': 64.14342629482071, 'NoAns_total': 251, 'best_exact': 32.394366197183096, 'best_exact_thresh': 0.0, 'best_f1': 35.43007732875682, 'best_f1_thresh': 0.0}</code></td>
+      <td><code class="language-plaintext highlighter-rouge">{‘exact': 75.90331003116314, 'f1': 79.23560349162027, 'total': 11873, 'HasAns_exact': 64.97975708502024, 'HasAns_f1': 71.65390017813893, 'HasAns_total': 5928, 'NoAns_exact': 86.79562657695543, 'NoAns_f1': 86.79562657695543, 'NoAns_total': 5945, 'best_exact': 75.90331003116314, 'best_exact_thresh': 0.0, 'best_f1': 79.23560349162024, 'best_f1_thresh': 0.0}</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="discussion">Discussion</h3>
+
+<p>A number of interesting observations and plausible conclusions can be made by looking at the data, and the eval data from the model trained on 1/10th and ½ of the reformatted GNQ dataset gives insight into how the performance of the model varies as it is fed more data.</p>
+<ul>
+  <li>One initial comparison to make is to look at the model’s performance on the dev set of the same dataset of the train set it was trained on. The SQuAD 2.0 trained model has a better f1 of 79.2 than either the GNQ trained model trained on 1/10th or ½ of the data with f1s of 57.7 and 63.6 respectively.</li>
+  <li>Note that GNQ is a much harder task, as state of the art f1 for short answer identification is .64 vs the around .93 for SQuAD 2.0. Much of the difficulty may have been offset by the fact we are using the long answer for context instead of the whole wikipedia article, but the fact that GNQ’s questions are naturally generated, and don’t tend to borrow pieces of the paragraph, is one way in which GNQ is still a harder task than SQuAD 2.0.</li>
+  <li>The fact that the GNQ trained model was only trained on half of the dataset whereas the SQuAD 2.0 trained model was trained on the whole thing also probably had an effect on the model performance.</li>
+  <li>Though the SQuAD 2.0 model did better on its own dev set than the GNQ model did, the GNQ model did better on the SQuAD 2.0 dev set than the SQuAD 2.0 model did on the GNQ dev set when the overall and the has_ans exact and f1 scores are compared. This implies that the GNQ dataset does a better job of instilling a general purpose language understanding in the model that can generalize to other domains.</li>
+</ul>
+
+<p>One thing to keep track of which can yield interesting insights into a model’s behavior is a model’s tendency to answer questions or refrain from answering them.</p>
+<ul>
+  <li>Looking at how the no_ans scores decrease and the has_ans score increases for the GNQ model on GNQ eval on differing amounts of data likely demonstrates how as the model is fed more data it tends to guess that the question has an answer more often.</li>
+  <li>This can be seen even more clearly by looking at the GNQ model on the SQuAD 2.0 eval, where for the 1/10th data model the has_ans score are very low and the no_ans score is very high, likely demonstrating that the model does not have much understanding and just tends to say that the question is unanswerable. For the 1/2th data model, the overall exact and f1 scores are lower, but it is clear the model has better understanding and not just relying on guessing that the question is unanswerable all the time as the has_ans scores are much higher, and the no_ans scores are lower.</li>
+</ul>
+
+<p>A couple of differences between the datasets that may have affected the experimental results are as follows.</p>
+<ul>
+  <li>There is no explicit plausible yet wrong answer in the long answer of questions that don’t have a short answer in the GNQ dataset, unlike the plausible answers in the SQuAD 2.0 dataset. Though there is no plausible answer per se, the long answer paragraph is necessarily related to the question, so there might be spans in the GNQ paragraphs that don’t have a short answer that are similar to the plausible answers found in the SQuAD 2.0 dataset.</li>
+  <li>Also, in the reformatting of the dataset we counted questions that had Yes or No answer as unanswerable as they don’t have a short answer span.</li>
+</ul>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Hopefully this article gave you further insight into whether SQuAD 2.0 or Google Natural Questions is right to use to train your model, or just gave insight into the nature of the datasets. NLP Question Answering is a very exciting area of active research, and there are a number of different interesting datasets for it out there beyond the two mentioned in the article such as <a href="https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/YangYihMeek_EMNLP-15_WikiQA.pdf">WikiQA</a>, <a href="https://hotpotqa.github.io/">HotpotQA</a>, and <a href="https://arxiv.org/pdf/1712.07040.pdf">NarrativeQA</a>. In the future, I hope to explore these other datasets and run more experiments to understand their strengths, weaknesses, and relations.</p>
+
+<h2 id="sources">Sources</h2>
+<p><a href="https://rajpurkar.github.io/SQuAD-explorer/">SQuAD Website</a>\
+<a href="https://ai.google.com/research/NaturalQuestions">SQuAD Paper</a>\
+<a href="https://arxiv.org/pdf/1806.03822.pdf">Google Natural Questions Website</a>\
+<a href="https://storage.googleapis.com/pub-tools-public-publication-data/pdf/1f7b46b5378d757553d3e92ead36bda2e4254244.pdf">Google Natural Questions Paper</a></p>
+
+
+  </div><a class="u-url" href="/2020/08/07/SQUAD-2.0-and-Google-Natural-Questions-A-Comparison-and-Investigation-into-Model-Performance.html" hidden></a>
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+
+    <h2 class="footer-heading">nlmatics.github.io</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">nlmatics.github.io</li><li><a class="u-email" href="mailto:your-email@example.com">your-email@example.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/nlmatics"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">nlmatics</span></a></li><li><a href="https://www.twitter.com/nlmatics"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">nlmatics</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>This is a collection of blogs on various topics including Natural Language Understanding, etc.</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

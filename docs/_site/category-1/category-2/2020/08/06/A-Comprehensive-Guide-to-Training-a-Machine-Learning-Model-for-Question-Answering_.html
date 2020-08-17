@@ -6,7 +6,7 @@
 <title>A Comprehensive Guide to Training a Machine Learning Model for Question Answering | nlmatics.github.io</title>
 <meta name="generator" content="Jekyll v3.8.7" />
 <meta property="og:title" content="A Comprehensive Guide to Training a Machine Learning Model for Question Answering" />
-<meta name="author" content="Batya Stein & Nick Greenspan" />
+<meta name="author" content="Batya Stein & Nicholas Greenspan" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="A Comprehensive Guide to Training a Machine Learning Model for Question Answering: Fine-tuning ALBERT on Google Natural Questions" />
 <meta property="og:description" content="A Comprehensive Guide to Training a Machine Learning Model for Question Answering: Fine-tuning ALBERT on Google Natural Questions" />
@@ -16,7 +16,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-08-06T06:30:00-04:00" />
 <script type="application/ld+json">
-{"@type":"BlogPosting","dateModified":"2020-08-06T06:30:00-04:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/category-1/category-2/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html"},"url":"http://localhost:4000/category-1/category-2/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html","author":{"@type":"Person","name":"Batya Stein & Nick Greenspan"},"headline":"A Comprehensive Guide to Training a Machine Learning Model for Question Answering","description":"A Comprehensive Guide to Training a Machine Learning Model for Question Answering: Fine-tuning ALBERT on Google Natural Questions","datePublished":"2020-08-06T06:30:00-04:00","@context":"https://schema.org"}</script>
+{"@type":"BlogPosting","headline":"A Comprehensive Guide to Training a Machine Learning Model for Question Answering","datePublished":"2020-08-06T06:30:00-04:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/category-1/category-2/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html"},"url":"http://localhost:4000/category-1/category-2/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html","author":{"@type":"Person","name":"Batya Stein & Nicholas Greenspan"},"description":"A Comprehensive Guide to Training a Machine Learning Model for Question Answering: Fine-tuning ALBERT on Google Natural Questions","dateModified":"2020-08-06T06:30:00-04:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="nlmatics.github.io" /></head>
 <body><header class="site-header" role="banner">
@@ -246,6 +246,8 @@ Once you start using your instance, you can monitor the costs or credits used, w
 <p><strong>Upload training data</strong></p>
 
 <p>Prepare for training by connecting to your EC2 instance from the terminal of your choice and creating a directory inside it to store the data files in. (See section II, on downloading and reformatting data, to learn how to get your data into the right format before you start working with it.) Upload your training and dev sets into the directory (in json format). Upload the training script, which can be <a href="https://github.com/huggingface/transformers/blob/master/examples/question-answering/run_squad.py">found in the Transformers github repo</a>, onto the instance. Lastly, create a new directory that will be used to store the evaluations and model checkpoints from the script’s output.</p>
+
+<p>Note that if you’ve previously trained a model of the same type on your EC2 instance, there will be a cached datafile with a name like “cached_dev_albert-xlarge-v2_384”. If you’re training on a different dataset than you used in the previous training, make sure to delete the cached file, otherwise the script will automatically load the data from it and you’ll end up training on different data then you meant to.</p>
 
 <p><strong>File transferring</strong></p>
 
@@ -497,6 +499,8 @@ Besides looking at the Wandb logging, you can use the command <code class="langu
 <p>All that is necessary is to run the same command you ran to start the training except <code class="language-plaintext highlighter-rouge">--model_name_or_path</code> must be set to the path to the folder for the checkpoint you want to resume training from. For example if your output folder is called outputs-2 and you want to resume training from checkpoint-1500 you should have <code class="language-plaintext highlighter-rouge">--model_name_or_path /path_to_outputs_folder/outputs-2/checkpoint-1500</code>. For consistency, if you’re restarting training from the middle, you may want to see what the learning rate was at the checkpoint you’re using (on wandb), and use that as the starting learning rate for your new training.</p>
 
 <p>Note that if you do end up stopping your training early due to the metrics leveling off, you will have stopped the script before it reached the evaluation section, so if you want the evaluation results you will have to run the script again with only the –do_eval flag, and not the –do_train flag, and –model_name_or_path should be set to the path to the checkpoint you want to evaluate.</p>
+
+<p>Also note that if you previously ran an evaluation on a checkpoint, and now you want to evaluate that checkpoint using a different data file than you originally used, be sure to delete the any cached dataset files associated with that checkpoint (which will have names like “cached_dev_checkpoint-7000-v2_384”), so that your evaluation runs on the new data file instead of the old cached data.</p>
 
 <h2 id="understanding-your-model-outputs">Understanding Your Model Outputs</h2>
 <p><em>What’s the point in training a model if we can’t understand what it’s telling us? Here is a primer on comprehending model terms.</em></p>
