@@ -2,7 +2,7 @@
 body, h1, h2, h3, h4, h5, h6, p, blockquote, pre, hr, dl, dd, ol, ul, figure { margin: 0; padding: 0; }
 
 /** Basic styling */
-body { font: 400 16px/1.5 Roboto, Open Sans; color: #111; background-color: #fdfdfd; -webkit-text-size-adjust: 100%; -webkit-font-feature-settings: "kern" 1; -moz-font-feature-settings: "kern" 1; -o-font-feature-settings: "kern" 1; font-feature-settings: "kern" 1; font-kerning: normal; display: flex; min-height: 100vh; flex-direction: column; }
+body { font: 400 16px/1.5 Roboto; color: #111; background-color: #fdfdfd; -webkit-text-size-adjust: 100%; -webkit-font-feature-settings: "kern" 1; -moz-font-feature-settings: "kern" 1; -o-font-feature-settings: "kern" 1; font-feature-settings: "kern" 1; font-kerning: normal; display: flex; min-height: 100vh; flex-direction: column; }
 
 /** Set `margin-bottom` to maintain vertical rhythm */
 h1, h2, h3, h4, h5, h6, p, blockquote, pre, ul, ol, dl, figure, .highlight { margin-bottom: 15px; }
@@ -10,21 +10,25 @@ h1, h2, h3, h4, h5, h6, p, blockquote, pre, ul, ol, dl, figure, .highlight { mar
 /** `main` element */
 main { display: block; /* Default value of `display` of `main` element is 'inline' in IE 11. */ }
 
-.featured-image { background-image: url("site_files/SIFthumb.png"); }
+/** featured article's styling */
+.featured-container { position: relative; background-color: #5E5387 0.5% 1%; }
 
-.featured-title { text-align: left; font: Bold 20px/24px Roboto; letter-spacing: 3px; color: #3F298B; opacity: 1; }
+.featured-thumb img { position: relative; width: 70%; padding-right: 90px; padding-bottom: 120px; }
 
-.featured-text p { width: 300px; text-align: left; font: Regular 18px/24px Roboto; letter-spacing: 0.43px; color: #1D1D1DDD; opacity: 1; }
+.featured-text { position: absolute; width: 600px; padding: 60px; }
 
-.featured-author { text-align: left; font: Regular 24px/33px Open Sans; letter-spacing: 0px; color: #3D61D8; opacity: 1; }
+.featured-meta { text-align: left; font: Bold 20px/24px Roboto; letter-spacing: 3px; color: #3F298B; opacity: 1; }
 
-.featured-text h1 { text-align: left; font: Regular 30px/37px Roboto; letter-spacing: 0px; color: #5D5187; opacity: 1; }
+.featured-title { text-align: left; font-size: 37px; letter-spacing: 0px; color: #5D5187; opacity: 1; }
 
+.featured-excerpt { text-align: left; font: Regular 18px/24px Roboto; letter-spacing: 0.43px; color: #1D1D1DDD; opacity: 1; }
+
+/**Post styling: how the individual articles show up **/
 .post-container { position: relative; }
 
 .post-thumb img { position: relative; width: 50%; padding-right: 90px; padding-bottom: 120px; }
 
-.post-text { position: absolute; width: 540px; padding-left: 15px; }
+.post-text { position: absolute; width: 600px; padding-left: 15px; }
 
 .divider { padding: 150px; }
 

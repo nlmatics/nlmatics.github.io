@@ -50,21 +50,51 @@ main {
 }
 
 
+/** featured article's styling */
 
-.featured-image{
-  background-image: url("site_files/SIFthumb.png");
+.featured-container 
+{
+  position: relative;
+  background-color: #5E5387 0.5% 1%;
 }
 
-.featured-title {
-text-align: left;
+
+.featured-thumb img
+{
+  position: relative;
+  width: 70%;
+
+padding-right: $spacing-unit*3;
+padding-bottom: $spacing-unit*4;}
+
+.featured-text
+{
+  position: absolute;
+  width: $spacing-unit*20;
+  padding:$spacing-unit*2;
+ 
+}
+
+.featured-meta {
+  text-align: left;
 font: Bold 20px/24px Roboto;
 letter-spacing: 3px;
 color: #3F298B;
 opacity: 1;
 }
 
-.featured-text p {
-width: $spacing-unit*10;
+
+.featured-title 
+{
+text-align: left;
+font-size: 37px;
+letter-spacing: 0px;
+color: #5D5187;
+opacity: 1;
+}
+
+.featured-excerpt
+{
 text-align: left;
 font: Regular 18px/24px Roboto;
 letter-spacing: 0.43px;
@@ -72,21 +102,9 @@ color: #1D1D1DDD;
 opacity: 1;
 }
 
-.featured-author {
-text-align: left;
-font: Regular 24px/33px Open Sans;
-letter-spacing: 0px;
-color: #3D61D8;
-opacity: 1;
-}
 
-.featured-text h1 {
-  text-align: left;
-font: Regular 30px/37px Roboto;
-letter-spacing: 0px;
-color: #5D5187;
-opacity: 1;
-}
+/**Post styling: how the individual articles show up **/
+
 
 .post-container{
   position: relative;
@@ -101,7 +119,7 @@ padding-bottom: $spacing-unit*4;
 }
 .post-text {
   position: absolute;
-  width: $spacing-unit*18;
+  width: $spacing-unit*20;
   padding-left: $spacing-unit/2;
 
 }
