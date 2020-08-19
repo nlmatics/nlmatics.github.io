@@ -1,4 +1,467 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-19T12:17:45-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><subtitle>This is a collection of blogs on various topics including Natural Language Understanding, etc.</subtitle><entry><title type="html">Smooth Inverse Frequency (SIF) Embeddings in Golang</title><link href="http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth-Inverse-Frequency-Frequency-(SIF)-Embeddings-in-Golang.html" rel="alternate" type="text/html" title="Smooth Inverse Frequency (SIF) Embeddings in Golang" /><published>2020-08-07T05:45:00-04:00</published><updated>2020-08-07T05:45:00-04:00</updated><id>http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth%20Inverse%20Frequency%20Frequency%20(SIF)%20Embeddings%20in%20Golang</id><content type="html" xml:base="http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth-Inverse-Frequency-Frequency-(SIF)-Embeddings-in-Golang.html">&lt;h4 id=&quot;by-daniel-ye&quot;&gt;by Daniel Ye&lt;/h4&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-19T14:42:54-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><subtitle>This is a collection of blogs on various topics including Natural Language Understanding, etc.</subtitle><entry><title type="html">How to Extract Keyphrases and Visualize Text</title><link href="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html" rel="alternate" type="text/html" title="How to Extract Keyphrases and Visualize Text" /><published>2020-08-07T06:30:00-04:00</published><updated>2020-08-07T06:30:00-04:00</updated><id>http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text</id><content type="html" xml:base="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html">&lt;h4 id=&quot;by-cheyenne-zhang&quot;&gt;by Cheyenne Zhang&lt;/h4&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Cheyenne Zhang&lt;/strong&gt; is a rising junior at Princeton University studying Computer Science with certificates in East Asian Studies and Cognitive Science. She’s originally from just outside of Seattle, WA, and enjoys watching movies and learning languages in her free time. Cheyenne was one of NLMatics’ 2020 summer interns.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h1&gt; How to Extract Keyphrases and Visualize Text using Python, JavaScript, Keppler Mapper, d3&lt;/h1&gt;
+
+&lt;h6&gt;By Cheyenne Zhang&lt;/h6&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;The end product of following this article on the 20 newsgroup dataset. Clusters represent related phrases, and each cluster is labeled with a representative phrase.&lt;/i&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;INTRODUCTION&lt;/h2&gt;
+
+&lt;p&gt;Imagine that you’ve just gotten a huge dataset; for example, the &lt;a href=&quot;http://qwone.com/~jason/20Newsgroups/&quot;&gt;20 newsgroup dataset&lt;/a&gt;, which has 11,314 entries, an example of which is shown below. What would you do to try to understand the data as a whole? Maybe you would look at some entries and their categorization. Maybe you would search the dataset for certain keywords or topics.&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/20newsgroupexample.png&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;The first entry in the newsgroup20 dataset.&lt;/i&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;These approaches will take reading through a large amount of data—maybe even the whole dataset—to gain an understanding of what is going on. However, if we were somehow able to find a way to visualize it, perhaps that might allow us to condense meaning into something we can view in a short amount of time. That’s the goal of the visualization approach—to provide information at a glance, as well as new ways of interacting with this information.&lt;/p&gt;
+
+&lt;p&gt;In this article, we’ll see some quick but successful ways to extract meaningful keyphrases from text and how we can use that to produce helpful visualizations.&lt;/p&gt;
+
+&lt;h2 id=&quot;motivation&quot;&gt;MOTIVATION&lt;/h2&gt;
+&lt;p&gt;Over the course of about four weeks during my internship at NLMatics, I worked on creating a visualization of search results from the NLMatics engine. Currently, asking a question to our system provides a textual list of possible answers. While this is very useful in many cases, there is an opportunity to add another lens through which to view information by displaying it in a more intuitive manner, and to guide the user to see what is important about this particular document. With visualization, there are so many possibilities for expressing connections and relationships among the data–color-coding, relative size, text labels, link lengths, link colors…the list goes on! We’ll explore some of these ideas throughout this article.&lt;/p&gt;
+
+&lt;p&gt;In this piece, I’ll walk through a simplified version of the process I went through and also some of what I learned from this project. There are two main steps: Keyphrase Extraction, i.e. getting the most meaningful phrases from our text, and then Visualization, which involves clustering based on those phrases and displaying these clusters in an aesthetically appealing manner. If you just want to see the final product, I have set up a &lt;a href=&quot;https://github.com/cznlm/visualize-keyphrases&quot;&gt;repository&lt;/a&gt; that you can just download and run. It provides a notebook with all of the code from the both steps as well as the modified kmapper code from the Visualization section.&lt;/p&gt;
+
+&lt;h2 id=&quot;keyphrase-extraction&quot;&gt;KEYPHRASE EXTRACTION&lt;/h2&gt;
+&lt;h3 id=&quot;intro-to-rake-and-yake&quot;&gt;INTRO. TO RAKE AND YAKE&lt;/h3&gt;
+&lt;p&gt;Keyphrase extraction is not an easy task for a computer; it’s not even easy for humans! Take this sentence from the &lt;a href=&quot;https://en.wikipedia.org/wiki/Harry_Potter&quot;&gt;Harry Potter Wikipedia page&lt;/a&gt; for example:&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;“The central character in the series is Harry Potter, a boy who lives in the fictional town of Little Whinging, Surrey with his aunt, uncle, and cousin.”&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;What are the important keyphrases here? Are they the proper nouns—“Harry Potter” and “Little Whinging, Surrey”? Or are they people—“boy,” “aunt,” “uncle,” and “cousin”? Or are the book-related terms most important—”central character”, “series”, “fictional”? As you can see, there are many different interpretations of what makes a keyphrase “meaningful,” even to human judgement. This makes keyphrase extraction a very interesting area of NLP research. For background, &lt;a href=&quot;https://arxiv.org/pdf/1905.05044.pdf&quot;&gt;this paper&lt;/a&gt;, published in July 2019, provides a very thorough overview of the unsupervised and supervised methods currently in the field. Additionally, &lt;a href=&quot;https://www.aclweb.org/anthology/P14-1119.pdf&quot;&gt;this paper&lt;/a&gt; from 2014 is also a very prominent literature review, if a bit outdated.&lt;/p&gt;
+
+&lt;p&gt;For this demonstration, we will focus on a couple of automatic methods (i.e. no training of a model required), namely &lt;a href=&quot;https://www.researchgate.net/profile/Stuart_Rose/publication/227988510_Automatic_Keyword_Extraction_from_Individual_Documents/links/55071c570cf27e990e04c8bb.pdf&quot;&gt;RAKE&lt;/a&gt; (Rapid Automatic Keyword Extraction) and &lt;a href=&quot;https://github.com/LIAAD/yake&quot;&gt;YAKE!&lt;/a&gt; (Yet Another Keyphrase Extraction). The reason I chose these two methods is because they are very fast while still producing decent results. At NLMatics, there is often a large number of long documents to be searched by the clients, so speed is most definitely a primary concern. Because of this need for speed and thus the relative simplicity of the algorithms, it is important to note that these methods may cut off phrases in the wrong places, return some not-so-relevant phrases, or miss important phrases entirely, etc. At the end of the day though, I think the speed is worth it!&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/speedmeme.png&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;This is us when we use RAKE and YAKE.&lt;/i&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Another note is that the reason that we are using both RAKE and YAKE is in the hopes that combining the keyphrases extracted through both of these methods on the same text will provide us with more, higher quality keyphrases. You’ll see below how we will use the keyphrases when clustering sentences based on meaning, but suffice to say that combining the two helps preserve meaning by drowning out the irrelevant ones and increasing the number of relevant ones.&lt;/p&gt;
+
+&lt;p&gt;RAKE is a fairly simple algorithm introduced in 2010 that makes use of the observation that good keyphrases rarely include stopwords. First, it uses stopwords and phrase delimiters to split up the text into potential keyphrases. Then, a score is calculated by taking the ratio of degree (defined as the sum of how many times it occurs next to other words in the text) to word frequency for every word in the phrase and summing them to get the phrase’s overall score. Here, I used the &lt;a href=&quot;https://github.com/csurfer/rake-nltk&quot;&gt;RAKE-NLTK&lt;/a&gt; implementation, which takes advantage of the power of NLTK.&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/rakeexample.png&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;An example of RAKE-extracted keyphrases and their scores. High scores represent high relevance.&lt;/i&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;YAKE is another keyword extraction technique (YAKE literally stands for “Yet Another Keyphrase Extractor”) which makes use of a few more word features to calculate a score. YAKE starts by calculating a score for each individual word using this set of five features: casing (ratio of uppercase and lowercase to overall count), position (favors words near beginning of document), relatedness to context (computes number of terms to the left/right), sentence difference (how often the word appears in different sentences). A sliding window of 3-grams (i.e. three-word-long phrases) is then used to determine the lowest scoring (i.e. most meaningful) possible keyphrases.&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/yakeexample.png&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;An example of YAKE-extracted keyphrases and their scores. Low scores represent high relevance.&lt;/i&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;using-rake-and-yake&quot;&gt;USING RAKE AND YAKE&lt;/h3&gt;
+&lt;p&gt;I would recommend following along in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;notebook.ipynb&lt;/code&gt; from the repository above. Alternatively, you can copy and paste these code blocks into your own new notebook. First, install and import these two libraries:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;!pip install rake_nltk
+!pip install yake
+from rake_nltk import Rake
+import yake
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Initialize:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Initialize
+r = Rake(min_length=1, max_length=4) # defining min and max length for keyphrases
+y = yake.KeywordExtractor()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;There are other parameters you can adjust if you so desire, such as providing your own stopwords for RAKE and n-gram size for YAKE. Check the official &lt;a href=&quot;https://csurfer.github.io/rake-nltk/_build/html/advanced.html&quot;&gt;RAKE NLTK usage details&lt;/a&gt; and &lt;a href=&quot;https://github.com/LIAAD/yake#specifying-parameters&quot;&gt;YAKE documentation&lt;/a&gt; for more on those.&lt;/p&gt;
+
+&lt;p&gt;Let’s initialize some sample sentences (again from the &lt;a href=&quot;https://en.wikipedia.org/wiki/Harry_Potter&quot;&gt;Harry Potter Wikipedia page&lt;/a&gt;):&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Create a list of sample sentences
+sentences = []
+sentences.append(&quot;Since the release of the first novel, Harry Potter and the Philosopher's Stone, on 26 June 1997, the books have found immense popularity, critical acclaim and commercial success worldwide.&quot;)
+sentences.append(&quot;The Harry Potter novels are mainly directed at a young adult audience as opposed to an audience of middle grade readers, children, or adults.&quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And use RAKE and YAKE on them!:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# For each sentence, print the keyphrases that RAKE and YAKE extract
+for sentence in sentences:
+    print(&quot;sentence: &quot;, sentence)	 
+r.extract_keywords_from_text(sentence)
+rake_keywords = r.get_ranked_phrases_with_scores()
+print(&quot;rake keyphrases: &quot;)
+for kw in rake_keywords:
+    print(kw)
+yake_keywords = y.extract_keywords(sentence)
+print(&quot;yake keyphrases: &quot;)
+for kw in yake_keywords:
+    print(kw)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;It’s that simple! As you can see, the keyphrases aren’t perfect. To help get rid of some of the noise, we’re going to set a cutoff. You can play around with the number more if you’d like, but I decided to use 3 as a cutoff for RAKE and 0.4 for YAKE. We’ll also define a function that returns a list of the phrases rather than just printing them out for this so that we can use it later:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define a function which takes in text and returns a list of keyphrases
+def get_keyphrases(text):
+    # yake has some trouble dealing with empty strings
+    if text.strip() == &quot;&quot;:
+         return [&quot;&quot;]
+
+  r.extract_keywords_from_text(text)
+  rake_keywords = r.get_ranked_phrases_with_scores()
+  yake_keywords = y.extract_keywords(text)
+  keyphrases = []
+  for kw in rake_keywords:
+      if kw[0] &amp;gt; 3:
+          keyphrases.append(kw[1])
+  for kw in yake_keywords:
+      if kw[0] &amp;lt; 0.4:
+          keyphrases.append(kw[1])
+  return list(set(keyphrases)) # to remove duplicates
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;A bit better! There are still some inconsistencies that we would be able to fix up with different heuristics, but for now, I think that the keyphrases give an acceptable overview of our example text.&lt;/p&gt;
+
+&lt;h2 id=&quot;visualization&quot;&gt;VISUALIZATION&lt;/h2&gt;
+&lt;h3 id=&quot;keppler-mapper-without-modifications&quot;&gt;KEPPLER MAPPER WITHOUT MODIFICATIONS&lt;/h3&gt;
+
+&lt;p&gt;Next, we’ll move onto visualization of these extracted keyphrases. We’ll be using &lt;a href=&quot;https://kepler-mapper.scikit-tda.org/&quot;&gt;Kepler Mapper&lt;/a&gt;, a scikit library that provides the functionality to project data visually, to cluster it, and to create connections between it. This project is inspired by &lt;a href=&quot;https://kepler-mapper.scikit-tda.org/notebooks/KeplerMapper-Newsgroup20-Pipeline.html&quot;&gt;this Kepler Mapper &amp;amp; NLP example&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;First, we’ll run Keppler Mapper without modifications. Note that if you are following along using the code in the repository above, since everything in there is already modified, running it will give you the final product and not these intermittent steps I will be talking about. But I have included screenshots every so often so hopefully, that will help clear up what each step does.&lt;/p&gt;
+
+&lt;p&gt;There will be a lot of steps and it is not necessary to know all the intricate details of each one, but understanding them at a high level will be helpful. Basically, we first need to project the data down into two dimensions so that it can be seen with the human eye on a screen. Then, we cluster it to create our nodes of varying sizes that represent an area of related data. Finally, we label the nodes with the appropriate identifying label.&lt;/p&gt;
+
+&lt;p&gt;First, you’ll have to &lt;a href=&quot;https://github.com/scikit-tda/kepler-mapper&quot;&gt;download Kepler Mapper from source&lt;/a&gt;, since we’ll be modifying some of the code for our purposes. Clone into your working directory:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/MLWave/kepler-mapper
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You now have the Kepler Mapper code locally, so we can go in and modify it later. But first, we’ll run an example of what a normal Kepler Mapper visualization would look like without modifications to the frontend, and then we’ll adapt it for our purposes.&lt;/p&gt;
+
+&lt;p&gt;As mentioned above, we’ll be using the &lt;a href=&quot;https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_20newsgroups.html#sklearn.datasets.fetch_20newsgroups&quot;&gt;20 newsgroup dataset&lt;/a&gt;, which scikit conveniently provides.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Imports
+import kmapper as km
+import numpy as np
+!pip install scikit-learn
+from sklearn.datasets import fetch_20newsgroups
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Make sure to move the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;kepler-mapper/kmapper&lt;/code&gt; folder (you won’t need any other folders from the repository besides this one) to the same directory as your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;notebook.ipynb&lt;/code&gt; so that your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;import kmapper as km&lt;/code&gt; statement can find it.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Get the 20newsgroup dataset
+newsgroups = fetch_20newsgroups(subset='train')
+raw_data = newsgroups.data
+X, category, category_names = np.array(raw_data), np.array(newsgroups.target), np.array(newsgroups.target_names)
+print(&quot;SAMPLE ENTRY: &quot;, X[0])
+print(&quot;SHAPE: &quot;, X.shape)
+print(&quot;SAMPLE CATEGORY: &quot;, category[0])
+print(&quot;SAMPLE CATEGORY NAME: &quot;, category_names[category[0]])
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We have extracted three lists named &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;category&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;category_names&lt;/code&gt;.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;From the “SAMPLE ENTRY” line, you can see what &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt;, our dataset, looks like–various emails with headers.&lt;/li&gt;
+  &lt;li&gt;The “SHAPE” line shows that the dataset is quite large, with 11,314 entries.&lt;/li&gt;
+  &lt;li&gt;The “CATEGORY” is simply an integer ID for each category that is used to index &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;category_names&lt;/code&gt; which has the category stored as a string; for example, category 7 is “rec.autos” means that it’s a recreational email about automobiles.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We’ll be using a subset of the entire dataset and cleaning it up a little bit, including removing the header from these emails. Then, we’ll run the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;get_keyphrases&lt;/code&gt; function we created above on the data to get our RAKE and YAKE phrases.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Format data -- get rid of email headers, new lines and tabs, and then create joined &quot;sentences&quot; for each sentence
+import re
+headers = [&quot;Lines: &quot;, &quot;NNTP-Posting-Host: &quot;, &quot;NNTP Posting Host: &quot;]
+data_formatted = []
+for entry in raw_data[:1000]:
+occurrences = []
+for header in headers:
+    occurrences.append(entry.lower().find(header.lower()))
+champ = max(occurrences)
+if champ != -1:
+    start = entry.find(&quot;\n&quot;, champ)
+    data_formatted.append(entry[start:])
+else:
+    data_formatted.append(entry)
+data_formatted = [re.sub(&quot;[\n\t-]&quot;, &quot; &quot;,
+entry) for entry in data_formatted]
+extracted_phrases = [get_keyphrases(entry)
+for entry in data_formatted]
+    print(&quot;SAMPLE EXTRACTED PHRASES: &quot;, extracted_phrases[0])
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Now this is where our keyphrases come in.&lt;/strong&gt; We want to preserve as much meaning as possible from the sentence when we project it down into two dimensions and cluster them. In many cases, raw sentences have a lot of junk in them. We can see this even with our example sentence from above:&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;“&lt;b&gt;The&lt;/b&gt; central character &lt;b&gt;in the&lt;/b&gt; series &lt;b&gt;is&lt;/b&gt; Harry Potter, &lt;b&gt;a&lt;/b&gt; boy &lt;b&gt;who&lt;/b&gt; lives &lt;b&gt;in the&lt;/b&gt; fictional town &lt;b&gt;of&lt;/b&gt; Little Whinging, Surrey &lt;b&gt;with his&lt;/b&gt; aunt, uncle, &lt;b&gt;and&lt;/b&gt; cousin.”&lt;/div&gt;
+
+&lt;p&gt;Out of the 27 words in the sentences, 12 of them are stopwords (bolded above). That’s almost half (!!!) of the words that essentially add no meaning to the sentence!&lt;/p&gt;
+
+&lt;p&gt;What we’ll do to overcome this is create “sentences” from our extracted keyphrases; i.e. stringing together all of the keyphrases for a given entry. This will emphasize the meaningful bits in it and de-emphasize the not-so-meaningful ones. Let’s use a shorter example; the sentence:&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;“There is a big black cat.”&lt;/div&gt;
+
+&lt;p&gt;gets the keyphrases:&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;“big black cat”, “black cat”&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;when passed in to our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;get_keyphrases&lt;/code&gt; function above. The joined “sentence” would then become “big black cat black cat,” essentially boiling the sentence down into its core meaning. We will use these for our projections. The below code will print an example from our dataset:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;extracted_phrases_joined = [&quot; &quot;.join(phrase) for phrase in extracted_phrases]
+print(&quot;SAMPLE ORIGINAL SENTENCE: &quot;, data_formatted[0])
+print(&quot;SAMPLE JOINED SENTENCE: &quot;, extracted_phrases_joined[0])
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then, we’ll start the process of projecting these meaningful “sentences.” We’ll use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TfidfVectorizer&lt;/code&gt; to convert our documents into a matrix of TF-IDF features, then perform dimensionality reduction with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TruncatedSVD&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Isomap&lt;/code&gt;. Finally, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MinMaxScaler&lt;/code&gt; scales them to an appropriate size.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Project all of the &quot;sentences&quot; down into a 2D representation
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import TruncatedSVD
+from sklearn.manifold import Isomap
+from sklearn.preprocessing import MinMaxScaler
+
+mapper = km.KeplerMapper(verbose=2)
+
+projected_X = mapper.fit_transform(np.array(extracted_phrases_joined),
+projection=[TfidfVectorizer(analyzer=&quot;char&quot;,
+                            ngram_range=(1,6),
+                            max_df=0.83,
+                            min_df=0.05),
+            TruncatedSVD(n_components=100,
+                         random_state=1729),
+            Isomap(n_components=2,
+                   n_jobs=-1)],
+scaler=[None, None, MinMaxScaler()])
+
+print(&quot;SHAPE&quot;,projected_X.shape)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now that we have &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;projected_X&lt;/code&gt;, a list of 2D representations of each of our sentences, we’re going to cluster the sentences. The clustering algorithm is pretty important here, as different algorithms are suited for different purposes; you can learn more about scikit’s different clustering algorithms &lt;a href=&quot;https://scikit-learn.org/stable/modules/clustering.html&quot;&gt;here&lt;/a&gt;. KeplerMapper uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AgglomerativeClustering&lt;/code&gt; in their example, but that ends up with a large number of clusters which is hard to look at and visually take in. Feel free to play around with the algorithms to see what best suits your needs, but here we’ll be using &lt;a href=&quot;https://scikit-learn.org/stable/modules/clustering.html#dbscan&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DBSCAN&lt;/code&gt;&lt;/a&gt;, which is characterized by uneven clusters and non-flat geometry (i.e. shapes that aren’t just circles or squares). Here’s a comparison of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AgglomerativeClustering&lt;/code&gt; vs. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DBSCAN&lt;/code&gt; on our data.&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/dbscan.png&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;DBSCAN on the newsgroup20 dataset.&lt;/i&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/agglomerative.png&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;AgglomerativeClustering on the newsgroup20 dataset.&lt;/i&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;As you can see, I had to zoom out much more to fit all of the points in with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AgglomerativeClustering&lt;/code&gt; version. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DBSCAN&lt;/code&gt; seems to be a lot more manageable for our purposes of wanting to see information at a glance. So here is the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DBSCAN&lt;/code&gt; clustering code:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Cluster the projected data
+from sklearn import cluster
+graph = mapper.map(projected_X, clusterer=cluster.DBSCAN(eps=0.5, min_samples=3))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Next, we’re going to get TF-IDF wordgrams (1-3) to help us identify each cluster. Essentially, we’ll find the phrases of one to three words that are not too common but at the same time not too uncommon (hence the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;min_df&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;max_df&lt;/code&gt; parameters, i.e. the cut-offs for document frequency values) and later the Kepler Mapper code will calculate some statistics on it that you’ll see in the side info panel.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Get counts of phrases from data (to be used for the label and for cluster statistics)
+vec = TfidfVectorizer(analyzer=&quot;word&quot;,
+                  strip_accents=&quot;unicode&quot;,
+                  stop_words=&quot;english&quot;,
+                  ngram_range=(1,3),
+                  max_df=0.97,
+                  min_df=0.02)
+
+interpretable_inverse_X = vec.fit_transform(X).toarray()
+interpretable_inverse_X_names = vec.get_feature_names()
+
+print(&quot;SHAPE&quot;, interpretable_inverse_X.shape)
+print(&quot;FEATURE NAMES SAMPLE&quot;,
+interpretable_inverse_X_names[:400])
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, we’ll put it all together by using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;visualize()&lt;/code&gt; function. It will write to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;path_html&lt;/code&gt; filename you provide it. We’ll see our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;category_names&lt;/code&gt; in the panel on the left-side, and our nodes will be colored according to their categories.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Visualize data!
+html = mapper.visualize(graph,
+	X=interpretable_inverse_X,
+	X_names=interpretable_inverse_X_names,
+	path_html=&quot;newsgroups20.html&quot;,
+	lens=projected_X,
+	lens_names=[&quot;ISOMAP1&quot;, &quot;ISOMAP2&quot;],
+	title=&quot;Visualizing Text - Newsgroup20&quot;,
+  custom_tooltips=np.array([category_names[ys] for ys in category]),
+	color_function=category)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The very last cell also gives you the option to open the file in the notebook.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Open visualization here in the notebook
+from kmapper import jupyter
+jupyter.display(path_html=&quot;newsgroups20.html&quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;That’s it! If you’re following along in the repository, the screenshot below is the outcome of the process so far. If you’re creating your own file from scratch with these code blocks, go ahead and run the whole kernel (it may take a while due to the clustering and projection), and you should see something like this at the bottom. Or, if you prefer, you can open &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;newsgroup20.html&lt;/code&gt; in your preferred web browser.&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/unmodifiedkm.png&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;Default Kepler Mapper on the newsgroup20 dataset using DBSCAN clustering.&lt;/i&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;It already looks really cool! Feel free to play around with it; zoom in and out, open the toggles in the navigation bar, hover on nodes, etc.&lt;/p&gt;
+
+&lt;h3 id=&quot;kepler-mapper-with-modifications&quot;&gt;KEPLER MAPPER WITH MODIFICATIONS&lt;/h3&gt;
+
+&lt;p&gt;However, one drawback is that you can’t really get much information at a glance from this screen. It’s hard to glean any sort of relationship between the data without knowing what the nodes represent! What we’re going to do next is modify the Kepler Mapper code in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;kmapper&lt;/code&gt; folder so that each node above retains its relative size to other nodes (based on how many members are in the cluster) and also make it big enough so that a defining label for each node can fit.&lt;/p&gt;
+
+&lt;p&gt;Please note that the defining label we will be using is the &lt;strong&gt;most common word or phrase&lt;/strong&gt; in all of the sentences in that cluster. This generally provides a good label for the cluster as a whole, as opposed to running RAKE or YAKE on the sentences in the cluster which, as I found in my experimentation, tends to focus on one or two entries in the cluster. The sentences in a cluster do have overlap in meaning (that’s why they’re clustered together), but oftentimes it might not be clear enough to simple techniques like RAKE/YAKE why this is so. Generally, these automatic techniques are run on one contained document, not a group of documents. All that is to say, we will be using the most frequent phrase as a label so that we can get an idea of the cluster as a whole.&lt;/p&gt;
+
+&lt;p&gt;Navigate to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;kmapper&lt;/code&gt; directory. This is where all of the relevant source code we will be working with is. First, we’ll change the size of the nodes so that they are large enough to hold text. Go into &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;visuals.py&lt;/code&gt; and find the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_size_node&lt;/code&gt; function in line 406, which is where the size of each node is defined based on how many members are in the cluster. It should look like:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def _size_node(member_ids):
+    return int(np.log(len(member_ids) + 1) + 1)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Change it to:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def _size_node(member_ids):
+    return 35 * int(np.log(len(member_ids) + 1) + 1)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you were to run again at this point, you would see something like the screenshot below.&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/halfmodifiedkm.png&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;Kepler Mapper after adjusting node size.&lt;/i&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;The nodes would appear bigger, but still at a good relative ratio with each other. As you can see, one problem is that there’s some overlap between nodes. We can play around with the forces a bit to try to fix this. If you navigate to line 127, you should see the force settings:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Force settings
+var force = d3.layout.force()
+        .linkDistance(5)
+        .gravity(0.2)
+        .charge(-1200)
+        .size([w,h]);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;For this dataset, I’ve found that changing the &lt;a href=&quot;http://bl.ocks.org/sathomas/191a8a302a363ac6a4b0&quot;&gt;gravity&lt;/a&gt; from 0.2 to 0.1 and &lt;a href=&quot;http://bl.ocks.org/sathomas/1ca23ee9588580d768aa&quot;&gt;charge&lt;/a&gt; from -1200 to -1800 repels the clusters enough to mostly get rid of the overlap problem. As a side note, Keppler Mapper actually runs on an outdated version of d3, so I wouldn’t worry too much about understanding the forces because in the most current release, these are basically deprecated anyways and there’s a cool function called &lt;a href=&quot;https://www.d3indepth.com/force-layout/#forcemanybody&quot;&gt;forceManyBody()&lt;/a&gt; that just gets rid of all overlap! But generally, a negative charge represents more repelling of nodes, and gravity closer to 0 allows the nodes to wander further apart.&lt;/p&gt;
+
+&lt;p&gt;Next, we’ll add the label of the top feature, i.e. most common phrase, to each node. Find the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;format_mapper_data&lt;/code&gt; function around line 166, which formats the data that will be passed to the HTML template. You can see that each node has this information:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;n = {
+        &quot;id&quot;: &quot;&quot;,
+        &quot;name&quot;: node_id,
+        &quot;color&quot;: c,
+        &quot;type&quot;: t,
+        &quot;size&quot;: s,
+        &quot;tooltip&quot;: tt,
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We’re going to add a field called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;feature&lt;/code&gt; which represents the top occurring feature, and we’ll write this on the node later in the frontend.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cluster_stats = _format_cluster_statistics(member_ids, X, X_names)
+f = cluster_stats['above'][0]['feature']
+
+n = {
+        &quot;id&quot;: &quot;&quot;,
+        &quot;name&quot;: node_id,
+        &quot;color&quot;: c,
+        &quot;type&quot;: t,
+        &quot;size&quot;: s,
+        &quot;tooltip&quot;: tt,
+        &quot;feature&quot;: f
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cluster_stats[‘above’]&lt;/code&gt; is a list of the “above-average features”, meaning the features i.e. phrases that occur more than an average amount of times. We’re taking the most common one and feeding it into the frontend.&lt;/p&gt;
+
+&lt;p&gt;Now, we can go into the JavaScript and make the feature appear. Kepler Mapper was built using &lt;a href=&quot;https://d3js.org/&quot;&gt;d3&lt;/a&gt;, which is a JavaScript library that “helps you bring data to life using HTML, SVG, and CSS.” In terms of this application, it is taking care of a lot of the interactivity, the physics, etc. The creator of d3 has a very thorough &lt;a href=&quot;https://observablehq.com/collection/@d3/learn-d3&quot;&gt;tutorial&lt;/a&gt; (it’s also interactive!) if you want to learn it from the ground up, but we won’t need to know much about it for this. I would recommend looking into it because you can make some really beautiful visualizations.&lt;/p&gt;
+
+&lt;p&gt;At line 194, you’ll see this code:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Draw circles
+var circle = node.append(&quot;path&quot;)
+  .attr(&quot;d&quot;, d3.svg.symbol()
+    .size(function(d) { return d.size * 50; })
+    .type(function(d) { return d.type; }))
+  .attr(&quot;class&quot;, &quot;circle&quot;)
+  .style(tocolor, function(d) {
+    console.log(&quot;Node color:&quot;, d.color);
+    console.log(&quot;becomes color &quot;, color(d.color));
+    return color(d.color);
+  });
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This is the code that creates the visual nodes we see. It gives each a size (note the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;d.size * 50&lt;/code&gt;, we’ll make use of that later), a type attribute, a class, and colors it according to the provided color function (the color scheme is &lt;a href=&quot;https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html#the-color-scales&quot;&gt;viridis&lt;/a&gt;). We’ll add code right after this to put text labels on top of this:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Add labels
+var label = node.append(&quot;text&quot;)
+    .attr(&quot;dy&quot;, &quot;.35em&quot;)
+    .attr(&quot;fill&quot;, &quot;white&quot;)
+    .style(&quot;font-family&quot;, &quot;Roboto&quot;)
+    .style(&quot;font-weight&quot;, &quot;300&quot;)
+    .text(d =&amp;gt; d.feature)
+    .style(&quot;font-size&quot;, function(d) {
+        var length = this.getComputedTextLength(); // supposedly returns a pixel integer
+        var available = Math.pow((d.size * 50 / Math.PI), 0.5) * 2 - 18; // d.size is the squared area
+        return (available / length) + &quot;em&quot;;
+    });
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To break this chunk of code down:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The first line adds text to each node.&lt;/li&gt;
+  &lt;li&gt;The second centers it vertically; “em” is a unit of measurement which is equal to the point size of the current font, i.e. in size 12 font an em would be 12 pixels. Basically, this line centers vertically for your current font size.&lt;/li&gt;
+  &lt;li&gt;Then we make it white, Roboto, and adjust its weight, i.e. its boldness.&lt;/li&gt;
+  &lt;li&gt;Then, we add the text itself by returning the property called feature that we just added for each node.&lt;/li&gt;
+  &lt;li&gt;All that’s left is the font size, which is a bit trickier but nothing crazy. The idea is that we have the size of each node that was passed in from the backend, which when multiplied by 50 (in line 197 if you recall from above, not sure why they designed it this way but it works I suppose) is the area it takes up in pixels, as well as the length of our text label, also in pixels. We then find the diameter of the node, subtract 18 to account for padding from the shadow on the outside of the pixel, then use the ratio of that available diameter to the length of our text as the em value for our font size.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Finally, we have to go up to line 45 and make sure that all text is anchored to the middle, i.e. centered. Change this:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var svg = d3.select(&quot;#canvas&quot;).append(&quot;svg&quot;)
+      .attr(&quot;width&quot;, width)
+      .attr(&quot;height&quot;, height);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To this:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var svg = d3.select(&quot;#canvas&quot;).append(&quot;svg&quot;)
+      .attr(&quot;width&quot;, width)
+      .attr(&quot;height&quot;, height)
+      .attr(&quot;text-anchor&quot;, &quot;middle&quot;);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And that’s it! Refresh your kernel and run all cells, and you should get something like this (or just go ahead and run without refreshing if you’re using my &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;notebook.ipynb&lt;/code&gt;). A colorful, interactive way of visualizing the most meaningful clusters of your data.&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif&quot; /&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;i&gt;Again, here’s the link to a &lt;a href=&quot;https://github.com/cznlm/visualize-keyphrases&quot;&gt;repository with the relevant code&lt;/a&gt; if you wish to download and run directly.&lt;/i&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;further-directions&quot;&gt;FURTHER DIRECTIONS&lt;/h2&gt;
+&lt;p&gt;There are a few of clear directions from here, namely working on reducing noise, fine-tuning the clustering algorithm, and improving the label quality. There are a lot of “junk” keyphrases that we get from RAKE and YAKE, so looking into a more advanced technique might be helpful to help us create even more meaningful “sentences” to project. Also, the choice of clustering algorithm we use on these projections is also relatively arbitrary. Finally, as you can see from the demo GIF, the labels themselves are far from perfect. It would be great to have a representative keyphrase of an entire cluster as opposed to just the top feature. However, it seems that the speedy automatic keyphrase extraction techniques we were using in this article are not suited for this purpose, so looking into more advanced techniques would be a great future direction as well.&lt;/p&gt;
+
+&lt;h2 id=&quot;resources-compiled&quot;&gt;RESOURCES COMPILED&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://qwone.com/~jason/20Newsgroups/&quot;&gt;20 Newsgroup Dataset&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://arxiv.org/pdf/1905.05044.pdf&quot;&gt;A 2019 Keyphrase Extraction Literature Review&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.aclweb.org/anthology/P14-1119.pdf&quot;&gt;A 2014 Keyphrase Extraction Literature Review&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=0DzcUXkn9HY&amp;amp;t=548s&quot;&gt;An interesting lecture on keyphrase extraction methods&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.researchgate.net/profile/Stuart_Rose/publication/227988510_Automatic_Keyword_Extraction_from_Individual_Documents/links/55071c570cf27e990e04c8bb.pdf&quot;&gt;RAKE paper&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.researchgate.net/profile/Stuart_Rose/publication/227988510_Automatic_Keyword_Extraction_from_Individual_Documents/links/55071c570cf27e990e04c8bb.pdf&quot;&gt;YAKE paper&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.aclweb.org/anthology/P17-1102/&quot;&gt;PositionRank, another cool technique that I tried out&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://scikit-learn.org/stable/modules/clustering.html&quot;&gt;Scikit-learn’s clustering algorithms&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://kepler-mapper.scikit-tda.org/&quot;&gt;Keppler Mapper&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://observablehq.com/collection/@d3/learn-d3&quot;&gt;Learn d3 Tutorial Series&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://bl.ocks.org/sathomas/11550728&quot;&gt;Understanding d3 v3 Forces&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.d3indepth.com/force-layout/&quot;&gt;Understanding d3 v5 Forces&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html&quot;&gt;viridis color palettes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Cheyenne Zhang</name></author><summary type="html">by Cheyenne Zhang</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/kepmapthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/kepmapthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Smooth Inverse Frequency (SIF) Embeddings in Golang</title><link href="http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth-Inverse-Frequency-Frequency-(SIF)-Embeddings-in-Golang.html" rel="alternate" type="text/html" title="Smooth Inverse Frequency (SIF) Embeddings in Golang" /><published>2020-08-07T05:45:00-04:00</published><updated>2020-08-07T05:45:00-04:00</updated><id>http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth%20Inverse%20Frequency%20Frequency%20(SIF)%20Embeddings%20in%20Golang</id><content type="html" xml:base="http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth-Inverse-Frequency-Frequency-(SIF)-Embeddings-in-Golang.html">&lt;h4 id=&quot;by-daniel-ye&quot;&gt;by Daniel Ye&lt;/h4&gt;
 
 &lt;hr /&gt;
 

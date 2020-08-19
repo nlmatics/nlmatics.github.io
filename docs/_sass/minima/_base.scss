@@ -4,7 +4,7 @@
 body, h1, h2, h3, h4, h5, h6,
 p, blockquote, pre, hr,
 dl, dd, ol, ul, figure {
-  margin-left: 40px;
+  margin: 0;
   padding: 0;
 }
 
@@ -102,7 +102,7 @@ font: Regular 18px/24px Roboto;
 letter-spacing: 0.43px;
 color: #1D1D1DDD;
 opacity: 1;
-padding-top: 20px;
+
 }
 
 /** button that says read more **/
@@ -175,7 +175,7 @@ font: Regular 20px/27px Open Sans;
 letter-spacing: 0px;
 color: #3D61D8;
 opacity: 1;
- margin-left: 40px;
+
 }
 
 .divider {
