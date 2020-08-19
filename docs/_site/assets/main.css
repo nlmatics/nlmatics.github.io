@@ -38,7 +38,7 @@ hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin:
 
 .post-thumb { padding-bottom: 120px; width: 20%; }
 
-.post-thumb img { width: 70%; float: left; }
+.post-thumb img { width: 25%; float: left; padding-right: 30px; }
 
 .post-text { width: 100%; }
 

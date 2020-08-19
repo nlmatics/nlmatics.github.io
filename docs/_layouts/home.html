@@ -39,6 +39,7 @@ layout: default
     <ul class="post-list">
       {%- for post in site.posts -%}
       <li>
+        <div class="divider"></div>
         <div class="post-container">
           <span class="post-thumb"> <img src="{{post.image}}"></span>
           <span class="post-text">
@@ -52,6 +53,7 @@ layout: default
             <span class="post-author"> By {{post.author}} </span>
           </span>
         </div>
+
         
       </li>
       {%- endfor -%}

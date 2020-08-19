@@ -149,7 +149,6 @@ hr {
 
 
 .post-container{
-
  
   background-color: #ffffff;
   padding: 20px;
@@ -158,7 +157,7 @@ hr {
 
 
 .post-container::after {
-    content: "";
+  content: "";
   clear: both;
   display: table;
 }
@@ -171,8 +170,9 @@ width: 20%;
 }
 
 .post-thumb img {
-  width: 70%;
+  width: 25%;
   float: left;
+  padding-right: $spacing-unit;
 }
 
 .post-text {
@@ -204,6 +204,7 @@ opacity: 1;
 padding: $spacing-unit;
 clear: both;
 }
+
 
 
 
