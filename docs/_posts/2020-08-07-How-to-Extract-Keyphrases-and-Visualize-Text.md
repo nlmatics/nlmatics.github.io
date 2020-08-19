@@ -11,17 +11,14 @@ author: Cheyenne Zhang
 
 #### by Cheyenne Zhang
 
-___
 
-<br> 
+
 
 **Cheyenne Zhang** is a rising junior at Princeton University studying Computer Science with certificates in East Asian Studies and Cognitive Science. She's originally from just outside of Seattle, WA, and enjoys watching movies and learning languages in her free time. Cheyenne was one of NLMatics' 2020 summer interns.
 
 ___
+<br> <br> 
 
-<h1> How to Extract Keyphrases and Visualize Text using Python, JavaScript, Keppler Mapper, d3</h1>
-
-<h6>By Cheyenne Zhang</h6>
 
 <div align="center"><img src="../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif"></div>
 

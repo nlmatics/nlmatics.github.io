@@ -1,16 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-19T14:45:58-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><subtitle>This is a collection of blogs on various topics including Natural Language Understanding, etc.</subtitle><entry><title type="html">How to Extract Keyphrases and Visualize Text</title><link href="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html" rel="alternate" type="text/html" title="How to Extract Keyphrases and Visualize Text" /><published>2020-08-07T06:30:00-04:00</published><updated>2020-08-07T06:30:00-04:00</updated><id>http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text</id><content type="html" xml:base="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html">&lt;h4 id=&quot;by-cheyenne-zhang&quot;&gt;by Cheyenne Zhang&lt;/h4&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-19T15:22:26-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><subtitle>This is a collection of blogs on various topics including Natural Language Understanding, etc.</subtitle><entry><title type="html">How to Extract Keyphrases and Visualize Text</title><link href="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html" rel="alternate" type="text/html" title="How to Extract Keyphrases and Visualize Text" /><published>2020-08-07T06:30:00-04:00</published><updated>2020-08-07T06:30:00-04:00</updated><id>http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text</id><content type="html" xml:base="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html">&lt;h4 id=&quot;by-cheyenne-zhang&quot;&gt;by Cheyenne Zhang&lt;/h4&gt;
 
 &lt;p&gt;&lt;strong&gt;Cheyenne Zhang&lt;/strong&gt; is a rising junior at Princeton University studying Computer Science with certificates in East Asian Studies and Cognitive Science. She’s originally from just outside of Seattle, WA, and enjoys watching movies and learning languages in her free time. Cheyenne was one of NLMatics’ 2020 summer interns.&lt;/p&gt;
 
 &lt;hr /&gt;
-
-&lt;h1&gt; How to Extract Keyphrases and Visualize Text using Python, JavaScript, Keppler Mapper, d3&lt;/h1&gt;
-
-&lt;h6&gt;By Cheyenne Zhang&lt;/h6&gt;
+&lt;p&gt;&lt;br /&gt; &lt;br /&gt;&lt;/p&gt;
 
 &lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif&quot; /&gt;&lt;/div&gt;
 

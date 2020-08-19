@@ -11,11 +11,9 @@ h1, h2, h3, h4, h5, h6, p, blockquote, pre, ul, ol, dl, figure, .highlight { mar
 main { display: block; /* Default value of `display` of `main` element is 'inline' in IE 11. */ }
 
 /** featured article's styling */
-.featured-container { padding-top: 150px; display: inline-flex; }
+.featured-container { padding-top: 150px; }
 
-.featured-thumb img { padding-right: 180px; padding-bottom: 120px; width: 95%; }
-
-.featured-text { flex: 0 1 auto; flex-wrap: wrap; }
+.featured-thumb img { padding-right: 180px; padding-bottom: 120px; width: 40%; float: left; }
 
 .featured-meta { text-align: left; font: Bold 20px/24px Roboto; letter-spacing: 3px; color: #3F298B; opacity: 1; }
 
@@ -28,20 +26,27 @@ main { display: block; /* Default value of `display` of `main` element is 'inlin
 
 .button:hover { background-color: #6200EE; /* nlmatics purple */ color: white; }
 
+.post-list-heading { clear: both; }
+
+/**divider lines **/
+hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0; }
+
 /**Post styling: how the individual articles show up on the landing page**/
-.post-container { display: flex; background-color: #ffffff; padding: 20px; }
+.post-container { background-color: #ffffff; padding: 20px; }
 
-.post-thumb { padding-bottom: 120px; width: 50%; }
+.post-container::after { content: ""; clear: both; display: table; }
 
-.post-thumb img { width: 70%; }
+.post-thumb { padding-bottom: 120px; width: 20%; }
 
-.post-text { flex: 0 0.1 auto; width: 50%; }
+.post-thumb img { width: 70%; float: left; }
+
+.post-text { width: 100%; }
 
 .post-meta { text-align: left; font: Medium 14px/17px Roboto; letter-spacing: 1.26px; color: #5B4F85; opacity: 1; }
 
 .post-author { text-align: left; font: Regular 20px/27px Open Sans; letter-spacing: 0px; color: #3D61D8; opacity: 1; }
 
-.divider { padding: 30px; }
+.divider { padding: 30px; clear: both; }
 
 /** Images */
 img { max-width: 100%; vertical-align: middle; }
@@ -81,6 +86,7 @@ pre > code { border: 0; padding-right: 0; padding-left: 0; }
 /** Wrapper */
 .wrapper { max-width: -webkit-calc(1200px - (30px * 2)); max-width: calc(1200px - (30px * 2)); margin-right: auto; margin-left: auto; padding-right: 30px; padding-left: 30px; }
 @media screen and (max-width: 800px) { .wrapper { max-width: -webkit-calc(1200px - (30px)); max-width: calc(1200px - (30px)); padding-right: 15px; padding-left: 15px; } }
+@media screen and (max-width: 600px) { .wrapper { max-width: -webkit-calc(1200px - (30px)); max-width: calc(1200px - (30px)); padding-right: 30px; padding-left: 30px; } }
 
 /** Clearfix */
 .wrapper:after, .footer-col-wrapper:after { content: ""; display: table; clear: both; }
