@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-19T18:29:30-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><subtitle>This is a collection of blogs on various topics including Natural Language Understanding, etc.</subtitle><entry><title type="html">How to Extract Keyphrases and Visualize Text</title><link href="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html" rel="alternate" type="text/html" title="How to Extract Keyphrases and Visualize Text" /><published>2020-08-07T06:30:00-04:00</published><updated>2020-08-07T06:30:00-04:00</updated><id>http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text</id><content type="html" xml:base="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html">&lt;h4 id=&quot;by-cheyenne-zhang&quot;&gt;by Cheyenne Zhang&lt;/h4&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-19T19:16:13-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><entry><title type="html">How to Extract Keyphrases and Visualize Text</title><link href="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html" rel="alternate" type="text/html" title="How to Extract Keyphrases and Visualize Text" /><published>2020-08-07T06:30:00-04:00</published><updated>2020-08-07T06:30:00-04:00</updated><id>http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text</id><content type="html" xml:base="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html">&lt;h4 id=&quot;by-cheyenne-zhang&quot;&gt;by Cheyenne Zhang&lt;/h4&gt;
 
 &lt;p&gt;&lt;strong&gt;Cheyenne Zhang&lt;/strong&gt; is a rising junior at Princeton University studying Computer Science with certificates in East Asian Studies and Cognitive Science. She’s originally from just outside of Seattle, WA, and enjoys watching movies and learning languages in her free time. Cheyenne was one of NLMatics’ 2020 summer interns.&lt;/p&gt;
 
@@ -910,7 +910,7 @@ Connie Xu is currently studying Computer Science at Princeton University, where 
 &lt;h2 id=&quot;simple-analogies&quot;&gt;Simple analogies&lt;/h2&gt;
 &lt;h3 id=&quot;brick-and-mortar&quot;&gt;Brick and Mortar&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&quot;../site_files/connie_post_images/brick-and-mortar.jpg&quot; width=&quot;500&quot; height=&quot;334&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/brick-and-mortar.jpg&quot; width=&quot;500&quot; height=&quot;334&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Simon and Ash are building 5 walls of brick.&lt;/p&gt;
 &lt;ul&gt;
@@ -924,7 +924,7 @@ The lack of &lt;strong&gt;&lt;em&gt;waiting&lt;/em&gt;&lt;/strong&gt; is the key
 
 &lt;h3 id=&quot;laundry&quot;&gt;Laundry&lt;/h3&gt;
 
-&lt;p&gt;&lt;img src=&quot;../site_files/connie_post_images/laundry.jpg&quot; width=&quot;500&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/laundry.jpg&quot; width=&quot;500&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Be wary that an asynchronous approach does not provide any performance boost when all the tasks are &lt;strong&gt;dependent&lt;/strong&gt; on each other. For example, if you are washing and drying clothes, you must wait for the clothes to finish washing first before drying them no matter what, because drying clothes is dependent on the output of the washing. There is no use in using an asynchronous approach, because the pipeline is just the same as a synchronous approach.&lt;/p&gt;
 
@@ -1089,7 +1089,7 @@ async def fetch(url, responses, i):
 
 &lt;h2 id=&quot;runtime-results&quot;&gt;Runtime Results&lt;/h2&gt;
 
-&lt;p&gt;|&lt;img src=&quot;../site_files/connie_post_images/table.png&quot; width=&quot;500&quot; /&gt;|&lt;img src=&quot;../site_files/connie_post_images/chart.png&quot; width=&quot;500&quot; /&gt;|
+&lt;p&gt;|&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/table.png&quot; width=&quot;500&quot; /&gt;|&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/chart.png&quot; width=&quot;500&quot; /&gt;|
 |—|—|&lt;/p&gt;
 
 &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronous&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_fail&lt;/code&gt; have similar runtimes because the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_fail&lt;/code&gt; method was not implemented correctly and is in reality synchronous code.

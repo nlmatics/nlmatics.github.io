@@ -43,7 +43,7 @@ For more information on the distinction between concurrency, parallelism, thread
 ## Simple analogies
 ### Brick and Mortar
 
-<img src="../site_files/connie_post_images/brick-and-mortar.jpg" width="500" height="334">
+<img src="{{site.url}}/site_files/connie_post_images/brick-and-mortar.jpg" width="500" height="334">
 
 
 Simon and Ash are building 5 walls of brick. 
@@ -56,7 +56,7 @@ A good coding use case would be when you have a lot of time-consuming requests l
 
 ### Laundry
 
-<img src="../site_files/connie_post_images/laundry.jpg" width="500">
+<img src="{{site.url}}/site_files/connie_post_images/laundry.jpg" width="500">
 
 Be wary that an asynchronous approach does not provide any performance boost when all the tasks are **dependent** on each other. For example, if you are washing and drying clothes, you must wait for the clothes to finish washing first before drying them no matter what, because drying clothes is dependent on the output of the washing. There is no use in using an asynchronous approach, because the pipeline is just the same as a synchronous approach.
 
@@ -199,7 +199,7 @@ async def asynchronous_ordered_batched(urls, batch_size=10):
 
 ## Runtime Results
 
-|<img src="../site_files/connie_post_images/table.png" width="500">|<img src="../site_files/connie_post_images/chart.png" width="500">|
+|<img src="{{site.url}}/site_files/connie_post_images/table.png" width="500">|<img src="{{site.url}}/site_files/connie_post_images/chart.png" width="500">|
 |---|---|
 
 `synchronous` and `asynchronous_fail` have similar runtimes because the `asynchronous_fail` method was not implemented correctly and is in reality synchronous code.

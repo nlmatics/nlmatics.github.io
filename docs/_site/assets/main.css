@@ -10,6 +10,9 @@ h1, h2, h3, h4, h5, h6, p, blockquote, pre, ul, ol, dl, figure, .highlight { mar
 /** `main` element */
 main { display: block; /* Default value of `display` of `main` element is 'inline' in IE 11. */ }
 
+/** header tagline styling **/
+.header-tagline { text-align: left; font-size: 22px; letter-spacing: 0px; color: #9E5FFD; opacity: 1; }
+
 /** featured article's styling */
 .featured-container { padding-top: 30px; }
 
@@ -42,11 +45,13 @@ hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin:
 
 .post-text { width: 100%; }
 
-.post-meta { text-align: left; font: Medium 14px/17px Roboto; letter-spacing: 1.26px; color: #41298B; opacity: 1; }
+.post-meta { text-align: left; font: Medium 14px/17px Roboto; letter-spacing: 1.26px; color: #5B4F85; opacity: 1; }
 
 .post-author { text-align: left; font: Regular 20px/27px Open Sans; letter-spacing: 0px; color: black; opacity: 1; }
 
 .divider { padding: 30px; clear: both; }
+
+.post-link { color: #5B4F85; }
 
 /** Images */
 img { max-width: 100%; vertical-align: middle; }
@@ -66,7 +71,7 @@ h1, h2, h3, h4, h5, h6 { font-weight: 400; }
 
 /** Links */
 a { color: #41298B; text-decoration: none; }
-a:visited { color: #473457; }
+a:visited { color: #3a3255; }
 a:hover { color: #111; text-decoration: underline; }
 .social-media-list a:hover { text-decoration: none; }
 .social-media-list a:hover .username { text-decoration: underline; }
