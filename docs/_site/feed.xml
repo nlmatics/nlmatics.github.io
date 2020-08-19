@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-19T15:25:41-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><subtitle>This is a collection of blogs on various topics including Natural Language Understanding, etc.</subtitle><entry><title type="html">How to Extract Keyphrases and Visualize Text</title><link href="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html" rel="alternate" type="text/html" title="How to Extract Keyphrases and Visualize Text" /><published>2020-08-07T06:30:00-04:00</published><updated>2020-08-07T06:30:00-04:00</updated><id>http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text</id><content type="html" xml:base="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html">&lt;h4 id=&quot;by-cheyenne-zhang&quot;&gt;by Cheyenne Zhang&lt;/h4&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-19T18:29:30-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><subtitle>This is a collection of blogs on various topics including Natural Language Understanding, etc.</subtitle><entry><title type="html">How to Extract Keyphrases and Visualize Text</title><link href="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html" rel="alternate" type="text/html" title="How to Extract Keyphrases and Visualize Text" /><published>2020-08-07T06:30:00-04:00</published><updated>2020-08-07T06:30:00-04:00</updated><id>http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text</id><content type="html" xml:base="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html">&lt;h4 id=&quot;by-cheyenne-zhang&quot;&gt;by Cheyenne Zhang&lt;/h4&gt;
 
 &lt;p&gt;&lt;strong&gt;Cheyenne Zhang&lt;/strong&gt; is a rising junior at Princeton University studying Computer Science with certificates in East Asian Studies and Cognitive Science. She’s originally from just outside of Seattle, WA, and enjoys watching movies and learning languages in her free time. Cheyenne was one of NLMatics’ 2020 summer interns.&lt;/p&gt;
 
 &lt;hr /&gt;
 &lt;p&gt;&lt;br /&gt; &lt;br /&gt;&lt;/p&gt;
 
-&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif&quot; /&gt;&lt;/div&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif&quot; /&gt;&lt;/div&gt;
 
 &lt;div align=&quot;center&quot;&gt;&lt;i&gt;The end product of following this article on the 20 newsgroup dataset. Clusters represent related phrases, and each cluster is labeled with a representative phrase.&lt;/i&gt;&lt;/div&gt;
 
@@ -13,7 +13,7 @@
 
 &lt;p&gt;Imagine that you’ve just gotten a huge dataset; for example, the &lt;a href=&quot;http://qwone.com/~jason/20Newsgroups/&quot;&gt;20 newsgroup dataset&lt;/a&gt;, which has 11,314 entries, an example of which is shown below. What would you do to try to understand the data as a whole? Maybe you would look at some entries and their categorization. Maybe you would search the dataset for certain keywords or topics.&lt;/p&gt;
 
-&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/20newsgroupexample.png&quot; /&gt;&lt;/div&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/20newsgroupexample.png&quot; /&gt;&lt;/div&gt;
 
 &lt;div align=&quot;center&quot;&gt;&lt;i&gt;The first entry in the newsgroup20 dataset.&lt;/i&gt;&lt;/div&gt;
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
@@ -38,7 +38,7 @@
 
 &lt;p&gt;For this demonstration, we will focus on a couple of automatic methods (i.e. no training of a model required), namely &lt;a href=&quot;https://www.researchgate.net/profile/Stuart_Rose/publication/227988510_Automatic_Keyword_Extraction_from_Individual_Documents/links/55071c570cf27e990e04c8bb.pdf&quot;&gt;RAKE&lt;/a&gt; (Rapid Automatic Keyword Extraction) and &lt;a href=&quot;https://github.com/LIAAD/yake&quot;&gt;YAKE!&lt;/a&gt; (Yet Another Keyphrase Extraction). The reason I chose these two methods is because they are very fast while still producing decent results. At NLMatics, there is often a large number of long documents to be searched by the clients, so speed is most definitely a primary concern. Because of this need for speed and thus the relative simplicity of the algorithms, it is important to note that these methods may cut off phrases in the wrong places, return some not-so-relevant phrases, or miss important phrases entirely, etc. At the end of the day though, I think the speed is worth it!&lt;/p&gt;
 
-&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/speedmeme.png&quot; /&gt;&lt;/div&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/speedmeme.png&quot; /&gt;&lt;/div&gt;
 
 &lt;div align=&quot;center&quot;&gt;&lt;i&gt;This is us when we use RAKE and YAKE.&lt;/i&gt;&lt;/div&gt;
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
@@ -47,14 +47,14 @@
 
 &lt;p&gt;RAKE is a fairly simple algorithm introduced in 2010 that makes use of the observation that good keyphrases rarely include stopwords. First, it uses stopwords and phrase delimiters to split up the text into potential keyphrases. Then, a score is calculated by taking the ratio of degree (defined as the sum of how many times it occurs next to other words in the text) to word frequency for every word in the phrase and summing them to get the phrase’s overall score. Here, I used the &lt;a href=&quot;https://github.com/csurfer/rake-nltk&quot;&gt;RAKE-NLTK&lt;/a&gt; implementation, which takes advantage of the power of NLTK.&lt;/p&gt;
 
-&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/rakeexample.png&quot; /&gt;&lt;/div&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/rakeexample.png&quot; /&gt;&lt;/div&gt;
 
 &lt;div align=&quot;center&quot;&gt;&lt;i&gt;An example of RAKE-extracted keyphrases and their scores. High scores represent high relevance.&lt;/i&gt;&lt;/div&gt;
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
 &lt;p&gt;YAKE is another keyword extraction technique (YAKE literally stands for “Yet Another Keyphrase Extractor”) which makes use of a few more word features to calculate a score. YAKE starts by calculating a score for each individual word using this set of five features: casing (ratio of uppercase and lowercase to overall count), position (favors words near beginning of document), relatedness to context (computes number of terms to the left/right), sentence difference (how often the word appears in different sentences). A sliding window of 3-grams (i.e. three-word-long phrases) is then used to determine the lowest scoring (i.e. most meaningful) possible keyphrases.&lt;/p&gt;
 
-&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/yakeexample.png&quot; /&gt;&lt;/div&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/yakeexample.png&quot; /&gt;&lt;/div&gt;
 
 &lt;div align=&quot;center&quot;&gt;&lt;i&gt;An example of YAKE-extracted keyphrases and their scores. Low scores represent high relevance.&lt;/i&gt;&lt;/div&gt;
 
@@ -239,12 +239,12 @@ print(&quot;SHAPE&quot;,projected_X.shape)
 
 &lt;p&gt;Now that we have &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;projected_X&lt;/code&gt;, a list of 2D representations of each of our sentences, we’re going to cluster the sentences. The clustering algorithm is pretty important here, as different algorithms are suited for different purposes; you can learn more about scikit’s different clustering algorithms &lt;a href=&quot;https://scikit-learn.org/stable/modules/clustering.html&quot;&gt;here&lt;/a&gt;. KeplerMapper uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AgglomerativeClustering&lt;/code&gt; in their example, but that ends up with a large number of clusters which is hard to look at and visually take in. Feel free to play around with the algorithms to see what best suits your needs, but here we’ll be using &lt;a href=&quot;https://scikit-learn.org/stable/modules/clustering.html#dbscan&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DBSCAN&lt;/code&gt;&lt;/a&gt;, which is characterized by uneven clusters and non-flat geometry (i.e. shapes that aren’t just circles or squares). Here’s a comparison of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AgglomerativeClustering&lt;/code&gt; vs. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DBSCAN&lt;/code&gt; on our data.&lt;/p&gt;
 
-&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/dbscan.png&quot; /&gt;&lt;/div&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/dbscan.png&quot; /&gt;&lt;/div&gt;
 
 &lt;div align=&quot;center&quot;&gt;&lt;i&gt;DBSCAN on the newsgroup20 dataset.&lt;/i&gt;&lt;/div&gt;
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
-&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/agglomerative.png&quot; /&gt;&lt;/div&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/agglomerative.png&quot; /&gt;&lt;/div&gt;
 
 &lt;div align=&quot;center&quot;&gt;&lt;i&gt;AgglomerativeClustering on the newsgroup20 dataset.&lt;/i&gt;&lt;/div&gt;
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
@@ -297,7 +297,7 @@ jupyter.display(path_html=&quot;newsgroups20.html&quot;)
 
 &lt;p&gt;That’s it! If you’re following along in the repository, the screenshot below is the outcome of the process so far. If you’re creating your own file from scratch with these code blocks, go ahead and run the whole kernel (it may take a while due to the clustering and projection), and you should see something like this at the bottom. Or, if you prefer, you can open &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;newsgroup20.html&lt;/code&gt; in your preferred web browser.&lt;/p&gt;
 
-&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/unmodifiedkm.png&quot; /&gt;&lt;/div&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/unmodifiedkm.png&quot; /&gt;&lt;/div&gt;
 
 &lt;div align=&quot;center&quot;&gt;&lt;i&gt;Default Kepler Mapper on the newsgroup20 dataset using DBSCAN clustering.&lt;/i&gt;&lt;/div&gt;
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
@@ -324,7 +324,7 @@ jupyter.display(path_html=&quot;newsgroups20.html&quot;)
 
 &lt;p&gt;If you were to run again at this point, you would see something like the screenshot below.&lt;/p&gt;
 
-&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/halfmodifiedkm.png&quot; /&gt;&lt;/div&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/halfmodifiedkm.png&quot; /&gt;&lt;/div&gt;
 
 &lt;div align=&quot;center&quot;&gt;&lt;i&gt;Kepler Mapper after adjusting node size.&lt;/i&gt;&lt;/div&gt;
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
@@ -431,7 +431,7 @@ var label = node.append(&quot;text&quot;)
 
 &lt;p&gt;And that’s it! Refresh your kernel and run all cells, and you should get something like this (or just go ahead and run without refreshing if you’re using my &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;notebook.ipynb&lt;/code&gt;). A colorful, interactive way of visualizing the most meaningful clusters of your data.&lt;/p&gt;
 
-&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;../site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif&quot; /&gt;&lt;/div&gt;
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif&quot; /&gt;&lt;/div&gt;
 &lt;p&gt;&lt;br /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;i&gt;Again, here’s the link to a &lt;a href=&quot;https://github.com/cznlm/visualize-keyphrases&quot;&gt;repository with the relevant code&lt;/a&gt; if you wish to download and run directly.&lt;/i&gt;&lt;/p&gt;
@@ -456,10 +456,8 @@ var label = node.append(&quot;text&quot;)
   &lt;li&gt;&lt;a href=&quot;https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html&quot;&gt;viridis color palettes&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</content><author><name>Cheyenne Zhang</name></author><summary type="html">by Cheyenne Zhang</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/kepmapthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/kepmapthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Smooth Inverse Frequency (SIF) Embeddings in Golang</title><link href="http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth-Inverse-Frequency-Frequency-(SIF)-Embeddings-in-Golang.html" rel="alternate" type="text/html" title="Smooth Inverse Frequency (SIF) Embeddings in Golang" /><published>2020-08-07T05:45:00-04:00</published><updated>2020-08-07T05:45:00-04:00</updated><id>http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth%20Inverse%20Frequency%20Frequency%20(SIF)%20Embeddings%20in%20Golang</id><content type="html" xml:base="http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth-Inverse-Frequency-Frequency-(SIF)-Embeddings-in-Golang.html">&lt;h4 id=&quot;by-daniel-ye&quot;&gt;by Daniel Ye&lt;/h4&gt;
 
-&lt;hr /&gt;
-
 &lt;p&gt;&lt;br /&gt; 
-&lt;b&gt;Daniel Ye &lt;/b&gt;is a sophomore at Cornell University majoring in Computer Science and minoring in Operations Research and Information Engineering. I am interested in machine learning, natural language processing, and data science. I have worked on projects involving manufacturing data collection/analysis, greenhouse environmental regulation, and a multiplayer programming game. In my free time I enjoy playing tennis, running, hiking, and playing cello or guitar.Daniel was one of NLMatics’ 2020 summer interns.
+&lt;strong&gt;&lt;em&gt;Daniel Ye&lt;/em&gt;&lt;/strong&gt; is a sophomore at Cornell University majoring in Computer Science and minoring in Operations Research and Information Engineering. I am interested in machine learning, natural language processing, and data science. I have worked on projects involving manufacturing data collection/analysis, greenhouse environmental regulation, and a multiplayer programming game. In my free time I enjoy playing tennis, running, hiking, and playing cello or guitar.Daniel was one of NLMatics’ 2020 summer interns.
 &lt;br /&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -506,7 +504,7 @@ var label = node.append(&quot;text&quot;)
 
 &lt;p&gt;Word embeddings are one of the most important developments in the field of modern Natural Language Processing. Translating the meaning behind words and the semantic relationships between them into measurable quantities is a crucial step in processing language. Many words, such as “cat” and “dog” or “Mozart” and “Beethoven” have almost no physical characteristics that would reveal their similarities. Instead, modern algorithms like Google’s &lt;a href=&quot;https://arxiv.org/abs/1301.3781&quot;&gt;Word2Vec&lt;/a&gt; developed in 2013 or Stanford’s &lt;a href=&quot;https://nlp.stanford.edu/pubs/glove.pdf&quot;&gt;GloVe&lt;/a&gt; essentially count the cooccurrences of words with other words, and condense these values into dense, relatively low-dimensional vectors. Their models train on massive corpora of English text such as all of Wikipedia, and embed words as vectors based on which other words they appear in proximity to. So, if “cat” and “dog” are found together in many sentences or documents, they will have very similar vector values. This method is able to capture not only semantic similarity, but also analogies (woman is to man as king is to __) and the effects of prefixes or suffixes.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;image_0.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/site_files/daniels_post/image_0.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;semantic relationships represented by Word2Vec and GloVe&lt;/em&gt;&lt;/p&gt;
 
@@ -532,11 +530,11 @@ var label = node.append(&quot;text&quot;)
 
 &lt;p&gt;In 2017, Arora et. al proposed SIF, or &lt;a href=&quot;https://openreview.net/pdf?id=SyK00v5xx#page=12&amp;amp;zoom=100,110,217&quot;&gt;Smooth Inverse Frequency&lt;/a&gt;, a weighting scheme to improve performance of sentence embeddings. When encoding a sentence, it is important to identify which words in the sentence are more significant. For example, if calculating the embedding of the sentence “who was Mozart?” the word “was” doesn’t add much meaning; looking for sentences or documents relating to the word “was” will not yield any useful results for the original question. It’s clear that “Mozart” holds the most meaning in the question from a human standpoint, but how do you program a machine to identify that? SIF operates under the assumption that the most important words tend to also be used less frequently. If you counted all the words in Wikipedia, the word “was” would most likely appear much more frequently than in “Mozart”. Weights of a word &lt;em&gt;w&lt;/em&gt; are computed by &lt;em&gt;a/(a + p(w))&lt;/em&gt; where a is a parameter and p(w) is the word frequency of w, which can be estimated by scraping a large corpus.* &lt;em&gt;The hyperparameter *a&lt;/em&gt; adjusts which words are quantitatively “common” and “uncommon.” Here is the formal algorithm:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;image_1.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Arora et. al found that despite its simplicity, SIF worked surprisingly well on semantic text similarity (STS), entailment, and sentiment tasks. STS tasks involve scoring pairs of sentences from 0-5 based on how similar their meanings are, which are then checked against a golden standard of human generated scores. For example, “The bird is bathing in the sink” and “Birdie is washing itself in the water basin” should receive a 5. Entailment tasks involve identifying if one sentence &lt;em&gt;entails&lt;/em&gt; that another one is true. For example, if you read the sentence “There is a soccer game with multiple males playing,” you could infer that the sentence “Several men are playing a sport” is true. Thus the first sentence, commonly referred to as the &lt;em&gt;text&lt;/em&gt; entails the following, also known as the &lt;em&gt;hypothesis&lt;/em&gt;.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;image_2.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;img src=&quot;image_3.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_2.png&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;/site_files/daniels_post/image_3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;em&gt;Tables detailing SIF performance on various semantic tasks. “GloVe + WR”, “PSL + WR”, and “Ours” correspond to SIF systems.&lt;/em&gt;&lt;/p&gt;
 
@@ -585,11 +583,11 @@ func fib(n int) int {
 
 &lt;p&gt;Our API allowed for clients to send multiple sentences at a time to be encoded by the SIF, often many at a time, and implementing the SIF in Golang allowed us to leverage powerful concurrency to speed up our calculations. My first iteration of the SIF server used &lt;a href=&quot;https://golang.org/pkg/net/http/&quot;&gt;Golang’s http package&lt;/a&gt; to host the model on an HTTP 1.0 server. I compared it with  our old system, as well as the original Python implementation. I used three different independent variables to benchmark how the performance scaled up: total words per ‘sentence’ to be embedded, total number of calls with fixed number of concurrent requests, and number of concurrent requests with fixed total number of calls. These benchmarks were made using &lt;a href=&quot;https://httpd.apache.org/docs/2.4/programs/ab.html&quot;&gt;Apache Benchmark&lt;/a&gt;, a software that allows you to make many concurrent requests to a server and reports significant timing data.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;image_4.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;image_5.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_5.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;image_6.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_6.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The results were impressive, to say the least. At a sentence level, around 10-100 words, the new implementation outperforms the old by up to &lt;strong&gt;30x&lt;/strong&gt; and at a document level, around 1000-10000+ words, it is still &lt;strong&gt;10x&lt;/strong&gt;** **faster in almost every scenario. The improved speed for sentence level embeddings is really useful, since it means that we can embed at lower levels of granularity much more easily. For example, if you were searching “who was Mozart” and only had embeddings for each document, your system might flag a document about Joseph Haydn, friend and mentor of Mozart, as relevant. As you descend levels of granularity of embeddings however, you can much more easily locate relevant information about your query. Perhaps it allows you to find a paragraph detailing their time in Vienna together, or a specific sentence about the pieces of music they worked on together.&lt;/p&gt;
 
@@ -668,7 +666,7 @@ type HelloRequest struct {
 
 &lt;p&gt;Due to how gRPC buffers data being received and sent, we no longer had to worry about size limits on requests to our server. gRPC servers also have a very helpful feature in that connections between client and server are maintained across multiple requests, whereas with HTTP requests, a new connection has to be established for every POST. As a result, I saw more improvements in performance as this overhead was removed from the new system:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;image_7.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_7.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The largest improvements are seen when requests have very small payloads, so the majority of time is spent on overhead from connecting to the server. However, once you get to larger payloads, the times converge to become about equal.&lt;/p&gt;
 
@@ -676,7 +674,7 @@ type HelloRequest struct {
 
 &lt;p&gt;A coworker sent me this &lt;a href=&quot;https://arxiv.org/pdf/1702.01417.pdf&quot;&gt;paper about post-processing word vectors&lt;/a&gt; in order to improve their representation of meaning. The algorithm essentially takes a list of pre-computed word vectors and performs principal component analysis on them, and then removes the top N components from every vector via Gram-Schmidt. Here is their formal algorithm:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;image_8.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_8.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;Python’s Numpy and sklearn packages have all the built-in tools needed to implement this algorithm, which you can find the code for &lt;a href=&quot;https://github.com/daniel-ye137/WordVectorProcessing&quot;&gt;here&lt;/a&gt;:&lt;/p&gt;
 
@@ -904,8 +902,8 @@ Connie Xu is currently studying Computer Science at Princeton University, where 
   &lt;li&gt;&lt;strong&gt;Asynchronous:&lt;/strong&gt; you can start another task before the completion of the first task.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;&lt;img src=&quot;../site_files/connie_post_images/synchronous.png&quot; alt=&quot;&quot; /&gt;
-&lt;img src=&quot;../site_files/connie_post_images/asynchronous.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/synchronous.png&quot; alt=&quot;&quot; /&gt;
+&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/asynchronous.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;For more information on the distinction between concurrency, parallelism, threads, sync, and async, check out this &lt;a href=&quot;https://medium.com/swift-india/concurrency-parallelism-threads-processes-async-and-sync-related-39fd951bc61d&quot;&gt;Medium article&lt;/a&gt;.&lt;/p&gt;
 
@@ -968,7 +966,7 @@ The lack of &lt;strong&gt;&lt;em&gt;waiting&lt;/em&gt;&lt;/strong&gt; is the key
     &lt;tr&gt;
       &lt;td&gt;asyncio.gather()&lt;/td&gt;
       &lt;td&gt;Used to run the scheduled executions &lt;br /&gt; → Needs to be awaited &lt;br /&gt; → This is vital to the asynchronous program, because you let it know which is the next task it can pick up before finishing the previous one.&lt;/td&gt;
-      &lt;td&gt;&lt;img src=&quot;../site_files/connie_post_images/gather.png&quot; alt=&quot;&quot; /&gt;&lt;/td&gt;
+      &lt;td&gt;&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/gather.png&quot; alt=&quot;&quot; /&gt;&lt;/td&gt;
     &lt;/tr&gt;
   &lt;/tbody&gt;
 &lt;/table&gt;
@@ -1116,10 +1114,8 @@ async def fetch(url, responses, i):
   &lt;li&gt;&lt;a href=&quot;https://docs.python.org/3/library/asyncio.html&quot;&gt;asyncio: Python Documentation&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</content><author><name>Connie Xu</name><email>rob@sor.com</email></author><summary type="html">by Connie Xu</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/Asynciothumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/Asynciothumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">SQUAD 2.0 and Google Natural Questions: A Comparison and Investigation into Model Performance</title><link href="http://localhost:4000/category-1/category-2/2020/08/06/SQUAD-2.0-and-Google-Natural-Questions-A-Comparison-and-Investigation-into-Model-Performance.html" rel="alternate" type="text/html" title="SQUAD 2.0 and Google Natural Questions: A Comparison and Investigation into Model Performance" /><published>2020-08-06T09:00:00-04:00</published><updated>2020-08-06T09:00:00-04:00</updated><id>http://localhost:4000/category-1/category-2/2020/08/06/SQUAD%202.0%20and%20Google%20Natural%20Questions-%20A%20Comparison%20and%20Investigation%20into%20Model%20Performance</id><content type="html" xml:base="http://localhost:4000/category-1/category-2/2020/08/06/SQUAD-2.0-and-Google-Natural-Questions-A-Comparison-and-Investigation-into-Model-Performance.html">&lt;h4 id=&quot;by-nick-greenspan&quot;&gt;by Nick Greenspan&lt;/h4&gt;
 
-&lt;hr /&gt;
-
 &lt;p&gt;&lt;br /&gt; 
-Nicholas Greenspan lives in New York City and is a freshman at Rice University who is majoring in computer science. Nicholas is interested in Machine Learning, Natural Language Processing, and their applications to various fields. Nicholas recently worked at the UTHealth School of Biomedical Informatics working on a Natural Language Processing project to help doctors find relevant treatments for their patients, and is excited to work on more interesting and meaningful problems at NLMatics. Outside of CS, Nicholas likes to read, play ice hockey, and listen to many genres of music including indie rock and electronic. Nicholas was one of NLMatics’ 2020 summer interns
+&lt;strong&gt;&lt;em&gt;Nicholas Greenspan&lt;/em&gt;&lt;/strong&gt; lives in New York City and is a freshman at Rice University who is majoring in computer science. Nicholas is interested in Machine Learning, Natural Language Processing, and their applications to various fields. Nicholas recently worked at the UTHealth School of Biomedical Informatics working on a Natural Language Processing project to help doctors find relevant treatments for their patients, and is excited to work on more interesting and meaningful problems at NLMatics. Outside of CS, Nicholas likes to read, play ice hockey, and listen to many genres of music including indie rock and electronic. Nicholas was one of NLMatics’ 2020 summer interns
 &lt;br /&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -1135,11 +1131,11 @@ Nicholas Greenspan lives in New York City and is a freshman at Rice University w
 
 &lt;h2 id=&quot;overviews-from-the-dataset-websites&quot;&gt;Overviews from the Dataset Websites&lt;/h2&gt;
 
-&lt;p&gt;&lt;img src=&quot;/site_files/nick_post/squad_image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/nick_post/squad_image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://rajpurkar.github.io/SQuAD-explorer/&quot;&gt;SQuAD 2.0&lt;/a&gt;: “SQuAD is a reading comprehension dataset, consisting of questions posed by crowdworkers on a set of Wikipedia articles, where the answer to every question is a segment of text, or span, from the corresponding reading passage, or the question might be unanswerable.”&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/site_files/nick_post/nq_image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/nick_post/nq_image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://ai.google.com/research/NaturalQuestions&quot;&gt;Google Natural Questions&lt;/a&gt;: “The NQ corpus contains questions from real users, and it requires QA systems to read and comprehend an entire Wikipedia article that may or may not contain the answer to the question.”&lt;/p&gt;
 
@@ -1341,12 +1337,10 @@ The fact that question distribution is much more balanced for Google Natural Que
 &lt;p&gt;&lt;a href=&quot;https://rajpurkar.github.io/SQuAD-explorer/&quot;&gt;SQuAD Website&lt;/a&gt;\
 &lt;a href=&quot;https://ai.google.com/research/NaturalQuestions&quot;&gt;SQuAD Paper&lt;/a&gt;\
 &lt;a href=&quot;https://arxiv.org/pdf/1806.03822.pdf&quot;&gt;Google Natural Questions Website&lt;/a&gt;\
-&lt;a href=&quot;https://storage.googleapis.com/pub-tools-public-publication-data/pdf/1f7b46b5378d757553d3e92ead36bda2e4254244.pdf&quot;&gt;Google Natural Questions Paper&lt;/a&gt;&lt;/p&gt;</content><author><name>Nick Greenspan</name></author><summary type="html">by Nick Greenspan</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/SIFthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/SIFthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">A Comprehensive Guide to Training a Machine Learning Model for Question Answering</title><link href="http://localhost:4000/category-1/category-2/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html" rel="alternate" type="text/html" title="A Comprehensive Guide to Training a Machine Learning Model for Question Answering" /><published>2020-08-06T06:30:00-04:00</published><updated>2020-08-06T06:30:00-04:00</updated><id>http://localhost:4000/category-1/category-2/2020/08/06/A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_</id><content type="html" xml:base="http://localhost:4000/category-1/category-2/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html">&lt;h4 id=&quot;by-batya-stein--nicholas-greenspan&quot;&gt;by Batya Stein &amp;amp; Nicholas Greenspan&lt;/h4&gt;
-
-&lt;hr /&gt;
+&lt;a href=&quot;https://storage.googleapis.com/pub-tools-public-publication-data/pdf/1f7b46b5378d757553d3e92ead36bda2e4254244.pdf&quot;&gt;Google Natural Questions Paper&lt;/a&gt;&lt;/p&gt;</content><author><name>Nick Greenspan</name></author><summary type="html">by Nick Greenspan</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/squadthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/squadthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">A Comprehensive Guide to Training a Machine Learning Model for Question Answering</title><link href="http://localhost:4000/category-1/category-2/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html" rel="alternate" type="text/html" title="A Comprehensive Guide to Training a Machine Learning Model for Question Answering" /><published>2020-08-06T06:30:00-04:00</published><updated>2020-08-06T06:30:00-04:00</updated><id>http://localhost:4000/category-1/category-2/2020/08/06/A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_</id><content type="html" xml:base="http://localhost:4000/category-1/category-2/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html">&lt;h4 id=&quot;by-batya-stein--nicholas-greenspan&quot;&gt;by Batya Stein &amp;amp; Nicholas Greenspan&lt;/h4&gt;
 
 &lt;p&gt;&lt;br /&gt; 
-&lt;b&gt;Batya Stein&lt;/b&gt; is a rising junior at Princeton University studying Computer Science and English Literature. Her research interests include Natural Language Processing and Software Engineering and Design. Previously, she has interned at a non-profit, designing a project to interface between its CRM softwares. When not coding, she enjoys drawing, swimming, and reading fiction. Batya was one of NLMatics’ 2020 summer interns. 
+&lt;strong&gt;&lt;em&gt;Batya Stein&lt;/em&gt;&lt;/strong&gt; is a rising junior at Princeton University studying Computer Science and English Literature. Her research interests include Natural Language Processing and Software Engineering and Design. Previously, she has interned at a non-profit, designing a project to interface between its CRM softwares. When not coding, she enjoys drawing, swimming, and reading fiction. Batya was one of NLMatics’ 2020 summer interns. 
 &lt;br /&gt;&lt;br /&gt;&lt;br /&gt;
 &lt;b&gt;Nicholas Greenspan&lt;/b&gt; lives in New York City and is a freshman at Rice University who is majoring in computer science. Nicholas is interested in Machine Learning, Natural Language Processing, and their applications to various fields. Nicholas recently worked at the UTHealth School of Biomedical Informatics working on a Natural Language Processing project to help doctors find relevant treatments for their patients, and is excited to work on more interesting and meaningful problems at NLMatics. Outside of CS, Nicholas likes to read, play ice hockey, and listen to many genres of music including indie rock and electronic. Nicholas was one of NLMatics’ 2020 summer interns.&lt;/p&gt;
 

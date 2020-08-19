@@ -10,10 +10,10 @@ image: site_files/MLQAthumb.png
 ---
 #### by Batya Stein & Nicholas Greenspan
 
-___
+
 
 <br> 
-<b>Batya Stein</b> is a rising junior at Princeton University studying Computer Science and English Literature. Her research interests include Natural Language Processing and Software Engineering and Design. Previously, she has interned at a non-profit, designing a project to interface between its CRM softwares. When not coding, she enjoys drawing, swimming, and reading fiction. Batya was one of NLMatics' 2020 summer interns. 
+***Batya Stein*** is a rising junior at Princeton University studying Computer Science and English Literature. Her research interests include Natural Language Processing and Software Engineering and Design. Previously, she has interned at a non-profit, designing a project to interface between its CRM softwares. When not coding, she enjoys drawing, swimming, and reading fiction. Batya was one of NLMatics' 2020 summer interns. 
 <br><br><br>
 <b>Nicholas Greenspan</b> lives in New York City and is a freshman at Rice University who is majoring in computer science. Nicholas is interested in Machine Learning, Natural Language Processing, and their applications to various fields. Nicholas recently worked at the UTHealth School of Biomedical Informatics working on a Natural Language Processing project to help doctors find relevant treatments for their patients, and is excited to work on more interesting and meaningful problems at NLMatics. Outside of CS, Nicholas likes to read, play ice hockey, and listen to many genres of music including indie rock and electronic. Nicholas was one of NLMatics' 2020 summer interns. 
 

@@ -34,8 +34,8 @@ It is a Python library that uses the ```async/await``` syntax to make code run a
 - **Synchronous:** you must wait for the completion of the first task before starting another task.
 - **Asynchronous:** you can start another task before the completion of the first task.
 
-![](../site_files/connie_post_images/synchronous.png)
-![](../site_files/connie_post_images/asynchronous.png)
+![]({{site.url}}/site_files/connie_post_images/synchronous.png)
+![]({{site.url}}/site_files/connie_post_images/asynchronous.png)
 
 
 For more information on the distinction between concurrency, parallelism, threads, sync, and async, check out this [Medium article](https://medium.com/swift-india/concurrency-parallelism-threads-processes-async-and-sync-related-39fd951bc61d).
@@ -72,7 +72,7 @@ For a further look into when and when not to use asynchronous programming, check
 | await | Used to run a coroutine once an asynchronous event loop has already started running <br> &#8594; <code>await</code> can only be used inside a coroutine <br> &#8594; Coroutines must be called with `await`, otherwise there will be a <code>RuntimeWarning</code> about enabling <code>tracemalloc</code>. <br></br> | <img src="../site_files/connie_post_images/await.png" width="448"> |
 | asyncio.run() | Used to start running an asynchronous event loop from a normal program <br> &#8594; `asyncio.run()` cannot be called in a nested fashion. You have to use await instead. <br> &#8594; `asyncio.run()` cannot be used if you are running the Python file in a Jupyter Notebook because Jupyter Notebook already has a running asynchronous event loop. You have to use await. (More on this in the Running the Code section)| <img src="../site_files/connie_post_images/run.png" width="622"> |
 | asyncio.create_task() | Used to schedule a coroutine execution <br> &#8594; Does not need to be awaited <br> &#8594; Allows you to line things up without actually running them first. | <img src="../site_files/connie_post_images/create_task.png" width="822"> |
-| asyncio.gather() | Used to run the scheduled executions <br> &#8594; Needs to be awaited <br> &#8594; This is vital to the asynchronous program, because you let it know which is the next task it can pick up before finishing the previous one. | ![](../site_files/connie_post_images/gather.png) |
+| asyncio.gather() | Used to run the scheduled executions <br> &#8594; Needs to be awaited <br> &#8594; This is vital to the asynchronous program, because you let it know which is the next task it can pick up before finishing the previous one. | ![]({{site.url}}/site_files/connie_post_images/gather.png) |
 
 If you are thirsting for more in-depth knowledge on asyncio, check out these links: 
 - [Async IO in Python: A Complete Walkthrough](https://realpython.com/async-io-python/)

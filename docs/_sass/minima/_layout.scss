@@ -26,7 +26,8 @@
 }
 .header-logo img {
   width:600px;
-  padding:50px;
+  padding-bottom: $spacing-unit;
+  padding-top: $spacing-unit;
 }
 .site-nav {
   float: right;
