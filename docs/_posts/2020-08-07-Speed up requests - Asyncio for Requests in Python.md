@@ -8,7 +8,17 @@ categories: REQUESTS SPEEDUP ASYNCIO PYTHON
 image: site_files/Asynciothumb.png
 
 ---
+#### by Connie Xu
 
+___
+
+<br> 
+Connie Xu is currently studying Computer Science at Princeton University, where she has sharpened her skills in Algorithms and Data Structures as well as Linear Algebra. She is interested in learning more about Natural Language Processing and Machine Learning applications. In her free time, she watches cooking videos or practices beatboxing. Connie was one of NLMatics' 2020 summer interns. 
+<br>
+
+___
+
+<br><br>
 
 # Speed up requests: Asyncio for Requests in Python
 

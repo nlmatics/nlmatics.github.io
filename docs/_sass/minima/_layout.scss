@@ -26,7 +26,6 @@
 }
 .header-logo img {
   width:600px;
-
   padding:50px;
 }
 .site-nav {
@@ -47,8 +46,12 @@
 
     // Gaps between nav items, but not on the last one
     &:not(:last-child) {
-      margin-right: 20px;
+      
     }
+  }
+
+  .redirect-link {
+    margin-left: 40px;
   }
 
   @include media-query($on-palm) {
