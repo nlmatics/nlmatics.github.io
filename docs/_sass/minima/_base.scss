@@ -16,7 +16,7 @@ dl, dd, ol, ul, figure {
 body {
   font: $base-font-weight #{$base-font-size}/#{$base-line-height} $base-font-family;
   color: $text-color;
-  background-color: #ffffff;
+   background-color: #ffffff;
   -webkit-text-size-adjust: 100%;
   -webkit-font-feature-settings: "kern" 1;
      -moz-font-feature-settings: "kern" 1;
@@ -47,6 +47,7 @@ ul, ol, dl, figure,
  */
 main {
   display: block; /* Default value of `display` of `main` element is 'inline' in IE 11. */
+
 }
 
 
@@ -57,7 +58,6 @@ main {
 
 padding-top: $spacing-unit*5;
   display: inline-flex;
-  background-color: #5E5387 0.5% 1%;
   
 }
 
@@ -102,6 +102,7 @@ font: Regular 18px/24px Roboto;
 letter-spacing: 0.43px;
 color: #1D1D1DDD;
 opacity: 1;
+padding-top: 20px;
 }
 
 /** button that says read more **/
@@ -132,13 +133,14 @@ opacity: 1;
 
 
 
-/**Post styling: how the individual articles show up **/
+/**Post styling: how the individual articles show up on the landing page**/
 
 
 .post-container{
 
   display: flex;
-
+  background-color: #ffffff;
+  padding: 20px;
 }
 
 .post-thumb {
@@ -175,6 +177,7 @@ color: #3D61D8;
 opacity: 1;
  margin-left: 40px;
 }
+
 .divider {
 padding: $spacing-unit;
 }
