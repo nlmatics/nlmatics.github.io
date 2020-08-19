@@ -16,7 +16,7 @@ dl, dd, ol, ul, figure {
 body {
   font: $base-font-weight #{$base-font-size}/#{$base-line-height} $base-font-family;
   color: $text-color;
-  background-color: $background-color;
+  background-color: #ffffff;
   -webkit-text-size-adjust: 100%;
   -webkit-font-feature-settings: "kern" 1;
      -moz-font-feature-settings: "kern" 1;
@@ -137,7 +137,7 @@ opacity: 1;
 
 .post-container{
 
-  display: inline-flex;
+  display: flex;
 
 }
 
@@ -154,7 +154,7 @@ width: 50%;
 .post-text {
  flex: 0 0.1 auto;
 width: 50%;
- 
+
 
 }
 
