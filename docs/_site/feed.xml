@@ -1,7 +1,1129 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-17T14:36:39-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><subtitle>This is a collection of blogs on various topics including Natural Language Understanding, etc.</subtitle><entry><title type="html">SQUAD 2.0 and Google Natural Questions: A Comparison and Investigation into Model Performance</title><link href="http://localhost:4000/category-1/category-2/2020/08/07/SQUAD-2.0-and-Google-Natural-Questions-A-Comparison-and-Investigation-into-Model-Performance.html" rel="alternate" type="text/html" title="SQUAD 2.0 and Google Natural Questions: A Comparison and Investigation into Model Performance" /><published>2020-08-07T09:00:00-04:00</published><updated>2020-08-07T09:00:00-04:00</updated><id>http://localhost:4000/category-1/category-2/2020/08/07/SQUAD%202.0%20and%20Google%20Natural%20Questions-%20A%20Comparison%20and%20Investigation%20into%20Model%20Performance</id><content type="html" xml:base="http://localhost:4000/category-1/category-2/2020/08/07/SQUAD-2.0-and-Google-Natural-Questions-A-Comparison-and-Investigation-into-Model-Performance.html">&lt;h1 align=&quot;center&quot;&gt; SQUAD 2.0 and Google Natural Questions: &lt;/h1&gt;
-&lt;h2 align=&quot;center&quot;&gt; A Comparison and Investigation into Model Performance &lt;/h2&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-19T19:16:13-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><entry><title type="html">How to Extract Keyphrases and Visualize Text</title><link href="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html" rel="alternate" type="text/html" title="How to Extract Keyphrases and Visualize Text" /><published>2020-08-07T06:30:00-04:00</published><updated>2020-08-07T06:30:00-04:00</updated><id>http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text</id><content type="html" xml:base="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html">&lt;h4 id=&quot;by-cheyenne-zhang&quot;&gt;by Cheyenne Zhang&lt;/h4&gt;
 
-&lt;p&gt;By Nick Greenspan&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cheyenne Zhang&lt;/strong&gt; is a rising junior at Princeton University studying Computer Science with certificates in East Asian Studies and Cognitive Science. She’s originally from just outside of Seattle, WA, and enjoys watching movies and learning languages in her free time. Cheyenne was one of NLMatics’ 2020 summer interns.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;&lt;br /&gt; &lt;br /&gt;&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;The end product of following this article on the 20 newsgroup dataset. Clusters represent related phrases, and each cluster is labeled with a representative phrase.&lt;/i&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;INTRODUCTION&lt;/h2&gt;
+
+&lt;p&gt;Imagine that you’ve just gotten a huge dataset; for example, the &lt;a href=&quot;http://qwone.com/~jason/20Newsgroups/&quot;&gt;20 newsgroup dataset&lt;/a&gt;, which has 11,314 entries, an example of which is shown below. What would you do to try to understand the data as a whole? Maybe you would look at some entries and their categorization. Maybe you would search the dataset for certain keywords or topics.&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/20newsgroupexample.png&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;The first entry in the newsgroup20 dataset.&lt;/i&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;These approaches will take reading through a large amount of data—maybe even the whole dataset—to gain an understanding of what is going on. However, if we were somehow able to find a way to visualize it, perhaps that might allow us to condense meaning into something we can view in a short amount of time. That’s the goal of the visualization approach—to provide information at a glance, as well as new ways of interacting with this information.&lt;/p&gt;
+
+&lt;p&gt;In this article, we’ll see some quick but successful ways to extract meaningful keyphrases from text and how we can use that to produce helpful visualizations.&lt;/p&gt;
+
+&lt;h2 id=&quot;motivation&quot;&gt;MOTIVATION&lt;/h2&gt;
+&lt;p&gt;Over the course of about four weeks during my internship at NLMatics, I worked on creating a visualization of search results from the NLMatics engine. Currently, asking a question to our system provides a textual list of possible answers. While this is very useful in many cases, there is an opportunity to add another lens through which to view information by displaying it in a more intuitive manner, and to guide the user to see what is important about this particular document. With visualization, there are so many possibilities for expressing connections and relationships among the data–color-coding, relative size, text labels, link lengths, link colors…the list goes on! We’ll explore some of these ideas throughout this article.&lt;/p&gt;
+
+&lt;p&gt;In this piece, I’ll walk through a simplified version of the process I went through and also some of what I learned from this project. There are two main steps: Keyphrase Extraction, i.e. getting the most meaningful phrases from our text, and then Visualization, which involves clustering based on those phrases and displaying these clusters in an aesthetically appealing manner. If you just want to see the final product, I have set up a &lt;a href=&quot;https://github.com/cznlm/visualize-keyphrases&quot;&gt;repository&lt;/a&gt; that you can just download and run. It provides a notebook with all of the code from the both steps as well as the modified kmapper code from the Visualization section.&lt;/p&gt;
+
+&lt;h2 id=&quot;keyphrase-extraction&quot;&gt;KEYPHRASE EXTRACTION&lt;/h2&gt;
+&lt;h3 id=&quot;intro-to-rake-and-yake&quot;&gt;INTRO. TO RAKE AND YAKE&lt;/h3&gt;
+&lt;p&gt;Keyphrase extraction is not an easy task for a computer; it’s not even easy for humans! Take this sentence from the &lt;a href=&quot;https://en.wikipedia.org/wiki/Harry_Potter&quot;&gt;Harry Potter Wikipedia page&lt;/a&gt; for example:&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;“The central character in the series is Harry Potter, a boy who lives in the fictional town of Little Whinging, Surrey with his aunt, uncle, and cousin.”&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;What are the important keyphrases here? Are they the proper nouns—“Harry Potter” and “Little Whinging, Surrey”? Or are they people—“boy,” “aunt,” “uncle,” and “cousin”? Or are the book-related terms most important—”central character”, “series”, “fictional”? As you can see, there are many different interpretations of what makes a keyphrase “meaningful,” even to human judgement. This makes keyphrase extraction a very interesting area of NLP research. For background, &lt;a href=&quot;https://arxiv.org/pdf/1905.05044.pdf&quot;&gt;this paper&lt;/a&gt;, published in July 2019, provides a very thorough overview of the unsupervised and supervised methods currently in the field. Additionally, &lt;a href=&quot;https://www.aclweb.org/anthology/P14-1119.pdf&quot;&gt;this paper&lt;/a&gt; from 2014 is also a very prominent literature review, if a bit outdated.&lt;/p&gt;
+
+&lt;p&gt;For this demonstration, we will focus on a couple of automatic methods (i.e. no training of a model required), namely &lt;a href=&quot;https://www.researchgate.net/profile/Stuart_Rose/publication/227988510_Automatic_Keyword_Extraction_from_Individual_Documents/links/55071c570cf27e990e04c8bb.pdf&quot;&gt;RAKE&lt;/a&gt; (Rapid Automatic Keyword Extraction) and &lt;a href=&quot;https://github.com/LIAAD/yake&quot;&gt;YAKE!&lt;/a&gt; (Yet Another Keyphrase Extraction). The reason I chose these two methods is because they are very fast while still producing decent results. At NLMatics, there is often a large number of long documents to be searched by the clients, so speed is most definitely a primary concern. Because of this need for speed and thus the relative simplicity of the algorithms, it is important to note that these methods may cut off phrases in the wrong places, return some not-so-relevant phrases, or miss important phrases entirely, etc. At the end of the day though, I think the speed is worth it!&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/speedmeme.png&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;This is us when we use RAKE and YAKE.&lt;/i&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;Another note is that the reason that we are using both RAKE and YAKE is in the hopes that combining the keyphrases extracted through both of these methods on the same text will provide us with more, higher quality keyphrases. You’ll see below how we will use the keyphrases when clustering sentences based on meaning, but suffice to say that combining the two helps preserve meaning by drowning out the irrelevant ones and increasing the number of relevant ones.&lt;/p&gt;
+
+&lt;p&gt;RAKE is a fairly simple algorithm introduced in 2010 that makes use of the observation that good keyphrases rarely include stopwords. First, it uses stopwords and phrase delimiters to split up the text into potential keyphrases. Then, a score is calculated by taking the ratio of degree (defined as the sum of how many times it occurs next to other words in the text) to word frequency for every word in the phrase and summing them to get the phrase’s overall score. Here, I used the &lt;a href=&quot;https://github.com/csurfer/rake-nltk&quot;&gt;RAKE-NLTK&lt;/a&gt; implementation, which takes advantage of the power of NLTK.&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/rakeexample.png&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;An example of RAKE-extracted keyphrases and their scores. High scores represent high relevance.&lt;/i&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;YAKE is another keyword extraction technique (YAKE literally stands for “Yet Another Keyphrase Extractor”) which makes use of a few more word features to calculate a score. YAKE starts by calculating a score for each individual word using this set of five features: casing (ratio of uppercase and lowercase to overall count), position (favors words near beginning of document), relatedness to context (computes number of terms to the left/right), sentence difference (how often the word appears in different sentences). A sliding window of 3-grams (i.e. three-word-long phrases) is then used to determine the lowest scoring (i.e. most meaningful) possible keyphrases.&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/yakeexample.png&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;An example of YAKE-extracted keyphrases and their scores. Low scores represent high relevance.&lt;/i&gt;&lt;/div&gt;
+
+&lt;h3 id=&quot;using-rake-and-yake&quot;&gt;USING RAKE AND YAKE&lt;/h3&gt;
+&lt;p&gt;I would recommend following along in &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;notebook.ipynb&lt;/code&gt; from the repository above. Alternatively, you can copy and paste these code blocks into your own new notebook. First, install and import these two libraries:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;!pip install rake_nltk
+!pip install yake
+from rake_nltk import Rake
+import yake
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Initialize:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Initialize
+r = Rake(min_length=1, max_length=4) # defining min and max length for keyphrases
+y = yake.KeywordExtractor()
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;There are other parameters you can adjust if you so desire, such as providing your own stopwords for RAKE and n-gram size for YAKE. Check the official &lt;a href=&quot;https://csurfer.github.io/rake-nltk/_build/html/advanced.html&quot;&gt;RAKE NLTK usage details&lt;/a&gt; and &lt;a href=&quot;https://github.com/LIAAD/yake#specifying-parameters&quot;&gt;YAKE documentation&lt;/a&gt; for more on those.&lt;/p&gt;
+
+&lt;p&gt;Let’s initialize some sample sentences (again from the &lt;a href=&quot;https://en.wikipedia.org/wiki/Harry_Potter&quot;&gt;Harry Potter Wikipedia page&lt;/a&gt;):&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Create a list of sample sentences
+sentences = []
+sentences.append(&quot;Since the release of the first novel, Harry Potter and the Philosopher's Stone, on 26 June 1997, the books have found immense popularity, critical acclaim and commercial success worldwide.&quot;)
+sentences.append(&quot;The Harry Potter novels are mainly directed at a young adult audience as opposed to an audience of middle grade readers, children, or adults.&quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And use RAKE and YAKE on them!:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# For each sentence, print the keyphrases that RAKE and YAKE extract
+for sentence in sentences:
+    print(&quot;sentence: &quot;, sentence)	 
+r.extract_keywords_from_text(sentence)
+rake_keywords = r.get_ranked_phrases_with_scores()
+print(&quot;rake keyphrases: &quot;)
+for kw in rake_keywords:
+    print(kw)
+yake_keywords = y.extract_keywords(sentence)
+print(&quot;yake keyphrases: &quot;)
+for kw in yake_keywords:
+    print(kw)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;It’s that simple! As you can see, the keyphrases aren’t perfect. To help get rid of some of the noise, we’re going to set a cutoff. You can play around with the number more if you’d like, but I decided to use 3 as a cutoff for RAKE and 0.4 for YAKE. We’ll also define a function that returns a list of the phrases rather than just printing them out for this so that we can use it later:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Define a function which takes in text and returns a list of keyphrases
+def get_keyphrases(text):
+    # yake has some trouble dealing with empty strings
+    if text.strip() == &quot;&quot;:
+         return [&quot;&quot;]
+
+  r.extract_keywords_from_text(text)
+  rake_keywords = r.get_ranked_phrases_with_scores()
+  yake_keywords = y.extract_keywords(text)
+  keyphrases = []
+  for kw in rake_keywords:
+      if kw[0] &amp;gt; 3:
+          keyphrases.append(kw[1])
+  for kw in yake_keywords:
+      if kw[0] &amp;lt; 0.4:
+          keyphrases.append(kw[1])
+  return list(set(keyphrases)) # to remove duplicates
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;A bit better! There are still some inconsistencies that we would be able to fix up with different heuristics, but for now, I think that the keyphrases give an acceptable overview of our example text.&lt;/p&gt;
+
+&lt;h2 id=&quot;visualization&quot;&gt;VISUALIZATION&lt;/h2&gt;
+&lt;h3 id=&quot;keppler-mapper-without-modifications&quot;&gt;KEPPLER MAPPER WITHOUT MODIFICATIONS&lt;/h3&gt;
+
+&lt;p&gt;Next, we’ll move onto visualization of these extracted keyphrases. We’ll be using &lt;a href=&quot;https://kepler-mapper.scikit-tda.org/&quot;&gt;Kepler Mapper&lt;/a&gt;, a scikit library that provides the functionality to project data visually, to cluster it, and to create connections between it. This project is inspired by &lt;a href=&quot;https://kepler-mapper.scikit-tda.org/notebooks/KeplerMapper-Newsgroup20-Pipeline.html&quot;&gt;this Kepler Mapper &amp;amp; NLP example&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;First, we’ll run Keppler Mapper without modifications. Note that if you are following along using the code in the repository above, since everything in there is already modified, running it will give you the final product and not these intermittent steps I will be talking about. But I have included screenshots every so often so hopefully, that will help clear up what each step does.&lt;/p&gt;
+
+&lt;p&gt;There will be a lot of steps and it is not necessary to know all the intricate details of each one, but understanding them at a high level will be helpful. Basically, we first need to project the data down into two dimensions so that it can be seen with the human eye on a screen. Then, we cluster it to create our nodes of varying sizes that represent an area of related data. Finally, we label the nodes with the appropriate identifying label.&lt;/p&gt;
+
+&lt;p&gt;First, you’ll have to &lt;a href=&quot;https://github.com/scikit-tda/kepler-mapper&quot;&gt;download Kepler Mapper from source&lt;/a&gt;, since we’ll be modifying some of the code for our purposes. Clone into your working directory:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;git clone https://github.com/MLWave/kepler-mapper
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;You now have the Kepler Mapper code locally, so we can go in and modify it later. But first, we’ll run an example of what a normal Kepler Mapper visualization would look like without modifications to the frontend, and then we’ll adapt it for our purposes.&lt;/p&gt;
+
+&lt;p&gt;As mentioned above, we’ll be using the &lt;a href=&quot;https://scikit-learn.org/stable/modules/generated/sklearn.datasets.fetch_20newsgroups.html#sklearn.datasets.fetch_20newsgroups&quot;&gt;20 newsgroup dataset&lt;/a&gt;, which scikit conveniently provides.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Imports
+import kmapper as km
+import numpy as np
+!pip install scikit-learn
+from sklearn.datasets import fetch_20newsgroups
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Make sure to move the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;kepler-mapper/kmapper&lt;/code&gt; folder (you won’t need any other folders from the repository besides this one) to the same directory as your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;notebook.ipynb&lt;/code&gt; so that your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;import kmapper as km&lt;/code&gt; statement can find it.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Get the 20newsgroup dataset
+newsgroups = fetch_20newsgroups(subset='train')
+raw_data = newsgroups.data
+X, category, category_names = np.array(raw_data), np.array(newsgroups.target), np.array(newsgroups.target_names)
+print(&quot;SAMPLE ENTRY: &quot;, X[0])
+print(&quot;SHAPE: &quot;, X.shape)
+print(&quot;SAMPLE CATEGORY: &quot;, category[0])
+print(&quot;SAMPLE CATEGORY NAME: &quot;, category_names[category[0]])
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We have extracted three lists named &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;category&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;category_names&lt;/code&gt;.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;From the “SAMPLE ENTRY” line, you can see what &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;X&lt;/code&gt;, our dataset, looks like–various emails with headers.&lt;/li&gt;
+  &lt;li&gt;The “SHAPE” line shows that the dataset is quite large, with 11,314 entries.&lt;/li&gt;
+  &lt;li&gt;The “CATEGORY” is simply an integer ID for each category that is used to index &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;category_names&lt;/code&gt; which has the category stored as a string; for example, category 7 is “rec.autos” means that it’s a recreational email about automobiles.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We’ll be using a subset of the entire dataset and cleaning it up a little bit, including removing the header from these emails. Then, we’ll run the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;get_keyphrases&lt;/code&gt; function we created above on the data to get our RAKE and YAKE phrases.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Format data -- get rid of email headers, new lines and tabs, and then create joined &quot;sentences&quot; for each sentence
+import re
+headers = [&quot;Lines: &quot;, &quot;NNTP-Posting-Host: &quot;, &quot;NNTP Posting Host: &quot;]
+data_formatted = []
+for entry in raw_data[:1000]:
+occurrences = []
+for header in headers:
+    occurrences.append(entry.lower().find(header.lower()))
+champ = max(occurrences)
+if champ != -1:
+    start = entry.find(&quot;\n&quot;, champ)
+    data_formatted.append(entry[start:])
+else:
+    data_formatted.append(entry)
+data_formatted = [re.sub(&quot;[\n\t-]&quot;, &quot; &quot;,
+entry) for entry in data_formatted]
+extracted_phrases = [get_keyphrases(entry)
+for entry in data_formatted]
+    print(&quot;SAMPLE EXTRACTED PHRASES: &quot;, extracted_phrases[0])
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Now this is where our keyphrases come in.&lt;/strong&gt; We want to preserve as much meaning as possible from the sentence when we project it down into two dimensions and cluster them. In many cases, raw sentences have a lot of junk in them. We can see this even with our example sentence from above:&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;“&lt;b&gt;The&lt;/b&gt; central character &lt;b&gt;in the&lt;/b&gt; series &lt;b&gt;is&lt;/b&gt; Harry Potter, &lt;b&gt;a&lt;/b&gt; boy &lt;b&gt;who&lt;/b&gt; lives &lt;b&gt;in the&lt;/b&gt; fictional town &lt;b&gt;of&lt;/b&gt; Little Whinging, Surrey &lt;b&gt;with his&lt;/b&gt; aunt, uncle, &lt;b&gt;and&lt;/b&gt; cousin.”&lt;/div&gt;
+
+&lt;p&gt;Out of the 27 words in the sentences, 12 of them are stopwords (bolded above). That’s almost half (!!!) of the words that essentially add no meaning to the sentence!&lt;/p&gt;
+
+&lt;p&gt;What we’ll do to overcome this is create “sentences” from our extracted keyphrases; i.e. stringing together all of the keyphrases for a given entry. This will emphasize the meaningful bits in it and de-emphasize the not-so-meaningful ones. Let’s use a shorter example; the sentence:&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;“There is a big black cat.”&lt;/div&gt;
+
+&lt;p&gt;gets the keyphrases:&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;“big black cat”, “black cat”&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;when passed in to our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;get_keyphrases&lt;/code&gt; function above. The joined “sentence” would then become “big black cat black cat,” essentially boiling the sentence down into its core meaning. We will use these for our projections. The below code will print an example from our dataset:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;extracted_phrases_joined = [&quot; &quot;.join(phrase) for phrase in extracted_phrases]
+print(&quot;SAMPLE ORIGINAL SENTENCE: &quot;, data_formatted[0])
+print(&quot;SAMPLE JOINED SENTENCE: &quot;, extracted_phrases_joined[0])
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Then, we’ll start the process of projecting these meaningful “sentences.” We’ll use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TfidfVectorizer&lt;/code&gt; to convert our documents into a matrix of TF-IDF features, then perform dimensionality reduction with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TruncatedSVD&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Isomap&lt;/code&gt;. Finally, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MinMaxScaler&lt;/code&gt; scales them to an appropriate size.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Project all of the &quot;sentences&quot; down into a 2D representation
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.decomposition import TruncatedSVD
+from sklearn.manifold import Isomap
+from sklearn.preprocessing import MinMaxScaler
+
+mapper = km.KeplerMapper(verbose=2)
+
+projected_X = mapper.fit_transform(np.array(extracted_phrases_joined),
+projection=[TfidfVectorizer(analyzer=&quot;char&quot;,
+                            ngram_range=(1,6),
+                            max_df=0.83,
+                            min_df=0.05),
+            TruncatedSVD(n_components=100,
+                         random_state=1729),
+            Isomap(n_components=2,
+                   n_jobs=-1)],
+scaler=[None, None, MinMaxScaler()])
+
+print(&quot;SHAPE&quot;,projected_X.shape)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Now that we have &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;projected_X&lt;/code&gt;, a list of 2D representations of each of our sentences, we’re going to cluster the sentences. The clustering algorithm is pretty important here, as different algorithms are suited for different purposes; you can learn more about scikit’s different clustering algorithms &lt;a href=&quot;https://scikit-learn.org/stable/modules/clustering.html&quot;&gt;here&lt;/a&gt;. KeplerMapper uses &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AgglomerativeClustering&lt;/code&gt; in their example, but that ends up with a large number of clusters which is hard to look at and visually take in. Feel free to play around with the algorithms to see what best suits your needs, but here we’ll be using &lt;a href=&quot;https://scikit-learn.org/stable/modules/clustering.html#dbscan&quot;&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DBSCAN&lt;/code&gt;&lt;/a&gt;, which is characterized by uneven clusters and non-flat geometry (i.e. shapes that aren’t just circles or squares). Here’s a comparison of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AgglomerativeClustering&lt;/code&gt; vs. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DBSCAN&lt;/code&gt; on our data.&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/dbscan.png&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;DBSCAN on the newsgroup20 dataset.&lt;/i&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/agglomerative.png&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;AgglomerativeClustering on the newsgroup20 dataset.&lt;/i&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;As you can see, I had to zoom out much more to fit all of the points in with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;AgglomerativeClustering&lt;/code&gt; version. &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DBSCAN&lt;/code&gt; seems to be a lot more manageable for our purposes of wanting to see information at a glance. So here is the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DBSCAN&lt;/code&gt; clustering code:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Cluster the projected data
+from sklearn import cluster
+graph = mapper.map(projected_X, clusterer=cluster.DBSCAN(eps=0.5, min_samples=3))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Next, we’re going to get TF-IDF wordgrams (1-3) to help us identify each cluster. Essentially, we’ll find the phrases of one to three words that are not too common but at the same time not too uncommon (hence the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;min_df&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;max_df&lt;/code&gt; parameters, i.e. the cut-offs for document frequency values) and later the Kepler Mapper code will calculate some statistics on it that you’ll see in the side info panel.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Get counts of phrases from data (to be used for the label and for cluster statistics)
+vec = TfidfVectorizer(analyzer=&quot;word&quot;,
+                  strip_accents=&quot;unicode&quot;,
+                  stop_words=&quot;english&quot;,
+                  ngram_range=(1,3),
+                  max_df=0.97,
+                  min_df=0.02)
+
+interpretable_inverse_X = vec.fit_transform(X).toarray()
+interpretable_inverse_X_names = vec.get_feature_names()
+
+print(&quot;SHAPE&quot;, interpretable_inverse_X.shape)
+print(&quot;FEATURE NAMES SAMPLE&quot;,
+interpretable_inverse_X_names[:400])
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, we’ll put it all together by using the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;visualize()&lt;/code&gt; function. It will write to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;path_html&lt;/code&gt; filename you provide it. We’ll see our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;category_names&lt;/code&gt; in the panel on the left-side, and our nodes will be colored according to their categories.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Visualize data!
+html = mapper.visualize(graph,
+	X=interpretable_inverse_X,
+	X_names=interpretable_inverse_X_names,
+	path_html=&quot;newsgroups20.html&quot;,
+	lens=projected_X,
+	lens_names=[&quot;ISOMAP1&quot;, &quot;ISOMAP2&quot;],
+	title=&quot;Visualizing Text - Newsgroup20&quot;,
+  custom_tooltips=np.array([category_names[ys] for ys in category]),
+	color_function=category)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;The very last cell also gives you the option to open the file in the notebook.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Open visualization here in the notebook
+from kmapper import jupyter
+jupyter.display(path_html=&quot;newsgroups20.html&quot;)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;That’s it! If you’re following along in the repository, the screenshot below is the outcome of the process so far. If you’re creating your own file from scratch with these code blocks, go ahead and run the whole kernel (it may take a while due to the clustering and projection), and you should see something like this at the bottom. Or, if you prefer, you can open &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;newsgroup20.html&lt;/code&gt; in your preferred web browser.&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/unmodifiedkm.png&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;Default Kepler Mapper on the newsgroup20 dataset using DBSCAN clustering.&lt;/i&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;It already looks really cool! Feel free to play around with it; zoom in and out, open the toggles in the navigation bar, hover on nodes, etc.&lt;/p&gt;
+
+&lt;h3 id=&quot;kepler-mapper-with-modifications&quot;&gt;KEPLER MAPPER WITH MODIFICATIONS&lt;/h3&gt;
+
+&lt;p&gt;However, one drawback is that you can’t really get much information at a glance from this screen. It’s hard to glean any sort of relationship between the data without knowing what the nodes represent! What we’re going to do next is modify the Kepler Mapper code in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;kmapper&lt;/code&gt; folder so that each node above retains its relative size to other nodes (based on how many members are in the cluster) and also make it big enough so that a defining label for each node can fit.&lt;/p&gt;
+
+&lt;p&gt;Please note that the defining label we will be using is the &lt;strong&gt;most common word or phrase&lt;/strong&gt; in all of the sentences in that cluster. This generally provides a good label for the cluster as a whole, as opposed to running RAKE or YAKE on the sentences in the cluster which, as I found in my experimentation, tends to focus on one or two entries in the cluster. The sentences in a cluster do have overlap in meaning (that’s why they’re clustered together), but oftentimes it might not be clear enough to simple techniques like RAKE/YAKE why this is so. Generally, these automatic techniques are run on one contained document, not a group of documents. All that is to say, we will be using the most frequent phrase as a label so that we can get an idea of the cluster as a whole.&lt;/p&gt;
+
+&lt;p&gt;Navigate to the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;kmapper&lt;/code&gt; directory. This is where all of the relevant source code we will be working with is. First, we’ll change the size of the nodes so that they are large enough to hold text. Go into &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;visuals.py&lt;/code&gt; and find the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;_size_node&lt;/code&gt; function in line 406, which is where the size of each node is defined based on how many members are in the cluster. It should look like:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def _size_node(member_ids):
+    return int(np.log(len(member_ids) + 1) + 1)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Change it to:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;def _size_node(member_ids):
+    return 35 * int(np.log(len(member_ids) + 1) + 1)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you were to run again at this point, you would see something like the screenshot below.&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/halfmodifiedkm.png&quot; /&gt;&lt;/div&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;i&gt;Kepler Mapper after adjusting node size.&lt;/i&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;The nodes would appear bigger, but still at a good relative ratio with each other. As you can see, one problem is that there’s some overlap between nodes. We can play around with the forces a bit to try to fix this. If you navigate to line 127, you should see the force settings:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Force settings
+var force = d3.layout.force()
+        .linkDistance(5)
+        .gravity(0.2)
+        .charge(-1200)
+        .size([w,h]);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;For this dataset, I’ve found that changing the &lt;a href=&quot;http://bl.ocks.org/sathomas/191a8a302a363ac6a4b0&quot;&gt;gravity&lt;/a&gt; from 0.2 to 0.1 and &lt;a href=&quot;http://bl.ocks.org/sathomas/1ca23ee9588580d768aa&quot;&gt;charge&lt;/a&gt; from -1200 to -1800 repels the clusters enough to mostly get rid of the overlap problem. As a side note, Keppler Mapper actually runs on an outdated version of d3, so I wouldn’t worry too much about understanding the forces because in the most current release, these are basically deprecated anyways and there’s a cool function called &lt;a href=&quot;https://www.d3indepth.com/force-layout/#forcemanybody&quot;&gt;forceManyBody()&lt;/a&gt; that just gets rid of all overlap! But generally, a negative charge represents more repelling of nodes, and gravity closer to 0 allows the nodes to wander further apart.&lt;/p&gt;
+
+&lt;p&gt;Next, we’ll add the label of the top feature, i.e. most common phrase, to each node. Find the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;format_mapper_data&lt;/code&gt; function around line 166, which formats the data that will be passed to the HTML template. You can see that each node has this information:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;n = {
+        &quot;id&quot;: &quot;&quot;,
+        &quot;name&quot;: node_id,
+        &quot;color&quot;: c,
+        &quot;type&quot;: t,
+        &quot;size&quot;: s,
+        &quot;tooltip&quot;: tt,
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;We’re going to add a field called &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;feature&lt;/code&gt; which represents the top occurring feature, and we’ll write this on the node later in the frontend.&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;cluster_stats = _format_cluster_statistics(member_ids, X, X_names)
+f = cluster_stats['above'][0]['feature']
+
+n = {
+        &quot;id&quot;: &quot;&quot;,
+        &quot;name&quot;: node_id,
+        &quot;color&quot;: c,
+        &quot;type&quot;: t,
+        &quot;size&quot;: s,
+        &quot;tooltip&quot;: tt,
+        &quot;feature&quot;: f
+    }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cluster_stats[‘above’]&lt;/code&gt; is a list of the “above-average features”, meaning the features i.e. phrases that occur more than an average amount of times. We’re taking the most common one and feeding it into the frontend.&lt;/p&gt;
+
+&lt;p&gt;Now, we can go into the JavaScript and make the feature appear. Kepler Mapper was built using &lt;a href=&quot;https://d3js.org/&quot;&gt;d3&lt;/a&gt;, which is a JavaScript library that “helps you bring data to life using HTML, SVG, and CSS.” In terms of this application, it is taking care of a lot of the interactivity, the physics, etc. The creator of d3 has a very thorough &lt;a href=&quot;https://observablehq.com/collection/@d3/learn-d3&quot;&gt;tutorial&lt;/a&gt; (it’s also interactive!) if you want to learn it from the ground up, but we won’t need to know much about it for this. I would recommend looking into it because you can make some really beautiful visualizations.&lt;/p&gt;
+
+&lt;p&gt;At line 194, you’ll see this code:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Draw circles
+var circle = node.append(&quot;path&quot;)
+  .attr(&quot;d&quot;, d3.svg.symbol()
+    .size(function(d) { return d.size * 50; })
+    .type(function(d) { return d.type; }))
+  .attr(&quot;class&quot;, &quot;circle&quot;)
+  .style(tocolor, function(d) {
+    console.log(&quot;Node color:&quot;, d.color);
+    console.log(&quot;becomes color &quot;, color(d.color));
+    return color(d.color);
+  });
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This is the code that creates the visual nodes we see. It gives each a size (note the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;d.size * 50&lt;/code&gt;, we’ll make use of that later), a type attribute, a class, and colors it according to the provided color function (the color scheme is &lt;a href=&quot;https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html#the-color-scales&quot;&gt;viridis&lt;/a&gt;). We’ll add code right after this to put text labels on top of this:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;// Add labels
+var label = node.append(&quot;text&quot;)
+    .attr(&quot;dy&quot;, &quot;.35em&quot;)
+    .attr(&quot;fill&quot;, &quot;white&quot;)
+    .style(&quot;font-family&quot;, &quot;Roboto&quot;)
+    .style(&quot;font-weight&quot;, &quot;300&quot;)
+    .text(d =&amp;gt; d.feature)
+    .style(&quot;font-size&quot;, function(d) {
+        var length = this.getComputedTextLength(); // supposedly returns a pixel integer
+        var available = Math.pow((d.size * 50 / Math.PI), 0.5) * 2 - 18; // d.size is the squared area
+        return (available / length) + &quot;em&quot;;
+    });
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To break this chunk of code down:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The first line adds text to each node.&lt;/li&gt;
+  &lt;li&gt;The second centers it vertically; “em” is a unit of measurement which is equal to the point size of the current font, i.e. in size 12 font an em would be 12 pixels. Basically, this line centers vertically for your current font size.&lt;/li&gt;
+  &lt;li&gt;Then we make it white, Roboto, and adjust its weight, i.e. its boldness.&lt;/li&gt;
+  &lt;li&gt;Then, we add the text itself by returning the property called feature that we just added for each node.&lt;/li&gt;
+  &lt;li&gt;All that’s left is the font size, which is a bit trickier but nothing crazy. The idea is that we have the size of each node that was passed in from the backend, which when multiplied by 50 (in line 197 if you recall from above, not sure why they designed it this way but it works I suppose) is the area it takes up in pixels, as well as the length of our text label, also in pixels. We then find the diameter of the node, subtract 18 to account for padding from the shadow on the outside of the pixel, then use the ratio of that available diameter to the length of our text as the em value for our font size.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Finally, we have to go up to line 45 and make sure that all text is anchored to the middle, i.e. centered. Change this:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var svg = d3.select(&quot;#canvas&quot;).append(&quot;svg&quot;)
+      .attr(&quot;width&quot;, width)
+      .attr(&quot;height&quot;, height);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;To this:&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;var svg = d3.select(&quot;#canvas&quot;).append(&quot;svg&quot;)
+      .attr(&quot;width&quot;, width)
+      .attr(&quot;height&quot;, height)
+      .attr(&quot;text-anchor&quot;, &quot;middle&quot;);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;And that’s it! Refresh your kernel and run all cells, and you should get something like this (or just go ahead and run without refreshing if you’re using my &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;notebook.ipynb&lt;/code&gt;). A colorful, interactive way of visualizing the most meaningful clusters of your data.&lt;/p&gt;
+
+&lt;div align=&quot;center&quot;&gt;&lt;img src=&quot;http://localhost:4000/site_files/2020-08-07-How-to-Extract-Keyphrases-and-Visualize-Text/visualizekeyphrases.gif&quot; /&gt;&lt;/div&gt;
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;i&gt;Again, here’s the link to a &lt;a href=&quot;https://github.com/cznlm/visualize-keyphrases&quot;&gt;repository with the relevant code&lt;/a&gt; if you wish to download and run directly.&lt;/i&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;further-directions&quot;&gt;FURTHER DIRECTIONS&lt;/h2&gt;
+&lt;p&gt;There are a few of clear directions from here, namely working on reducing noise, fine-tuning the clustering algorithm, and improving the label quality. There are a lot of “junk” keyphrases that we get from RAKE and YAKE, so looking into a more advanced technique might be helpful to help us create even more meaningful “sentences” to project. Also, the choice of clustering algorithm we use on these projections is also relatively arbitrary. Finally, as you can see from the demo GIF, the labels themselves are far from perfect. It would be great to have a representative keyphrase of an entire cluster as opposed to just the top feature. However, it seems that the speedy automatic keyphrase extraction techniques we were using in this article are not suited for this purpose, so looking into more advanced techniques would be a great future direction as well.&lt;/p&gt;
+
+&lt;h2 id=&quot;resources-compiled&quot;&gt;RESOURCES COMPILED&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://qwone.com/~jason/20Newsgroups/&quot;&gt;20 Newsgroup Dataset&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://arxiv.org/pdf/1905.05044.pdf&quot;&gt;A 2019 Keyphrase Extraction Literature Review&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.aclweb.org/anthology/P14-1119.pdf&quot;&gt;A 2014 Keyphrase Extraction Literature Review&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.youtube.com/watch?v=0DzcUXkn9HY&amp;amp;t=548s&quot;&gt;An interesting lecture on keyphrase extraction methods&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.researchgate.net/profile/Stuart_Rose/publication/227988510_Automatic_Keyword_Extraction_from_Individual_Documents/links/55071c570cf27e990e04c8bb.pdf&quot;&gt;RAKE paper&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.researchgate.net/profile/Stuart_Rose/publication/227988510_Automatic_Keyword_Extraction_from_Individual_Documents/links/55071c570cf27e990e04c8bb.pdf&quot;&gt;YAKE paper&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.aclweb.org/anthology/P17-1102/&quot;&gt;PositionRank, another cool technique that I tried out&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://scikit-learn.org/stable/modules/clustering.html&quot;&gt;Scikit-learn’s clustering algorithms&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://kepler-mapper.scikit-tda.org/&quot;&gt;Keppler Mapper&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://observablehq.com/collection/@d3/learn-d3&quot;&gt;Learn d3 Tutorial Series&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://bl.ocks.org/sathomas/11550728&quot;&gt;Understanding d3 v3 Forces&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.d3indepth.com/force-layout/&quot;&gt;Understanding d3 v5 Forces&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html&quot;&gt;viridis color palettes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Cheyenne Zhang</name></author><summary type="html">by Cheyenne Zhang</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/kepmapthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/kepmapthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Smooth Inverse Frequency (SIF) Embeddings in Golang</title><link href="http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth-Inverse-Frequency-Frequency-(SIF)-Embeddings-in-Golang.html" rel="alternate" type="text/html" title="Smooth Inverse Frequency (SIF) Embeddings in Golang" /><published>2020-08-07T05:45:00-04:00</published><updated>2020-08-07T05:45:00-04:00</updated><id>http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth%20Inverse%20Frequency%20Frequency%20(SIF)%20Embeddings%20in%20Golang</id><content type="html" xml:base="http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth-Inverse-Frequency-Frequency-(SIF)-Embeddings-in-Golang.html">&lt;h4 id=&quot;by-daniel-ye&quot;&gt;by Daniel Ye&lt;/h4&gt;
+
+&lt;p&gt;&lt;br /&gt; 
+&lt;strong&gt;&lt;em&gt;Daniel Ye&lt;/em&gt;&lt;/strong&gt; is a sophomore at Cornell University majoring in Computer Science and minoring in Operations Research and Information Engineering. I am interested in machine learning, natural language processing, and data science. I have worked on projects involving manufacturing data collection/analysis, greenhouse environmental regulation, and a multiplayer programming game. In my free time I enjoy playing tennis, running, hiking, and playing cello or guitar.Daniel was one of NLMatics’ 2020 summer interns.
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Smooth Inverse Frequency (SIF) Embeddings in Golang&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Daniel Ye&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Table of Contents&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;#bookmark=id.uv0gxlx5wixm&quot;&gt;Introduction &lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;#bookmark=id.pcgyzkz8chfm&quot;&gt;Motivation&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;#bookmark=id.vij0hbt6t1id&quot;&gt;Why GoLang?&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;#bookmark=id.mmsg2fvvb5zz&quot;&gt;GRPC Improvements&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;#bookmark=id.i0zeii5wg08t&quot;&gt;Post-Processing Improvements&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;#bookmark=id.aol4ijt37be&quot;&gt;Productionalizing With Docker&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;a href=&quot;#bookmark=id.ouhqmef3a5d5&quot;&gt;Conclusion&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;**1. Introduction **&lt;/p&gt;
+
+&lt;p&gt;I am a rising junior majoring in computer science and minoring in operations research and information engineering at Cornell Engineering. This summer, I interned at NLMatics, and one of the projects I worked on was implementing a &lt;a href=&quot;https://openreview.net/pdf?id=SyK00v5xx#page=12&amp;amp;zoom=100,110,217&quot;&gt;Smooth Inverse Frequency&lt;/a&gt; model using Golang. This is able to calculate sentence embeddings from sequences of words in the form of vectors, which mathematically represent the meaning of the sentence. We use it to encode documents and queries into embeddings which are then processed further using other natural language processing models to get search results. However, our original Python implementation was fairly slow at calculating these embeddings, and it scaled poorly with increasing document sizes or concurrent requests, so we needed to find a way to speed up the service.&lt;/p&gt;
+
+&lt;p&gt;Over the course of about four weeks, I worked on combating this issue by developing a Golang implementation of the model and switching from HTTP 1.0 protocol to gRPC protocol for the server. This increased the amount of concurrent processing we were able to utilize, and reduced overhead for connecting and sending requests to the server, speeding up the service greatly. Ultimately, I was able to build a system that generated more accurate sentence embeddings at much faster speeds.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2. Motivation&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Word embeddings are one of the most important developments in the field of modern Natural Language Processing. Translating the meaning behind words and the semantic relationships between them into measurable quantities is a crucial step in processing language. Many words, such as “cat” and “dog” or “Mozart” and “Beethoven” have almost no physical characteristics that would reveal their similarities. Instead, modern algorithms like Google’s &lt;a href=&quot;https://arxiv.org/abs/1301.3781&quot;&gt;Word2Vec&lt;/a&gt; developed in 2013 or Stanford’s &lt;a href=&quot;https://nlp.stanford.edu/pubs/glove.pdf&quot;&gt;GloVe&lt;/a&gt; essentially count the cooccurrences of words with other words, and condense these values into dense, relatively low-dimensional vectors. Their models train on massive corpora of English text such as all of Wikipedia, and embed words as vectors based on which other words they appear in proximity to. So, if “cat” and “dog” are found together in many sentences or documents, they will have very similar vector values. This method is able to capture not only semantic similarity, but also analogies (woman is to man as king is to __) and the effects of prefixes or suffixes.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/site_files/daniels_post/image_0.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;semantic relationships represented by Word2Vec and GloVe&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;A natural next step in the field was the development of sentence embeddings, or being able to extract meaning from a sequence of words. Early methods include:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Tf%E2%80%93idf&quot;&gt;TF-ID**F&lt;/a&gt;&lt;/strong&gt; **&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;**&lt;a href=&quot;https://arxiv.org/pdf/1511.08198.pdf&quot;&gt;Paragram Phrase (PP**)&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;**&lt;a href=&quot;https://en.wikipedia.org/wiki/Recurrent_neural_network&quot;&gt;Recurrent Neural Network (RNN**)&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;**&lt;a href=&quot;https://arxiv.org/pdf/1503.00075.pdf&quot;&gt;Long Short-Term Memory Networks (LSTM**)&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;**&lt;a href=&quot;https://people.cs.umass.edu/~miyyer/pubs/2015_acl_dan.pdf&quot;&gt;Deep Averaging Network (DAN**)&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;In 2017, Arora et. al proposed SIF, or &lt;a href=&quot;https://openreview.net/pdf?id=SyK00v5xx#page=12&amp;amp;zoom=100,110,217&quot;&gt;Smooth Inverse Frequency&lt;/a&gt;, a weighting scheme to improve performance of sentence embeddings. When encoding a sentence, it is important to identify which words in the sentence are more significant. For example, if calculating the embedding of the sentence “who was Mozart?” the word “was” doesn’t add much meaning; looking for sentences or documents relating to the word “was” will not yield any useful results for the original question. It’s clear that “Mozart” holds the most meaning in the question from a human standpoint, but how do you program a machine to identify that? SIF operates under the assumption that the most important words tend to also be used less frequently. If you counted all the words in Wikipedia, the word “was” would most likely appear much more frequently than in “Mozart”. Weights of a word &lt;em&gt;w&lt;/em&gt; are computed by &lt;em&gt;a/(a + p(w))&lt;/em&gt; where a is a parameter and p(w) is the word frequency of w, which can be estimated by scraping a large corpus.* &lt;em&gt;The hyperparameter *a&lt;/em&gt; adjusts which words are quantitatively “common” and “uncommon.” Here is the formal algorithm:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_1.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Arora et. al found that despite its simplicity, SIF worked surprisingly well on semantic text similarity (STS), entailment, and sentiment tasks. STS tasks involve scoring pairs of sentences from 0-5 based on how similar their meanings are, which are then checked against a golden standard of human generated scores. For example, “The bird is bathing in the sink” and “Birdie is washing itself in the water basin” should receive a 5. Entailment tasks involve identifying if one sentence &lt;em&gt;entails&lt;/em&gt; that another one is true. For example, if you read the sentence “There is a soccer game with multiple males playing,” you could infer that the sentence “Several men are playing a sport” is true. Thus the first sentence, commonly referred to as the &lt;em&gt;text&lt;/em&gt; entails the following, also known as the &lt;em&gt;hypothesis&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_2.png&quot; alt=&quot;&quot; /&gt;&lt;img src=&quot;/site_files/daniels_post/image_3.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Tables detailing SIF performance on various semantic tasks. “GloVe + WR”, “PSL + WR”, and “Ours” correspond to SIF systems.&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Due to its effectiveness and simplicity, SIF is an incredibly practical method of embedding sentences for commercial or enterprise products that rely on both accurate and fast results while consuming low amounts of resources.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;2. Why Golang?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&quot;https://github.com/PrincetonML/SIF&quot;&gt;original code&lt;/a&gt; corresponding to the paper describing SIF is implemented in Python, which by design has a &lt;a href=&quot;https://wiki.python.org/moin/GlobalInterpreterLock&quot;&gt;Global Interpreter Lock (GIL)&lt;/a&gt;, a mutex that prevents multi threaded processes from utilizing multiple cores of a processor. We hosted our Cython implementation of the SIF embedding model on a cloud service, which provided us with multiple cores of processing power. However, the GIL meant that we could not make use of the full processing power we were paying for.&lt;/p&gt;
+
+&lt;p&gt;GoLang however, has no such restrictions and also provides built-in structures for concurrency through the form of Goroutines, a form of very lightweight threads.  They are organized by channels, which allow goroutines to either block on awaiting input or signal that they have completed.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;func main() {
+    jobs := make(chan int, 100)
+    results := make(chan int, 100)
+    for i := 0; i &amp;lt; 4; i++ {
+        go worker(jobs, results)
+    }
+    for i := 0; i &amp;lt; 100; i++ {
+        jobs &amp;lt;- i
+    }
+    close(jobs)
+    for j := 0; j &amp;lt; 100; j++ {
+        fmt.Println(&amp;lt;-results)
+    }
+}
+func worker(jobs &amp;lt;-chan int, results chan&amp;lt;- int) {
+    for n := range jobs {
+        results &amp;lt;- fib(n)
+    }
+}
+
+func fib(n int) int {
+    if n &amp;lt;= 1 {
+        return n
+    }
+    return fib(n-1) + fib(n-2)
+}&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;em&gt;Basic architecture of a worker pool using goroutines&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;It is important to note that this structure does not enforce the order in which workers complete their jobs or the order in which their results are sent to the results channel. Executing this code won’t necessarily return the fibonacci numbers in their correct order.&lt;/p&gt;
+
+&lt;p&gt;Our API allowed for clients to send multiple sentences at a time to be encoded by the SIF, often many at a time, and implementing the SIF in Golang allowed us to leverage powerful concurrency to speed up our calculations. My first iteration of the SIF server used &lt;a href=&quot;https://golang.org/pkg/net/http/&quot;&gt;Golang’s http package&lt;/a&gt; to host the model on an HTTP 1.0 server. I compared it with  our old system, as well as the original Python implementation. I used three different independent variables to benchmark how the performance scaled up: total words per ‘sentence’ to be embedded, total number of calls with fixed number of concurrent requests, and number of concurrent requests with fixed total number of calls. These benchmarks were made using &lt;a href=&quot;https://httpd.apache.org/docs/2.4/programs/ab.html&quot;&gt;Apache Benchmark&lt;/a&gt;, a software that allows you to make many concurrent requests to a server and reports significant timing data.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_5.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_6.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The results were impressive, to say the least. At a sentence level, around 10-100 words, the new implementation outperforms the old by up to &lt;strong&gt;30x&lt;/strong&gt; and at a document level, around 1000-10000+ words, it is still &lt;strong&gt;10x&lt;/strong&gt;** **faster in almost every scenario. The improved speed for sentence level embeddings is really useful, since it means that we can embed at lower levels of granularity much more easily. For example, if you were searching “who was Mozart” and only had embeddings for each document, your system might flag a document about Joseph Haydn, friend and mentor of Mozart, as relevant. As you descend levels of granularity of embeddings however, you can much more easily locate relevant information about your query. Perhaps it allows you to find a paragraph detailing their time in Vienna together, or a specific sentence about the pieces of music they worked on together.&lt;/p&gt;
+
+&lt;p&gt;I found that Go works incredibly well for creating a web service capable of handling many concurrent requests efficiently. However, Go’s build in functionality does have a significant limitation of restricting HTTP requests to sizes of 1MB or less, which was not ideal for our use cases where we had to embed large amounts of text in a single request. For example, a legal company looking to process Google’s 2019 environmental and sustainability report would need about 11 MB of payload. Or a stressed-out undergraduate trying to find tips in &lt;em&gt;Cracking the Coding Interview&lt;/em&gt; would require around 90 MB of allowance. Additionally, every HTTP request requires a new connection to be made between the server and client, which adds a significant amount of overhead to our typical use case which often requires embedding many documents at once and sending many requests.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;3. GRPC Improvements&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Developed by Google, gRPC is an open source Remote Procedure Call framework and is what I turned to in order to hopefully remove the size limit and connection overhead problems with Go’s http package. gRPC processes payloads from requests using buffers, so it removes the 1MB size cap on requests. It also maintains connections between individual clients, so a single user can make multiple requests without having to create a connection more than once. It has its own Interface Definition Language called protocol buffers that also serve as a mechanism for serializing structured data and uses HTTP/2 to transport data. gRPC services are defined in .proto files:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;syntax = &quot;proto3&quot;
+option go_package = “greeter”
+package main
+// The greeter service definition.
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+}
+
+// The request message containing the user's name.
+message HelloRequest {
+  string name = 1;
+}
+
+// The response message containing the greetings
+message HelloReply {
+  string message = 1;
+}
+&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;You can then use the protoc command to compile your service into any of &lt;a href=&quot;https://grpc.io/docs/languages/&quot;&gt;gRPC’s supported languages&lt;/a&gt;.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;// Code generated by protoc-gen-go. DO NOT EDIT.
+// versions:
+//  protoc-gen-go v1.23.0
+//  protoc        v3.6.1
+// source: greeter.proto
+
+package greeter
+
+import (
+    proto &quot;github.com/golang/protobuf/proto&quot;
+    protoreflect &quot;google.golang.org/protobuf/reflect/protoreflect&quot;
+    protoimpl &quot;google.golang.org/protobuf/runtime/protoimpl&quot;
+    reflect &quot;reflect&quot;
+    sync &quot;sync&quot;
+)
+
+const (
+    // Verify that this generated code is sufficiently up-to-date.
+    _ = protoimpl.EnforceVersion(20 - protoimpl.MinVersion)
+    // Verify that runtime/protoimpl is sufficiently up-to-date.
+    _ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
+)
+
+// This is a compile-time assertion that a sufficiently up-to-date version
+// of the legacy proto package is being used.
+const _ = proto.ProtoPackageIsVersion4
+
+// The request message containing the user's name.
+type HelloRequest struct {
+    state         protoimpl.MessageState
+    sizeCache     protoimpl.SizeCache
+    unknownFields protoimpl.UnknownFields
+
+    Name string `protobuf:&quot;bytes,1,opt,name=name,proto3&quot; json:&quot;name,omitempty&quot;`
+}
+//... excess code has been left out&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Due to how gRPC buffers data being received and sent, we no longer had to worry about size limits on requests to our server. gRPC servers also have a very helpful feature in that connections between client and server are maintained across multiple requests, whereas with HTTP requests, a new connection has to be established for every POST. As a result, I saw more improvements in performance as this overhead was removed from the new system:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_7.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The largest improvements are seen when requests have very small payloads, so the majority of time is spent on overhead from connecting to the server. However, once you get to larger payloads, the times converge to become about equal.&lt;/p&gt;
+
+&lt;p&gt;**4. Post-Processing Improvements **&lt;/p&gt;
+
+&lt;p&gt;A coworker sent me this &lt;a href=&quot;https://arxiv.org/pdf/1702.01417.pdf&quot;&gt;paper about post-processing word vectors&lt;/a&gt; in order to improve their representation of meaning. The algorithm essentially takes a list of pre-computed word vectors and performs principal component analysis on them, and then removes the top N components from every vector via Gram-Schmidt. Here is their formal algorithm:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_8.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Python’s Numpy and sklearn packages have all the built-in tools needed to implement this algorithm, which you can find the code for &lt;a href=&quot;https://github.com/daniel-ye137/WordVectorProcessing&quot;&gt;here&lt;/a&gt;:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;import numpy as np
+from sklearn.decomposition import PCA
+import argparse
+
+
+parser = argparse.ArgumentParser(description='postprocess word embeddings')
+parser.add_argument(&quot;file&quot;, help=&quot;file containing embeddings to be processed&quot;)
+args = parser.parse_args()
+N = 2
+embedding_file = args.file
+embs = []
+
+#map indexes of word vectors in matrix to their corresponding words
+idx_to_word = dict()
+dimension = 0
+#append each vector to a 2-D matrix and calculate average vector
+with open(embedding_file, 'rb') as f:
+    first_line = []
+    for line in f: 
+        first_line = line.rstrip().split()
+        dimension = len(first_line) - 1
+        if dimension &amp;lt; 100 :
+            continue
+        print(&quot;dimension: &quot;, dimension)
+        
+        break
+    avg_vec = [0] * dimension
+    vocab_size = 0
+    word = str(first_line[0].decode(&quot;utf-8&quot;))
+    word = word.split(&quot;_&quot;)[0]
+    # print(word)
+    idx_to_word[vocab_size] = word
+    vec = [float(x) for x in first_line[1:]]
+    avg_vec = [vec[i] + avg_vec[i] for i in range(len(vec))]
+    vocab_size += 1
+    embs.append(vec)
+    for line in f:
+        line = line.rstrip().split()
+        word = str(line[0].decode(&quot;utf-8&quot;))
+        word = word.split(&quot;_&quot;)[0]
+        idx_to_word[vocab_size] = word
+        vec = [float(x) for x in line[1:]]
+        avg_vec = [vec[i] + avg_vec[i] for i in range(len(vec))]
+        vocab_size += 1
+        embs.append(vec)
+    avg_vec = [x / vocab_size for x in avg_vec]
+# convert to numpy array
+embs = np.array(embs)
+
+#subtract average vector from each vector
+for i in range(len(embs)):
+    new_vec = [embs[i][j] - avg_vec[j] for j in range(len(avg_vec))]
+    embs[i] = np.array(new_vec)
+
+#principal component analysis using sklearn
+pca = PCA()
+pca.fit(embs)
+
+#remove the top N components from each vector
+for i in range(len(embs)):
+    preprocess_sum = [0] * dimension
+    for j in range(N):
+        princip = np.array(pca.components_[j])
+        preprocess = princip.dot(embs[i])
+        preprocess_vec = [princip[k] * preprocess for k in range(len(princip))]
+        preprocess_sum = [preprocess_sum[k] + preprocess_vec[k] for k in range(len(preprocess_sum))]
+    embs[i] = np.array([embs[i][j] - preprocess_sum[j] for j in range(len(preprocess_sum))])
+
+file = open(&quot;postprocessed_embeddings.txt&quot;, &quot;w+&quot;, encoding=&quot;utf-8&quot;)
+
+#write back new word vector file
+idx = 0
+for vec in embs:
+    file.write(idx_to_word[idx])
+    file.write(&quot; &quot;)
+    for num in vec:
+        file.write(str(num))
+        file.write(&quot; &quot;)
+    file.write(&quot;\n&quot;)
+    idx+=1
+file.close()
+
+print(&quot;Wrote: &quot;, len(embs), &quot;word embeddings&quot;)&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Using the new word embedding file, I saw meaningful improvements in semantic similarity tasks, similar to the results they found in their paper:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;Dataset&lt;/td&gt;
+    &lt;td&gt;k&lt;/td&gt;
+    &lt;td&gt;Original&lt;/td&gt;
+    &lt;td&gt;Post-Processed Vectors&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;MSR Paraphrase&lt;/td&gt;
+    &lt;td&gt;k = 1&lt;/td&gt;
+    &lt;td&gt;76.43&lt;/td&gt;
+    &lt;td&gt;78.34&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;MS MARCO, 10000&lt;/td&gt;
+    &lt;td&gt;k = 1&lt;/td&gt;
+    &lt;td&gt;18.2002&lt;/td&gt;
+    &lt;td&gt;20.4&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;MSR Paraphrase&lt;/td&gt;
+    &lt;td&gt;k = 3&lt;/td&gt;
+    &lt;td&gt;87.122&lt;/td&gt;
+    &lt;td&gt;88.84&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;MS MARCO, 10000&lt;/td&gt;
+    &lt;td&gt;k = 3&lt;/td&gt;
+    &lt;td&gt;26.915&lt;/td&gt;
+    &lt;td&gt;29.37&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;MSR Paraphrase&lt;/td&gt;
+    &lt;td&gt;k = 5&lt;/td&gt;
+    &lt;td&gt;89.37944567&lt;/td&gt;
+    &lt;td&gt;90.92&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;MS MARCO, 10000&lt;/td&gt;
+    &lt;td&gt;k = 5&lt;/td&gt;
+    &lt;td&gt;33.05634374&lt;/td&gt;
+    &lt;td&gt;36.2&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;I benchmarked the system on semantic text similarities tests using  the MSR Paraphrase dataset, as well as the first 10000 entries of the MS MARCO dataset using p@k with k = 1, 3, and 5. These tasks involved identifying a sentence from a large pool of candidates as being semantically equivalent to another. p@k testing introduces some leeway into the testing, where the program chooses the top K candidates from the pool as potential matches instead of only getting one attempt at the correct answer. This kind of testing is more representative of a search engine, where you care not only about getting the single best result, but also a reasonable amount of relevant information.&lt;/p&gt;
+
+&lt;p&gt;The post-processed vectors outperformed the original in every case. I also benchmarked our system using a word frequency file generated by fellow intern Connie Xu using a June snapshot of all of Wikipedia. It had a far more comprehensive vocabulary than our current word frequency file, with over 50x as many entries, but performance results were inconclusive. The results do indicate, however, that post-processed word vectors also increase performance of sentence embedding systems.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;5. Productionalizing With Docker&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;After finishing the code for our new SIF, my final step was to prepare it for production, which meant an inevitable encounter with Docker. Here is my Dockerfile, which I got from &lt;a href=&quot;https://www.callicoder.com/docker-golang-image-container-example/&quot;&gt;this tutorial:&lt;/a&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;td&gt;# Start from the latest golang base image
+FROM golang:latest
+
+# Add Maintainer Info
+LABEL maintainer=&quot;Daniel Ye &amp;lt;daniel.ye@nlmatics.com&amp;gt;&quot;
+
+# Set the Current Working Directory inside the container
+WORKDIR /app
+
+# Copy go mod and sum files
+COPY go.mod go.sum ./
+
+# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
+RUN go mod download
+
+# Copy the source from the current directory to the Working Directory inside the container
+COPY . .
+
+# Build the Go app
+RUN go build -o main .
+
+# Expose port 8080 to the outside world
+EXPOSE 8080
+
+# Command to run the executable
+CMD [&quot;./main&quot;]&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Most components are fairly self-explanatory. It does require that you use Go modules to manage your dependencies, which you can read about &lt;a href=&quot;https://blog.golang.org/using-go-modules&quot;&gt;here&lt;/a&gt;. The steps I took to compile my code into a Docker image were as follows:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Create a go mod file in the root directory of your Golang project using go mod init &lt;project name=&quot;&quot;&gt;. Your project name can be anything you want, it does not have to correspond to any file or package names, although it probably should.&lt;/project&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Populate your go mod file with dependencies using go build. This will automatically detect the packages used by your project, and write them to your go mod file&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Create a Dockerfile in the root directory of your project&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Build your image using docker build -t &lt;project name=&quot;&quot;&gt; . Include the period!&lt;/project&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Run your project with docker run -d -p 8080:8080 &lt;project name=&quot;&quot;&gt;&lt;/project&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;strong&gt;6. Conclusion&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Improving the SIF implementation was a really interesting project. There were a lot of fun challenges involved like solving the ordering of goroutines and dealing with concurrent writes to map. It was incredibly satisfying to run my own benchmarks and see quantitative improvements in performance go as high as 30x the original speed. Of course, more improvements can still be made. &lt;a href=&quot;https://arxiv.org/pdf/2005.09069.pdf&quot;&gt;This paper&lt;/a&gt; details how SIF embeddings of documents can be improved by producing and then combining topic vectors. Other models for embedding sentences such as &lt;a href=&quot;https://arxiv.org/pdf/1803.11175.pdf&quot;&gt;Universal Sentence Encoder&lt;/a&gt; or &lt;a href=&quot;https://arxiv.org/pdf/1908.10084.pdf&quot;&gt;Sentence-BERT&lt;/a&gt; have been developed in recent years as well and are able to outperform SIF in certain categories of NLP tasks.&lt;/p&gt;</content><author><name>Daniel Ye</name></author><summary type="html">by Daniel Ye</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/SIFthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/SIFthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Speed up requests: Asyncio for Requests in Python</title><link href="http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html" rel="alternate" type="text/html" title="Speed up requests: Asyncio for Requests in Python" /><published>2020-08-06T20:00:00-04:00</published><updated>2020-08-06T20:00:00-04:00</updated><id>http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed%20up%20requests%20-%20Asyncio%20for%20Requests%20in%20Python</id><content type="html" xml:base="http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html">&lt;h4 id=&quot;by-connie-xu&quot;&gt;by Connie Xu&lt;/h4&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt; 
+Connie Xu is currently studying Computer Science at Princeton University, where she has sharpened her skills in Algorithms and Data Structures as well as Linear Algebra. She is interested in learning more about Natural Language Processing and Machine Learning applications. In her free time, she watches cooking videos or practices beatboxing. Connie was one of NLMatics’ 2020 summer interns. 
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;speed-up-requests-asyncio-for-requests-in-python&quot;&gt;Speed up requests: Asyncio for Requests in Python&lt;/h1&gt;
+
+&lt;h4 id=&quot;dont-be-like-this&quot;&gt;Don’t be like this.&lt;/h4&gt;
+&lt;p&gt;&lt;img src=&quot;https://memegenerator.net/img/instances/78137468/my-code-cant-run-slow-if-i-never-write-it.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As you have probably already noticed because you decided to visit this page, requests can take forever to run, so here’s a nice blog written while I was an intern at NLMatics to show you how to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asyncio&lt;/code&gt; to speed them up.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-is-asyncio&quot;&gt;What is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asyncio&lt;/code&gt;?&lt;/h2&gt;
+&lt;p&gt;It is a Python library that uses the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;async/await&lt;/code&gt; syntax to make code run asynchronously.&lt;/p&gt;
+&lt;h2 id=&quot;what-does-it-mean-to-run-asynchronously&quot;&gt;What does it mean to run asynchronously?&lt;/h2&gt;
+&lt;h3 id=&quot;synchronous-normal-vs-asynchronous-using-asyncio&quot;&gt;Synchronous (normal) vs. Asynchronous (using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asyncio&lt;/code&gt;)&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Synchronous:&lt;/strong&gt; you must wait for the completion of the first task before starting another task.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Asynchronous:&lt;/strong&gt; you can start another task before the completion of the first task.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/synchronous.png&quot; alt=&quot;&quot; /&gt;
+&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/asynchronous.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;For more information on the distinction between concurrency, parallelism, threads, sync, and async, check out this &lt;a href=&quot;https://medium.com/swift-india/concurrency-parallelism-threads-processes-async-and-sync-related-39fd951bc61d&quot;&gt;Medium article&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;simple-analogies&quot;&gt;Simple analogies&lt;/h2&gt;
+&lt;h3 id=&quot;brick-and-mortar&quot;&gt;Brick and Mortar&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/brick-and-mortar.jpg&quot; width=&quot;500&quot; height=&quot;334&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Simon and Ash are building 5 walls of brick.&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;Simon builds one wall and waits for it to set before starting to build the next wall (synchronous).&lt;/li&gt;
+  &lt;li&gt;Ash, on the other hand, starts building the next wall before the first one sets (asynchronous).  &lt;br /&gt;&amp;lt;/br&amp;gt;
+Ash starts the next task whereas Simon &lt;strong&gt;waits&lt;/strong&gt;, so Ash (asynchronous) will finish faster.
+The lack of &lt;strong&gt;&lt;em&gt;waiting&lt;/em&gt;&lt;/strong&gt; is the key to why asynchronous programming provides a performance boost.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;A good coding use case would be when you have a lot of time-consuming requests lined up with the outputs independent of each other. request1 takes a while to finish running, so instead of waiting, you start request2, which doesn’t affect the output of request1.&lt;/p&gt;
+
+&lt;h3 id=&quot;laundry&quot;&gt;Laundry&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/laundry.jpg&quot; width=&quot;500&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Be wary that an asynchronous approach does not provide any performance boost when all the tasks are &lt;strong&gt;dependent&lt;/strong&gt; on each other. For example, if you are washing and drying clothes, you must wait for the clothes to finish washing first before drying them no matter what, because drying clothes is dependent on the output of the washing. There is no use in using an asynchronous approach, because the pipeline is just the same as a synchronous approach.&lt;/p&gt;
+
+&lt;p&gt;The coding equivalent of this laundry example is when the output of request1 is used as the input in the request2.&lt;/p&gt;
+
+&lt;p&gt;For a further look into when and when not to use asynchronous programming, check out this &lt;a href=&quot;https://stackify.com/when-to-use-asynchronous-programming/&quot;&gt;Stackify thread&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&quot;what-syntax-do-i-need-to-know&quot;&gt;What syntax do I need to know?&lt;/h2&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Syntax&lt;/th&gt;
+      &lt;th&gt;Description&lt;/th&gt;
+      &lt;th&gt;Example&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;async&lt;/td&gt;
+      &lt;td&gt;Used to indicate which methods are going to be run asynchronously &lt;br /&gt; &amp;lt;p&amp;gt;	 → These new methods are called &lt;strong&gt;coroutines&lt;/strong&gt;.&lt;/td&gt;
+      &lt;td&gt;&lt;img src=&quot;../site_files/connie_post_images/async.png&quot; width=&quot;651&quot; /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;await&lt;/td&gt;
+      &lt;td&gt;Used to run a coroutine once an asynchronous event loop has already started running &lt;br /&gt; → &lt;code&gt;await&lt;/code&gt; can only be used inside a coroutine &lt;br /&gt; → Coroutines must be called with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;await&lt;/code&gt;, otherwise there will be a &lt;code&gt;RuntimeWarning&lt;/code&gt; about enabling &lt;code&gt;tracemalloc&lt;/code&gt;. &lt;br /&gt;&amp;lt;/br&amp;gt;&lt;/td&gt;
+      &lt;td&gt;&lt;img src=&quot;../site_files/connie_post_images/await.png&quot; width=&quot;448&quot; /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;asyncio.run()&lt;/td&gt;
+      &lt;td&gt;Used to start running an asynchronous event loop from a normal program &lt;br /&gt; → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asyncio.run()&lt;/code&gt; cannot be called in a nested fashion. You have to use await instead. &lt;br /&gt; → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asyncio.run()&lt;/code&gt; cannot be used if you are running the Python file in a Jupyter Notebook because Jupyter Notebook already has a running asynchronous event loop. You have to use await. (More on this in the Running the Code section)&lt;/td&gt;
+      &lt;td&gt;&lt;img src=&quot;../site_files/connie_post_images/run.png&quot; width=&quot;622&quot; /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;asyncio.create_task()&lt;/td&gt;
+      &lt;td&gt;Used to schedule a coroutine execution &lt;br /&gt; → Does not need to be awaited &lt;br /&gt; → Allows you to line things up without actually running them first.&lt;/td&gt;
+      &lt;td&gt;&lt;img src=&quot;../site_files/connie_post_images/create_task.png&quot; width=&quot;822&quot; /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;asyncio.gather()&lt;/td&gt;
+      &lt;td&gt;Used to run the scheduled executions &lt;br /&gt; → Needs to be awaited &lt;br /&gt; → This is vital to the asynchronous program, because you let it know which is the next task it can pick up before finishing the previous one.&lt;/td&gt;
+      &lt;td&gt;&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/gather.png&quot; alt=&quot;&quot; /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;If you are thirsting for more in-depth knowledge on asyncio, check out these links:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://realpython.com/async-io-python/&quot;&gt;Async IO in Python: A Complete Walkthrough&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.python.org/3/library/asyncio.html&quot;&gt;asyncio: Python Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;But with that, let’s jump straight into the code.&lt;/p&gt;
+
+&lt;p&gt;Follow along with the Python file and Jupyter Notebook in this &lt;a href=&quot;https://github.com/nlmatics/asyncio-for-requests&quot;&gt;github repo&lt;/a&gt; that I developed for this post!&lt;/p&gt;
+
+&lt;h2 id=&quot;code&quot;&gt;Code&lt;/h2&gt;
+
+&lt;h3 id=&quot;preliminary&quot;&gt;Preliminary&lt;/h3&gt;
+
+&lt;p&gt;Get imports and generate the list of urls to get requests from. Here, I use &lt;a href=&quot;https://jsonplaceholder.typicode.com/&quot;&gt;this placeholder url&lt;/a&gt;. Don’t forget to do &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pip install -r requirements.txt&lt;/code&gt; in the terminal for all the modules that you don’t have. Normal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;requests&lt;/code&gt; cannot be awaited, so you will need to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;import requests_async&lt;/code&gt; to run the asynchronous code.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;import requests, requests_async, asyncio, time
+
+itr = 200
+tag = 'https://jsonplaceholder.typicode.com/todos/'
+urls = []
+for i in range(1, itr):
+    urls.append(tag + str(i))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;synchronous&quot;&gt;Synchronous&lt;/h3&gt;
+
+&lt;p&gt;This is what some typical Python code for requests would look like.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;def synchronous(urls):
+    for url in urls:
+        r = requests.get(url)
+        print(r.json())
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&quot;asynchronous&quot;&gt;Asynchronous&lt;/h3&gt;
+
+&lt;h4 id=&quot;incorrect-alteration&quot;&gt;Incorrect Alteration&lt;/h4&gt;
+&lt;p&gt;The following is an understandable but bad alteration to the synchronous code. The runtime for this is the same as the runtime for the synchronous method, because you have not created a list of tasks that the program knows it needs to execute together, thus you essentially still have synchronous code.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;async def asynchronous_fail(urls):
+    for url in urls:
+        r = await requests_async.get(url)
+        print(r.json())
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h4 id=&quot;correct-alteration&quot;&gt;Correct Alteration&lt;/h4&gt;
+&lt;p&gt;Create a list of tasks, and run all of them together using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asyncio.gather()&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;async def asynchronous(urls):
+    tasks = []
+    for url in urls:
+        task = asyncio.create_task(requests_async.get(url))
+        tasks.append(task)
+    responses = await asyncio.gather(*tasks)
+    for response in responses:
+        print(response.json())
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;running-the-code&quot;&gt;Running the Code&lt;/h2&gt;
+
+&lt;h3 id=&quot;python&quot;&gt;Python&lt;/h3&gt;
+&lt;p&gt;Simply add these three lines to the bottom of your Python file and run it.&lt;/p&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;starttime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;asyncio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asynchronous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;starttime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;If you try to run this same code in Jupyter Notebook, you will get this error:&lt;/p&gt;
+
+&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;RuntimeError: asyncio.run&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; cannot be called from a running event loop
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;This happens because Jupyter is already running an event loop. More info &lt;a href=&quot;https://stackoverflow.com/questions/55409641/asyncio-run-cannot-be-called-from-a-running-event-loop&quot;&gt;here&lt;/a&gt;. You need to use the following:&lt;/p&gt;
+
+&lt;h3 id=&quot;jupyter-notebook&quot;&gt;Jupyter Notebook&lt;/h3&gt;
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;starttime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asynchronous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;starttime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;ordering&quot;&gt;Ordering&lt;/h2&gt;
+
+&lt;p&gt;Asynchronous running can cause your responses to be out of order. If this is an issue, create your own responses list and fill it up, rather than receiving the output from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asyncio.gather()&lt;/code&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;async def asynchronous_ordered(urls):
+    responses = [None] * len(urls) # create own responses list
+    tasks = []
+    for i in range(len(urls)):
+        url = urls[i]
+        task = asyncio.create_task(fetch(url, responses, i))
+        tasks.append(task)
+    await asyncio.gather(*tasks) # responses is not set to equal this
+    for response in responses:
+        print(response.json())
+
+async def fetch(url, responses, i):
+    response = await requests.get(url)
+    responses[i] = response # fill up responses list
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;batching&quot;&gt;Batching&lt;/h2&gt;
+
+&lt;p&gt;Sometimes running too many requests concurrently can cause timeout errors in your resource. This is when you need to create tasks in batches and gather them separately to avoid the issue. Find the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;batch_size&lt;/code&gt; that best fits your code by experimenting with a smaller portion of requests. Requests that take longer to process (long server delay) are more likely to cause errors than others. In my own experience with NLMatic’s engine, MongoDB had timeout errors whenever I ran batches of size greater than 10.&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;asynchronous_ordered_batched&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;batch_size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;responses&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;kiterations&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;batch_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kiterations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;tasks&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;batch_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;batch_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;task&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asyncio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create_task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;responses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;tasks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asyncio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gather&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tasks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;responses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;runtime-results&quot;&gt;Runtime Results&lt;/h2&gt;
+
+&lt;p&gt;|&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/table.png&quot; width=&quot;500&quot; /&gt;|&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/chart.png&quot; width=&quot;500&quot; /&gt;|
+|—|—|&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronous&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_fail&lt;/code&gt; have similar runtimes because the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_fail&lt;/code&gt; method was not implemented correctly and is in reality synchronous code.
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_ordered&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_ordered_batched&lt;/code&gt; have noticeably better runtimes in comparison to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronous&lt;/code&gt; - up to 4 times as fast.&lt;/p&gt;
+
+&lt;p&gt;In general, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_ordered_batched&lt;/code&gt; gives fast and stable code, so use that if you are going for consistency. However, the runtimes of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_ordered&lt;/code&gt; can sometimes be better than &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_ordered_batched&lt;/code&gt;, depending on your database and servers. So, I recommend using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous&lt;/code&gt; first and then adding extra things (order and batch) as necessary.&lt;/p&gt;
+
+&lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;As you have seen, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asyncio&lt;/code&gt; is a helpful tool that can greatly boost your runtime if you are running a lot of independent API requests. It’s also very easy to implement when compared to threading, so definitely try it out. Of course, make sure that your requests are independent.&lt;/p&gt;
+
+&lt;p&gt;Now I must conclude by saying that using asyncio improperly implemented can cause many bugs, so sometimes it is not worth the hassle. If you really must, use my guide and use it  s p a r i n g l y.&lt;/p&gt;
+
+&lt;p&gt;And that’s a wrap!&lt;/p&gt;
+
+&lt;h2 id=&quot;resources&quot;&gt;Resources&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://medium.com/swift-india/concurrency-parallelism-threads-processes-async-and-sync-related-39fd951bc61d&quot;&gt;Concurrency, parallelism, threads, sync, and async&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://stackify.com/when-to-use-asynchronous-programming/&quot;&gt;When/when not to use asynchronous programming&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://realpython.com/async-io-python/&quot;&gt;Async IO in Python: A Complete Walkthrough&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://docs.python.org/3/library/asyncio.html&quot;&gt;asyncio: Python Documentation&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Connie Xu</name><email>rob@sor.com</email></author><summary type="html">by Connie Xu</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/Asynciothumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/Asynciothumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">SQUAD 2.0 and Google Natural Questions: A Comparison and Investigation into Model Performance</title><link href="http://localhost:4000/category-1/category-2/2020/08/06/SQUAD-2.0-and-Google-Natural-Questions-A-Comparison-and-Investigation-into-Model-Performance.html" rel="alternate" type="text/html" title="SQUAD 2.0 and Google Natural Questions: A Comparison and Investigation into Model Performance" /><published>2020-08-06T09:00:00-04:00</published><updated>2020-08-06T09:00:00-04:00</updated><id>http://localhost:4000/category-1/category-2/2020/08/06/SQUAD%202.0%20and%20Google%20Natural%20Questions-%20A%20Comparison%20and%20Investigation%20into%20Model%20Performance</id><content type="html" xml:base="http://localhost:4000/category-1/category-2/2020/08/06/SQUAD-2.0-and-Google-Natural-Questions-A-Comparison-and-Investigation-into-Model-Performance.html">&lt;h4 id=&quot;by-nick-greenspan&quot;&gt;by Nick Greenspan&lt;/h4&gt;
+
+&lt;p&gt;&lt;br /&gt; 
+&lt;strong&gt;&lt;em&gt;Nicholas Greenspan&lt;/em&gt;&lt;/strong&gt; lives in New York City and is a freshman at Rice University who is majoring in computer science. Nicholas is interested in Machine Learning, Natural Language Processing, and their applications to various fields. Nicholas recently worked at the UTHealth School of Biomedical Informatics working on a Natural Language Processing project to help doctors find relevant treatments for their patients, and is excited to work on more interesting and meaningful problems at NLMatics. Outside of CS, Nicholas likes to read, play ice hockey, and listen to many genres of music including indie rock and electronic. Nicholas was one of NLMatics’ 2020 summer interns
+&lt;br /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h1 align=&quot;center&quot;&gt; SQUAD 2.0 and Google Natural Questions: &lt;/h1&gt;
+&lt;h2 align=&quot;center&quot;&gt; A Comparison and Investigation into Model Performance &lt;/h2&gt;
 
 &lt;h2 id=&quot;intro&quot;&gt;Intro&lt;/h2&gt;
 
@@ -9,11 +1131,11 @@
 
 &lt;h2 id=&quot;overviews-from-the-dataset-websites&quot;&gt;Overviews from the Dataset Websites&lt;/h2&gt;
 
-&lt;p&gt;&lt;img src=&quot;/site_files/nick_post/squad_image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/nick_post/squad_image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://rajpurkar.github.io/SQuAD-explorer/&quot;&gt;SQuAD 2.0&lt;/a&gt;: “SQuAD is a reading comprehension dataset, consisting of questions posed by crowdworkers on a set of Wikipedia articles, where the answer to every question is a segment of text, or span, from the corresponding reading passage, or the question might be unanswerable.”&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;/site_files/nick_post/nq_image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/nick_post/nq_image.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://ai.google.com/research/NaturalQuestions&quot;&gt;Google Natural Questions&lt;/a&gt;: “The NQ corpus contains questions from real users, and it requires QA systems to read and comprehend an entire Wikipedia article that may or may not contain the answer to the question.”&lt;/p&gt;
 
@@ -215,646 +1337,18 @@ The fact that question distribution is much more balanced for Google Natural Que
 &lt;p&gt;&lt;a href=&quot;https://rajpurkar.github.io/SQuAD-explorer/&quot;&gt;SQuAD Website&lt;/a&gt;\
 &lt;a href=&quot;https://ai.google.com/research/NaturalQuestions&quot;&gt;SQuAD Paper&lt;/a&gt;\
 &lt;a href=&quot;https://arxiv.org/pdf/1806.03822.pdf&quot;&gt;Google Natural Questions Website&lt;/a&gt;\
-&lt;a href=&quot;https://storage.googleapis.com/pub-tools-public-publication-data/pdf/1f7b46b5378d757553d3e92ead36bda2e4254244.pdf&quot;&gt;Google Natural Questions Paper&lt;/a&gt;&lt;/p&gt;</content><author><name></name></author><summary type="html">SQUAD 2.0 and Google Natural Questions: A Comparison and Investigation into Model Performance</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/SIFthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/SIFthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Smooth Inverse Frequency Frequency (SIF) Embeddings in Golang</title><link href="http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth-Inverse-Frequency-Frequency-(SIF)-Embeddings-in-Golang.html" rel="alternate" type="text/html" title="Smooth Inverse Frequency Frequency (SIF) Embeddings in Golang" /><published>2020-08-07T05:45:00-04:00</published><updated>2020-08-07T05:45:00-04:00</updated><id>http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth%20Inverse%20Frequency%20Frequency%20(SIF)%20Embeddings%20in%20Golang</id><content type="html" xml:base="http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth-Inverse-Frequency-Frequency-(SIF)-Embeddings-in-Golang.html">&lt;p&gt;&lt;strong&gt;Smooth Inverse Frequency (SIF) Embeddings in Golang&lt;/strong&gt;&lt;/p&gt;
+&lt;a href=&quot;https://storage.googleapis.com/pub-tools-public-publication-data/pdf/1f7b46b5378d757553d3e92ead36bda2e4254244.pdf&quot;&gt;Google Natural Questions Paper&lt;/a&gt;&lt;/p&gt;</content><author><name>Nick Greenspan</name></author><summary type="html">by Nick Greenspan</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/squadthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/squadthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">A Comprehensive Guide to Training a Machine Learning Model for Question Answering</title><link href="http://localhost:4000/category-1/category-2/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html" rel="alternate" type="text/html" title="A Comprehensive Guide to Training a Machine Learning Model for Question Answering" /><published>2020-08-06T06:30:00-04:00</published><updated>2020-08-06T06:30:00-04:00</updated><id>http://localhost:4000/category-1/category-2/2020/08/06/A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_</id><content type="html" xml:base="http://localhost:4000/category-1/category-2/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html">&lt;h4 id=&quot;by-batya-stein--nicholas-greenspan&quot;&gt;by Batya Stein &amp;amp; Nicholas Greenspan&lt;/h4&gt;
 
-&lt;p&gt;Daniel Ye&lt;/p&gt;
+&lt;p&gt;&lt;br /&gt; 
+&lt;strong&gt;&lt;em&gt;Batya Stein&lt;/em&gt;&lt;/strong&gt; is a rising junior at Princeton University studying Computer Science and English Literature. Her research interests include Natural Language Processing and Software Engineering and Design. Previously, she has interned at a non-profit, designing a project to interface between its CRM softwares. When not coding, she enjoys drawing, swimming, and reading fiction. Batya was one of NLMatics’ 2020 summer interns. 
+&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;
+&lt;b&gt;Nicholas Greenspan&lt;/b&gt; lives in New York City and is a freshman at Rice University who is majoring in computer science. Nicholas is interested in Machine Learning, Natural Language Processing, and their applications to various fields. Nicholas recently worked at the UTHealth School of Biomedical Informatics working on a Natural Language Processing project to help doctors find relevant treatments for their patients, and is excited to work on more interesting and meaningful problems at NLMatics. Outside of CS, Nicholas likes to read, play ice hockey, and listen to many genres of music including indie rock and electronic. Nicholas was one of NLMatics’ 2020 summer interns.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;Table of Contents&lt;/strong&gt;&lt;/p&gt;
+&lt;hr /&gt;
 
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;#bookmark=id.uv0gxlx5wixm&quot;&gt;Introduction &lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;#bookmark=id.pcgyzkz8chfm&quot;&gt;Motivation&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;#bookmark=id.vij0hbt6t1id&quot;&gt;Why GoLang?&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;#bookmark=id.mmsg2fvvb5zz&quot;&gt;GRPC Improvements&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;#bookmark=id.i0zeii5wg08t&quot;&gt;Post-Processing Improvements&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;#bookmark=id.aol4ijt37be&quot;&gt;Productionalizing With Docker&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;#bookmark=id.ouhqmef3a5d5&quot;&gt;Conclusion&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;**1. Introduction **&lt;/p&gt;
-
-&lt;p&gt;I am a rising junior majoring in computer science and minoring in operations research and information engineering at Cornell Engineering. This summer, I interned at NLMatics, and one of the projects I worked on was implementing a &lt;a href=&quot;https://openreview.net/pdf?id=SyK00v5xx#page=12&amp;amp;zoom=100,110,217&quot;&gt;Smooth Inverse Frequency&lt;/a&gt; model using Golang. This is able to calculate sentence embeddings from sequences of words in the form of vectors, which mathematically represent the meaning of the sentence. We use it to encode documents and queries into embeddings which are then processed further using other natural language processing models to get search results. However, our original Python implementation was fairly slow at calculating these embeddings, and it scaled poorly with increasing document sizes or concurrent requests, so we needed to find a way to speed up the service.&lt;/p&gt;
-
-&lt;p&gt;Over the course of about four weeks, I worked on combating this issue by developing a Golang implementation of the model and switching from HTTP 1.0 protocol to gRPC protocol for the server. This increased the amount of concurrent processing we were able to utilize, and reduced overhead for connecting and sending requests to the server, speeding up the service greatly. Ultimately, I was able to build a system that generated more accurate sentence embeddings at much faster speeds.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;2. Motivation&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Word embeddings are one of the most important developments in the field of modern Natural Language Processing. Translating the meaning behind words and the semantic relationships between them into measurable quantities is a crucial step in processing language. Many words, such as “cat” and “dog” or “Mozart” and “Beethoven” have almost no physical characteristics that would reveal their similarities. Instead, modern algorithms like Google’s &lt;a href=&quot;https://arxiv.org/abs/1301.3781&quot;&gt;Word2Vec&lt;/a&gt; developed in 2013 or Stanford’s &lt;a href=&quot;https://nlp.stanford.edu/pubs/glove.pdf&quot;&gt;GloVe&lt;/a&gt; essentially count the cooccurrences of words with other words, and condense these values into dense, relatively low-dimensional vectors. Their models train on massive corpora of English text such as all of Wikipedia, and embed words as vectors based on which other words they appear in proximity to. So, if “cat” and “dog” are found together in many sentences or documents, they will have very similar vector values. This method is able to capture not only semantic similarity, but also analogies (woman is to man as king is to __) and the effects of prefixes or suffixes.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;image_0.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;semantic relationships represented by Word2Vec and GloVe&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;A natural next step in the field was the development of sentence embeddings, or being able to extract meaning from a sequence of words. Early methods include:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Tf%E2%80%93idf&quot;&gt;TF-ID**F&lt;/a&gt;&lt;/strong&gt; **&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;**&lt;a href=&quot;https://arxiv.org/pdf/1511.08198.pdf&quot;&gt;Paragram Phrase (PP**)&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;**&lt;a href=&quot;https://en.wikipedia.org/wiki/Recurrent_neural_network&quot;&gt;Recurrent Neural Network (RNN**)&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;**&lt;a href=&quot;https://arxiv.org/pdf/1503.00075.pdf&quot;&gt;Long Short-Term Memory Networks (LSTM**)&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;**&lt;a href=&quot;https://people.cs.umass.edu/~miyyer/pubs/2015_acl_dan.pdf&quot;&gt;Deep Averaging Network (DAN**)&lt;/a&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;In 2017, Arora et. al proposed SIF, or &lt;a href=&quot;https://openreview.net/pdf?id=SyK00v5xx#page=12&amp;amp;zoom=100,110,217&quot;&gt;Smooth Inverse Frequency&lt;/a&gt;, a weighting scheme to improve performance of sentence embeddings. When encoding a sentence, it is important to identify which words in the sentence are more significant. For example, if calculating the embedding of the sentence “who was Mozart?” the word “was” doesn’t add much meaning; looking for sentences or documents relating to the word “was” will not yield any useful results for the original question. It’s clear that “Mozart” holds the most meaning in the question from a human standpoint, but how do you program a machine to identify that? SIF operates under the assumption that the most important words tend to also be used less frequently. If you counted all the words in Wikipedia, the word “was” would most likely appear much more frequently than in “Mozart”. Weights of a word &lt;em&gt;w&lt;/em&gt; are computed by &lt;em&gt;a/(a + p(w))&lt;/em&gt; where a is a parameter and p(w) is the word frequency of w, which can be estimated by scraping a large corpus.* &lt;em&gt;The hyperparameter *a&lt;/em&gt; adjusts which words are quantitatively “common” and “uncommon.” Here is the formal algorithm:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;image_1.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Arora et. al found that despite its simplicity, SIF worked surprisingly well on semantic text similarity (STS), entailment, and sentiment tasks. STS tasks involve scoring pairs of sentences from 0-5 based on how similar their meanings are, which are then checked against a golden standard of human generated scores. For example, “The bird is bathing in the sink” and “Birdie is washing itself in the water basin” should receive a 5. Entailment tasks involve identifying if one sentence &lt;em&gt;entails&lt;/em&gt; that another one is true. For example, if you read the sentence “There is a soccer game with multiple males playing,” you could infer that the sentence “Several men are playing a sport” is true. Thus the first sentence, commonly referred to as the &lt;em&gt;text&lt;/em&gt; entails the following, also known as the &lt;em&gt;hypothesis&lt;/em&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;image_2.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;img src=&quot;image_3.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Tables detailing SIF performance on various semantic tasks. “GloVe + WR”, “PSL + WR”, and “Ours” correspond to SIF systems.&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;Due to its effectiveness and simplicity, SIF is an incredibly practical method of embedding sentences for commercial or enterprise products that rely on both accurate and fast results while consuming low amounts of resources.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;2. Why Golang?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;The &lt;a href=&quot;https://github.com/PrincetonML/SIF&quot;&gt;original code&lt;/a&gt; corresponding to the paper describing SIF is implemented in Python, which by design has a &lt;a href=&quot;https://wiki.python.org/moin/GlobalInterpreterLock&quot;&gt;Global Interpreter Lock (GIL)&lt;/a&gt;, a mutex that prevents multi threaded processes from utilizing multiple cores of a processor. We hosted our Cython implementation of the SIF embedding model on a cloud service, which provided us with multiple cores of processing power. However, the GIL meant that we could not make use of the full processing power we were paying for.&lt;/p&gt;
-
-&lt;p&gt;GoLang however, has no such restrictions and also provides built-in structures for concurrency through the form of Goroutines, a form of very lightweight threads.  They are organized by channels, which allow goroutines to either block on awaiting input or signal that they have completed.&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;tr&gt;
-    &lt;td&gt;func main() {
-    jobs := make(chan int, 100)
-    results := make(chan int, 100)
-    for i := 0; i &amp;lt; 4; i++ {
-        go worker(jobs, results)
-    }
-    for i := 0; i &amp;lt; 100; i++ {
-        jobs &amp;lt;- i
-    }
-    close(jobs)
-    for j := 0; j &amp;lt; 100; j++ {
-        fmt.Println(&amp;lt;-results)
-    }
-}
-func worker(jobs &amp;lt;-chan int, results chan&amp;lt;- int) {
-    for n := range jobs {
-        results &amp;lt;- fib(n)
-    }
-}
-
-func fib(n int) int {
-    if n &amp;lt;= 1 {
-        return n
-    }
-    return fib(n-1) + fib(n-2)
-}&lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
-
-&lt;p&gt;&lt;em&gt;Basic architecture of a worker pool using goroutines&lt;/em&gt;&lt;/p&gt;
-
-&lt;p&gt;It is important to note that this structure does not enforce the order in which workers complete their jobs or the order in which their results are sent to the results channel. Executing this code won’t necessarily return the fibonacci numbers in their correct order.&lt;/p&gt;
-
-&lt;p&gt;Our API allowed for clients to send multiple sentences at a time to be encoded by the SIF, often many at a time, and implementing the SIF in Golang allowed us to leverage powerful concurrency to speed up our calculations. My first iteration of the SIF server used &lt;a href=&quot;https://golang.org/pkg/net/http/&quot;&gt;Golang’s http package&lt;/a&gt; to host the model on an HTTP 1.0 server. I compared it with  our old system, as well as the original Python implementation. I used three different independent variables to benchmark how the performance scaled up: total words per ‘sentence’ to be embedded, total number of calls with fixed number of concurrent requests, and number of concurrent requests with fixed total number of calls. These benchmarks were made using &lt;a href=&quot;https://httpd.apache.org/docs/2.4/programs/ab.html&quot;&gt;Apache Benchmark&lt;/a&gt;, a software that allows you to make many concurrent requests to a server and reports significant timing data.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;image_4.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;image_5.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;image_6.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The results were impressive, to say the least. At a sentence level, around 10-100 words, the new implementation outperforms the old by up to &lt;strong&gt;30x&lt;/strong&gt; and at a document level, around 1000-10000+ words, it is still &lt;strong&gt;10x&lt;/strong&gt;** **faster in almost every scenario. The improved speed for sentence level embeddings is really useful, since it means that we can embed at lower levels of granularity much more easily. For example, if you were searching “who was Mozart” and only had embeddings for each document, your system might flag a document about Joseph Haydn, friend and mentor of Mozart, as relevant. As you descend levels of granularity of embeddings however, you can much more easily locate relevant information about your query. Perhaps it allows you to find a paragraph detailing their time in Vienna together, or a specific sentence about the pieces of music they worked on together.&lt;/p&gt;
-
-&lt;p&gt;I found that Go works incredibly well for creating a web service capable of handling many concurrent requests efficiently. However, Go’s build in functionality does have a significant limitation of restricting HTTP requests to sizes of 1MB or less, which was not ideal for our use cases where we had to embed large amounts of text in a single request. For example, a legal company looking to process Google’s 2019 environmental and sustainability report would need about 11 MB of payload. Or a stressed-out undergraduate trying to find tips in &lt;em&gt;Cracking the Coding Interview&lt;/em&gt; would require around 90 MB of allowance. Additionally, every HTTP request requires a new connection to be made between the server and client, which adds a significant amount of overhead to our typical use case which often requires embedding many documents at once and sending many requests.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;3. GRPC Improvements&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Developed by Google, gRPC is an open source Remote Procedure Call framework and is what I turned to in order to hopefully remove the size limit and connection overhead problems with Go’s http package. gRPC processes payloads from requests using buffers, so it removes the 1MB size cap on requests. It also maintains connections between individual clients, so a single user can make multiple requests without having to create a connection more than once. It has its own Interface Definition Language called protocol buffers that also serve as a mechanism for serializing structured data and uses HTTP/2 to transport data. gRPC services are defined in .proto files:&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;tr&gt;
-    &lt;td&gt;syntax = &quot;proto3&quot;
-option go_package = “greeter”
-package main
-// The greeter service definition.
-service Greeter {
-  // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply) {}
-}
-
-// The request message containing the user's name.
-message HelloRequest {
-  string name = 1;
-}
-
-// The response message containing the greetings
-message HelloReply {
-  string message = 1;
-}
-&lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
-
-&lt;p&gt;You can then use the protoc command to compile your service into any of &lt;a href=&quot;https://grpc.io/docs/languages/&quot;&gt;gRPC’s supported languages&lt;/a&gt;.&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;tr&gt;
-    &lt;td&gt;// Code generated by protoc-gen-go. DO NOT EDIT.
-// versions:
-//  protoc-gen-go v1.23.0
-//  protoc        v3.6.1
-// source: greeter.proto
-
-package greeter
-
-import (
-    proto &quot;github.com/golang/protobuf/proto&quot;
-    protoreflect &quot;google.golang.org/protobuf/reflect/protoreflect&quot;
-    protoimpl &quot;google.golang.org/protobuf/runtime/protoimpl&quot;
-    reflect &quot;reflect&quot;
-    sync &quot;sync&quot;
-)
-
-const (
-    // Verify that this generated code is sufficiently up-to-date.
-    _ = protoimpl.EnforceVersion(20 - protoimpl.MinVersion)
-    // Verify that runtime/protoimpl is sufficiently up-to-date.
-    _ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
-)
-
-// This is a compile-time assertion that a sufficiently up-to-date version
-// of the legacy proto package is being used.
-const _ = proto.ProtoPackageIsVersion4
-
-// The request message containing the user's name.
-type HelloRequest struct {
-    state         protoimpl.MessageState
-    sizeCache     protoimpl.SizeCache
-    unknownFields protoimpl.UnknownFields
-
-    Name string `protobuf:&quot;bytes,1,opt,name=name,proto3&quot; json:&quot;name,omitempty&quot;`
-}
-//... excess code has been left out&lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Due to how gRPC buffers data being received and sent, we no longer had to worry about size limits on requests to our server. gRPC servers also have a very helpful feature in that connections between client and server are maintained across multiple requests, whereas with HTTP requests, a new connection has to be established for every POST. As a result, I saw more improvements in performance as this overhead was removed from the new system:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;image_7.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The largest improvements are seen when requests have very small payloads, so the majority of time is spent on overhead from connecting to the server. However, once you get to larger payloads, the times converge to become about equal.&lt;/p&gt;
-
-&lt;p&gt;**4. Post-Processing Improvements **&lt;/p&gt;
-
-&lt;p&gt;A coworker sent me this &lt;a href=&quot;https://arxiv.org/pdf/1702.01417.pdf&quot;&gt;paper about post-processing word vectors&lt;/a&gt; in order to improve their representation of meaning. The algorithm essentially takes a list of pre-computed word vectors and performs principal component analysis on them, and then removes the top N components from every vector via Gram-Schmidt. Here is their formal algorithm:&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;image_8.png&quot; alt=&quot;image alt text&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Python’s Numpy and sklearn packages have all the built-in tools needed to implement this algorithm, which you can find the code for &lt;a href=&quot;https://github.com/daniel-ye137/WordVectorProcessing&quot;&gt;here&lt;/a&gt;:&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;tr&gt;
-    &lt;td&gt;import numpy as np
-from sklearn.decomposition import PCA
-import argparse
-
-
-parser = argparse.ArgumentParser(description='postprocess word embeddings')
-parser.add_argument(&quot;file&quot;, help=&quot;file containing embeddings to be processed&quot;)
-args = parser.parse_args()
-N = 2
-embedding_file = args.file
-embs = []
-
-#map indexes of word vectors in matrix to their corresponding words
-idx_to_word = dict()
-dimension = 0
-#append each vector to a 2-D matrix and calculate average vector
-with open(embedding_file, 'rb') as f:
-    first_line = []
-    for line in f: 
-        first_line = line.rstrip().split()
-        dimension = len(first_line) - 1
-        if dimension &amp;lt; 100 :
-            continue
-        print(&quot;dimension: &quot;, dimension)
-        
-        break
-    avg_vec = [0] * dimension
-    vocab_size = 0
-    word = str(first_line[0].decode(&quot;utf-8&quot;))
-    word = word.split(&quot;_&quot;)[0]
-    # print(word)
-    idx_to_word[vocab_size] = word
-    vec = [float(x) for x in first_line[1:]]
-    avg_vec = [vec[i] + avg_vec[i] for i in range(len(vec))]
-    vocab_size += 1
-    embs.append(vec)
-    for line in f:
-        line = line.rstrip().split()
-        word = str(line[0].decode(&quot;utf-8&quot;))
-        word = word.split(&quot;_&quot;)[0]
-        idx_to_word[vocab_size] = word
-        vec = [float(x) for x in line[1:]]
-        avg_vec = [vec[i] + avg_vec[i] for i in range(len(vec))]
-        vocab_size += 1
-        embs.append(vec)
-    avg_vec = [x / vocab_size for x in avg_vec]
-# convert to numpy array
-embs = np.array(embs)
-
-#subtract average vector from each vector
-for i in range(len(embs)):
-    new_vec = [embs[i][j] - avg_vec[j] for j in range(len(avg_vec))]
-    embs[i] = np.array(new_vec)
-
-#principal component analysis using sklearn
-pca = PCA()
-pca.fit(embs)
-
-#remove the top N components from each vector
-for i in range(len(embs)):
-    preprocess_sum = [0] * dimension
-    for j in range(N):
-        princip = np.array(pca.components_[j])
-        preprocess = princip.dot(embs[i])
-        preprocess_vec = [princip[k] * preprocess for k in range(len(princip))]
-        preprocess_sum = [preprocess_sum[k] + preprocess_vec[k] for k in range(len(preprocess_sum))]
-    embs[i] = np.array([embs[i][j] - preprocess_sum[j] for j in range(len(preprocess_sum))])
-
-file = open(&quot;postprocessed_embeddings.txt&quot;, &quot;w+&quot;, encoding=&quot;utf-8&quot;)
-
-#write back new word vector file
-idx = 0
-for vec in embs:
-    file.write(idx_to_word[idx])
-    file.write(&quot; &quot;)
-    for num in vec:
-        file.write(str(num))
-        file.write(&quot; &quot;)
-    file.write(&quot;\n&quot;)
-    idx+=1
-file.close()
-
-print(&quot;Wrote: &quot;, len(embs), &quot;word embeddings&quot;)&lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Using the new word embedding file, I saw meaningful improvements in semantic similarity tasks, similar to the results they found in their paper:&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;tr&gt;
-    &lt;td&gt;Dataset&lt;/td&gt;
-    &lt;td&gt;k&lt;/td&gt;
-    &lt;td&gt;Original&lt;/td&gt;
-    &lt;td&gt;Post-Processed Vectors&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;MSR Paraphrase&lt;/td&gt;
-    &lt;td&gt;k = 1&lt;/td&gt;
-    &lt;td&gt;76.43&lt;/td&gt;
-    &lt;td&gt;78.34&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;MS MARCO, 10000&lt;/td&gt;
-    &lt;td&gt;k = 1&lt;/td&gt;
-    &lt;td&gt;18.2002&lt;/td&gt;
-    &lt;td&gt;20.4&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;MSR Paraphrase&lt;/td&gt;
-    &lt;td&gt;k = 3&lt;/td&gt;
-    &lt;td&gt;87.122&lt;/td&gt;
-    &lt;td&gt;88.84&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;MS MARCO, 10000&lt;/td&gt;
-    &lt;td&gt;k = 3&lt;/td&gt;
-    &lt;td&gt;26.915&lt;/td&gt;
-    &lt;td&gt;29.37&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;MSR Paraphrase&lt;/td&gt;
-    &lt;td&gt;k = 5&lt;/td&gt;
-    &lt;td&gt;89.37944567&lt;/td&gt;
-    &lt;td&gt;90.92&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;MS MARCO, 10000&lt;/td&gt;
-    &lt;td&gt;k = 5&lt;/td&gt;
-    &lt;td&gt;33.05634374&lt;/td&gt;
-    &lt;td&gt;36.2&lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
-
-&lt;p&gt;I benchmarked the system on semantic text similarities tests using  the MSR Paraphrase dataset, as well as the first 10000 entries of the MS MARCO dataset using p@k with k = 1, 3, and 5. These tasks involved identifying a sentence from a large pool of candidates as being semantically equivalent to another. p@k testing introduces some leeway into the testing, where the program chooses the top K candidates from the pool as potential matches instead of only getting one attempt at the correct answer. This kind of testing is more representative of a search engine, where you care not only about getting the single best result, but also a reasonable amount of relevant information.&lt;/p&gt;
-
-&lt;p&gt;The post-processed vectors outperformed the original in every case. I also benchmarked our system using a word frequency file generated by fellow intern Connie Xu using a June snapshot of all of Wikipedia. It had a far more comprehensive vocabulary than our current word frequency file, with over 50x as many entries, but performance results were inconclusive. The results do indicate, however, that post-processed word vectors also increase performance of sentence embedding systems.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;5. Productionalizing With Docker&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;After finishing the code for our new SIF, my final step was to prepare it for production, which meant an inevitable encounter with Docker. Here is my Dockerfile, which I got from &lt;a href=&quot;https://www.callicoder.com/docker-golang-image-container-example/&quot;&gt;this tutorial:&lt;/a&gt;&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;tr&gt;
-    &lt;td&gt;# Start from the latest golang base image
-FROM golang:latest
-
-# Add Maintainer Info
-LABEL maintainer=&quot;Daniel Ye &amp;lt;daniel.ye@nlmatics.com&amp;gt;&quot;
-
-# Set the Current Working Directory inside the container
-WORKDIR /app
-
-# Copy go mod and sum files
-COPY go.mod go.sum ./
-
-# Download all dependencies. Dependencies will be cached if the go.mod and go.sum files are not changed
-RUN go mod download
-
-# Copy the source from the current directory to the Working Directory inside the container
-COPY . .
-
-# Build the Go app
-RUN go build -o main .
-
-# Expose port 8080 to the outside world
-EXPOSE 8080
-
-# Command to run the executable
-CMD [&quot;./main&quot;]&lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Most components are fairly self-explanatory. It does require that you use Go modules to manage your dependencies, which you can read about &lt;a href=&quot;https://blog.golang.org/using-go-modules&quot;&gt;here&lt;/a&gt;. The steps I took to compile my code into a Docker image were as follows:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;Create a go mod file in the root directory of your Golang project using go mod init &lt;project name=&quot;&quot;&gt;. Your project name can be anything you want, it does not have to correspond to any file or package names, although it probably should.&lt;/project&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Populate your go mod file with dependencies using go build. This will automatically detect the packages used by your project, and write them to your go mod file&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Create a Dockerfile in the root directory of your project&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Build your image using docker build -t &lt;project name=&quot;&quot;&gt; . Include the period!&lt;/project&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;Run your project with docker run -d -p 8080:8080 &lt;project name=&quot;&quot;&gt;&lt;/project&gt;&lt;/p&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;strong&gt;6. Conclusion&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;Improving the SIF implementation was a really interesting project. There were a lot of fun challenges involved like solving the ordering of goroutines and dealing with concurrent writes to map. It was incredibly satisfying to run my own benchmarks and see quantitative improvements in performance go as high as 30x the original speed. Of course, more improvements can still be made. &lt;a href=&quot;https://arxiv.org/pdf/2005.09069.pdf&quot;&gt;This paper&lt;/a&gt; details how SIF embeddings of documents can be improved by producing and then combining topic vectors. Other models for embedding sentences such as &lt;a href=&quot;https://arxiv.org/pdf/1803.11175.pdf&quot;&gt;Universal Sentence Encoder&lt;/a&gt; or &lt;a href=&quot;https://arxiv.org/pdf/1908.10084.pdf&quot;&gt;Sentence-BERT&lt;/a&gt; have been developed in recent years as well and are able to outperform SIF in certain categories of NLP tasks.&lt;/p&gt;</content><author><name>Daniel Ye</name></author><summary type="html">Smooth Inverse Frequency (SIF) Embeddings in Golang</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/SIFthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/SIFthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Speed up requests: Asyncio for Requests in Python</title><link href="http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html" rel="alternate" type="text/html" title="Speed up requests: Asyncio for Requests in Python" /><published>2020-08-06T20:00:00-04:00</published><updated>2020-08-06T20:00:00-04:00</updated><id>http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed%20up%20requests%20-%20Asyncio%20for%20Requests%20in%20Python</id><content type="html" xml:base="http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html">&lt;h1 id=&quot;speed-up-requests-asyncio-for-requests-in-python&quot;&gt;Speed up requests: Asyncio for Requests in Python&lt;/h1&gt;
-
-&lt;h4 id=&quot;dont-be-like-this&quot;&gt;Don’t be like this.&lt;/h4&gt;
-&lt;p&gt;&lt;img src=&quot;https://memegenerator.net/img/instances/78137468/my-code-cant-run-slow-if-i-never-write-it.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;As you have probably already noticed because you decided to visit this page, requests can take forever to run, so here’s a nice blog written while I was an intern at NLMatics to show you how to use &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asyncio&lt;/code&gt; to speed them up.&lt;/p&gt;
-
-&lt;h2 id=&quot;what-is-asyncio&quot;&gt;What is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asyncio&lt;/code&gt;?&lt;/h2&gt;
-&lt;p&gt;It is a Python library that uses the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;async/await&lt;/code&gt; syntax to make code run asynchronously.&lt;/p&gt;
-&lt;h2 id=&quot;what-does-it-mean-to-run-asynchronously&quot;&gt;What does it mean to run asynchronously?&lt;/h2&gt;
-&lt;h3 id=&quot;synchronous-normal-vs-asynchronous-using-asyncio&quot;&gt;Synchronous (normal) vs. Asynchronous (using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asyncio&lt;/code&gt;)&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;Synchronous:&lt;/strong&gt; you must wait for the completion of the first task before starting another task.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Asynchronous:&lt;/strong&gt; you can start another task before the completion of the first task.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;&lt;img src=&quot;../site_files/connie_post_images/synchronous.png&quot; alt=&quot;&quot; /&gt;
-&lt;img src=&quot;../site_files/connie_post_images/asynchronous.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;For more information on the distinction between concurrency, parallelism, threads, sync, and async, check out this &lt;a href=&quot;https://medium.com/swift-india/concurrency-parallelism-threads-processes-async-and-sync-related-39fd951bc61d&quot;&gt;Medium article&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;simple-analogies&quot;&gt;Simple analogies&lt;/h2&gt;
-&lt;h3 id=&quot;brick-and-mortar&quot;&gt;Brick and Mortar&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&quot;../site_files/connie_post_images/brick-and-mortar.jpg&quot; width=&quot;500&quot; height=&quot;334&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Simon and Ash are building 5 walls of brick.&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Simon builds one wall and waits for it to set before starting to build the next wall (synchronous).&lt;/li&gt;
-  &lt;li&gt;Ash, on the other hand, starts building the next wall before the first one sets (asynchronous).  &lt;br /&gt;&amp;lt;/br&amp;gt;
-Ash starts the next task whereas Simon &lt;strong&gt;waits&lt;/strong&gt;, so Ash (asynchronous) will finish faster.
-The lack of &lt;strong&gt;&lt;em&gt;waiting&lt;/em&gt;&lt;/strong&gt; is the key to why asynchronous programming provides a performance boost.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;A good coding use case would be when you have a lot of time-consuming requests lined up with the outputs independent of each other. request1 takes a while to finish running, so instead of waiting, you start request2, which doesn’t affect the output of request1.&lt;/p&gt;
-
-&lt;h3 id=&quot;laundry&quot;&gt;Laundry&lt;/h3&gt;
-
-&lt;p&gt;&lt;img src=&quot;../site_files/connie_post_images/laundry.jpg&quot; width=&quot;500&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Be wary that an asynchronous approach does not provide any performance boost when all the tasks are &lt;strong&gt;dependent&lt;/strong&gt; on each other. For example, if you are washing and drying clothes, you must wait for the clothes to finish washing first before drying them no matter what, because drying clothes is dependent on the output of the washing. There is no use in using an asynchronous approach, because the pipeline is just the same as a synchronous approach.&lt;/p&gt;
-
-&lt;p&gt;The coding equivalent of this laundry example is when the output of request1 is used as the input in the request2.&lt;/p&gt;
-
-&lt;p&gt;For a further look into when and when not to use asynchronous programming, check out this &lt;a href=&quot;https://stackify.com/when-to-use-asynchronous-programming/&quot;&gt;Stackify thread&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&quot;what-syntax-do-i-need-to-know&quot;&gt;What syntax do I need to know?&lt;/h2&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;Syntax&lt;/th&gt;
-      &lt;th&gt;Description&lt;/th&gt;
-      &lt;th&gt;Example&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;async&lt;/td&gt;
-      &lt;td&gt;Used to indicate which methods are going to be run asynchronously &lt;br /&gt; &amp;lt;p&amp;gt;	 → These new methods are called &lt;strong&gt;coroutines&lt;/strong&gt;.&lt;/td&gt;
-      &lt;td&gt;&lt;img src=&quot;../site_files/connie_post_images/async.png&quot; width=&quot;651&quot; /&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;await&lt;/td&gt;
-      &lt;td&gt;Used to run a coroutine once an asynchronous event loop has already started running &lt;br /&gt; → &lt;code&gt;await&lt;/code&gt; can only be used inside a coroutine &lt;br /&gt; → Coroutines must be called with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;await&lt;/code&gt;, otherwise there will be a &lt;code&gt;RuntimeWarning&lt;/code&gt; about enabling &lt;code&gt;tracemalloc&lt;/code&gt;. &lt;br /&gt;&amp;lt;/br&amp;gt;&lt;/td&gt;
-      &lt;td&gt;&lt;img src=&quot;../site_files/connie_post_images/await.png&quot; width=&quot;448&quot; /&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;asyncio.run()&lt;/td&gt;
-      &lt;td&gt;Used to start running an asynchronous event loop from a normal program &lt;br /&gt; → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asyncio.run()&lt;/code&gt; cannot be called in a nested fashion. You have to use await instead. &lt;br /&gt; → &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asyncio.run()&lt;/code&gt; cannot be used if you are running the Python file in a Jupyter Notebook because Jupyter Notebook already has a running asynchronous event loop. You have to use await. (More on this in the Running the Code section)&lt;/td&gt;
-      &lt;td&gt;&lt;img src=&quot;../site_files/connie_post_images/run.png&quot; width=&quot;622&quot; /&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;asyncio.create_task()&lt;/td&gt;
-      &lt;td&gt;Used to schedule a coroutine execution &lt;br /&gt; → Does not need to be awaited &lt;br /&gt; → Allows you to line things up without actually running them first.&lt;/td&gt;
-      &lt;td&gt;&lt;img src=&quot;../site_files/connie_post_images/create_task.png&quot; width=&quot;822&quot; /&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;asyncio.gather()&lt;/td&gt;
-      &lt;td&gt;Used to run the scheduled executions &lt;br /&gt; → Needs to be awaited &lt;br /&gt; → This is vital to the asynchronous program, because you let it know which is the next task it can pick up before finishing the previous one.&lt;/td&gt;
-      &lt;td&gt;&lt;img src=&quot;../site_files/connie_post_images/gather.png&quot; alt=&quot;&quot; /&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;If you are thirsting for more in-depth knowledge on asyncio, check out these links:&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://realpython.com/async-io-python/&quot;&gt;Async IO in Python: A Complete Walkthrough&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docs.python.org/3/library/asyncio.html&quot;&gt;asyncio: Python Documentation&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;But with that, let’s jump straight into the code.&lt;/p&gt;
-
-&lt;p&gt;Follow along with the Python file and Jupyter Notebook in this &lt;a href=&quot;https://github.com/nlmatics/asyncio-for-requests&quot;&gt;github repo&lt;/a&gt; that I developed for this post!&lt;/p&gt;
-
-&lt;h2 id=&quot;code&quot;&gt;Code&lt;/h2&gt;
-
-&lt;h3 id=&quot;preliminary&quot;&gt;Preliminary&lt;/h3&gt;
-
-&lt;p&gt;Get imports and generate the list of urls to get requests from. Here, I use &lt;a href=&quot;https://jsonplaceholder.typicode.com/&quot;&gt;this placeholder url&lt;/a&gt;. Don’t forget to do &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pip install -r requirements.txt&lt;/code&gt; in the terminal for all the modules that you don’t have. Normal &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;requests&lt;/code&gt; cannot be awaited, so you will need to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;import requests_async&lt;/code&gt; to run the asynchronous code.&lt;/p&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;import requests, requests_async, asyncio, time
-
-itr = 200
-tag = 'https://jsonplaceholder.typicode.com/todos/'
-urls = []
-for i in range(1, itr):
-    urls.append(tag + str(i))
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&quot;synchronous&quot;&gt;Synchronous&lt;/h3&gt;
-
-&lt;p&gt;This is what some typical Python code for requests would look like.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;def synchronous(urls):
-    for url in urls:
-        r = requests.get(url)
-        print(r.json())
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h3 id=&quot;asynchronous&quot;&gt;Asynchronous&lt;/h3&gt;
-
-&lt;h4 id=&quot;incorrect-alteration&quot;&gt;Incorrect Alteration&lt;/h4&gt;
-&lt;p&gt;The following is an understandable but bad alteration to the synchronous code. The runtime for this is the same as the runtime for the synchronous method, because you have not created a list of tasks that the program knows it needs to execute together, thus you essentially still have synchronous code.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;async def asynchronous_fail(urls):
-    for url in urls:
-        r = await requests_async.get(url)
-        print(r.json())
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h4 id=&quot;correct-alteration&quot;&gt;Correct Alteration&lt;/h4&gt;
-&lt;p&gt;Create a list of tasks, and run all of them together using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asyncio.gather()&lt;/code&gt;.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;async def asynchronous(urls):
-    tasks = []
-    for url in urls:
-        task = asyncio.create_task(requests_async.get(url))
-        tasks.append(task)
-    responses = await asyncio.gather(*tasks)
-    for response in responses:
-        print(response.json())
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;running-the-code&quot;&gt;Running the Code&lt;/h2&gt;
-
-&lt;h3 id=&quot;python&quot;&gt;Python&lt;/h3&gt;
-&lt;p&gt;Simply add these three lines to the bottom of your Python file and run it.&lt;/p&gt;
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;starttime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;asyncio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asynchronous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;starttime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;If you try to run this same code in Jupyter Notebook, you will get this error:&lt;/p&gt;
-
-&lt;div class=&quot;language-sh highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;RuntimeError: asyncio.run&lt;span class=&quot;o&quot;&gt;()&lt;/span&gt; cannot be called from a running event loop
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;This happens because Jupyter is already running an event loop. More info &lt;a href=&quot;https://stackoverflow.com/questions/55409641/asyncio-run-cannot-be-called-from-a-running-event-loop&quot;&gt;here&lt;/a&gt;. You need to use the following:&lt;/p&gt;
-
-&lt;h3 id=&quot;jupyter-notebook&quot;&gt;Jupyter Notebook&lt;/h3&gt;
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;starttime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asynchronous&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;starttime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;ordering&quot;&gt;Ordering&lt;/h2&gt;
-
-&lt;p&gt;Asynchronous running can cause your responses to be out of order. If this is an issue, create your own responses list and fill it up, rather than receiving the output from &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asyncio.gather()&lt;/code&gt;.&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;async def asynchronous_ordered(urls):
-    responses = [None] * len(urls) # create own responses list
-    tasks = []
-    for i in range(len(urls)):
-        url = urls[i]
-        task = asyncio.create_task(fetch(url, responses, i))
-        tasks.append(task)
-    await asyncio.gather(*tasks) # responses is not set to equal this
-    for response in responses:
-        print(response.json())
-
-async def fetch(url, responses, i):
-    response = await requests.get(url)
-    responses[i] = response # fill up responses list
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;h2 id=&quot;batching&quot;&gt;Batching&lt;/h2&gt;
-
-&lt;p&gt;Sometimes running too many requests concurrently can cause timeout errors in your resource. This is when you need to create tasks in batches and gather them separately to avoid the issue. Find the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;batch_size&lt;/code&gt; that best fits your code by experimenting with a smaller portion of requests. Requests that take longer to process (long server delay) are more likely to cause errors than others. In my own experience with NLMatic’s engine, MongoDB had timeout errors whenever I ran batches of size greater than 10.&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;async&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;asynchronous_ordered_batched&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;batch_size&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;responses&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;kiterations&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;/&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;batch_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;kiterations&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;tasks&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;
-        &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;min&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;batch_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;len&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;range&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;k&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;batch_size&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urls&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;task&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asyncio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;create_task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fetch&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;responses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;tasks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;append&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;await&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asyncio&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;gather&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tasks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;response&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;responses&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;response&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;runtime-results&quot;&gt;Runtime Results&lt;/h2&gt;
-
-&lt;p&gt;|&lt;img src=&quot;../site_files/connie_post_images/table.png&quot; width=&quot;500&quot; /&gt;|&lt;img src=&quot;../site_files/connie_post_images/chart.png&quot; width=&quot;500&quot; /&gt;|
-|—|—|&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronous&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_fail&lt;/code&gt; have similar runtimes because the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_fail&lt;/code&gt; method was not implemented correctly and is in reality synchronous code.
-&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_ordered&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_ordered_batched&lt;/code&gt; have noticeably better runtimes in comparison to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronous&lt;/code&gt; - up to 4 times as fast.&lt;/p&gt;
-
-&lt;p&gt;In general, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_ordered_batched&lt;/code&gt; gives fast and stable code, so use that if you are going for consistency. However, the runtimes of &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_ordered&lt;/code&gt; can sometimes be better than &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_ordered_batched&lt;/code&gt;, depending on your database and servers. So, I recommend using &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous&lt;/code&gt; first and then adding extra things (order and batch) as necessary.&lt;/p&gt;
-
-&lt;h2 id=&quot;summary&quot;&gt;Summary&lt;/h2&gt;
-
-&lt;p&gt;As you have seen, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asyncio&lt;/code&gt; is a helpful tool that can greatly boost your runtime if you are running a lot of independent API requests. It’s also very easy to implement when compared to threading, so definitely try it out. Of course, make sure that your requests are independent.&lt;/p&gt;
-
-&lt;p&gt;Now I must conclude by saying that using asyncio improperly implemented can cause many bugs, so sometimes it is not worth the hassle. If you really must, use my guide and use it  s p a r i n g l y.&lt;/p&gt;
-
-&lt;p&gt;And that’s a wrap!&lt;/p&gt;
-
-&lt;h2 id=&quot;resources&quot;&gt;Resources&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;https://medium.com/swift-india/concurrency-parallelism-threads-processes-async-and-sync-related-39fd951bc61d&quot;&gt;Concurrency, parallelism, threads, sync, and async&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://stackify.com/when-to-use-asynchronous-programming/&quot;&gt;When/when not to use asynchronous programming&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://realpython.com/async-io-python/&quot;&gt;Async IO in Python: A Complete Walkthrough&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;https://docs.python.org/3/library/asyncio.html&quot;&gt;asyncio: Python Documentation&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Connie Xu</name><email>rob@sor.com</email></author><summary type="html">Speed up requests: Asyncio for Requests in Python</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/Asynciothumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/Asynciothumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">A Comprehensive Guide to Training a Machine Learning Model for Question Answering</title><link href="http://localhost:4000/category-1/category-2/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html" rel="alternate" type="text/html" title="A Comprehensive Guide to Training a Machine Learning Model for Question Answering" /><published>2020-08-06T06:30:00-04:00</published><updated>2020-08-06T06:30:00-04:00</updated><id>http://localhost:4000/category-1/category-2/2020/08/06/A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_</id><content type="html" xml:base="http://localhost:4000/category-1/category-2/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html">&lt;h1 align=&quot;center&quot;&gt; A Comprehensive Guide to Training a Machine Learning Model for Question Answering: &lt;/h1&gt;
+&lt;p&gt;&lt;br /&gt;&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;h1 align=&quot;center&quot;&gt; A Comprehensive Guide to Training a Machine Learning Model for Question Answering: &lt;/h1&gt;
 &lt;h2 align=&quot;center&quot;&gt; Fine-tuning ALBERT on Google Natural Questions &lt;/h2&gt;
-
-&lt;p&gt;By Nicholas Greenspan and Batya Stein&lt;/p&gt;
 
 &lt;h3 id=&quot;contents&quot;&gt;Contents:&lt;/h3&gt;
 &lt;ol&gt;
@@ -1353,4 +1847,4 @@ https://medium.com/@arnab.k/how-to-keep-processes-running-after-ending-ssh-sessi
 https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/authorizing-access-to-an-instance.html – authorizing inbound traffic to instance\
 https://github.com/huggingface/transformers#run_squadpy-fine-tuning-on-squad-for-question-answering
 https://machinelearningmastery.com/classification-accuracy-is-not-enough-more-performance-measures-you-can-use/ – meaning of f1 score\
-http://www.kodyaz.com/aws/list-all-amazon-EC2-instances-using-aws-gui-tools.aspx – EC2 instance dashboard image&lt;/p&gt;</content><author><name>Batya Stein &amp; Nicholas Greenspan</name></author><summary type="html">A Comprehensive Guide to Training a Machine Learning Model for Question Answering: Fine-tuning ALBERT on Google Natural Questions</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/MLQAthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/MLQAthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>
+http://www.kodyaz.com/aws/list-all-amazon-EC2-instances-using-aws-gui-tools.aspx – EC2 instance dashboard image&lt;/p&gt;</content><author><name>Batya Stein &amp; Nicholas Greenspan</name></author><summary type="html">by Batya Stein &amp;amp; Nicholas Greenspan</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/MLQAthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/MLQAthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry></feed>

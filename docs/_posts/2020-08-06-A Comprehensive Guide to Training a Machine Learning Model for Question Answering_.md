@@ -8,11 +8,24 @@ categories: CATEGORY-1 CATEGORY-2
 image: site_files/MLQAthumb.png
 
 ---
+#### by Batya Stein & Nicholas Greenspan
 
+
+
+<br> 
+***Batya Stein*** is a rising junior at Princeton University studying Computer Science and English Literature. Her research interests include Natural Language Processing and Software Engineering and Design. Previously, she has interned at a non-profit, designing a project to interface between its CRM softwares. When not coding, she enjoys drawing, swimming, and reading fiction. Batya was one of NLMatics' 2020 summer interns. 
+<br><br><br>
+<b>Nicholas Greenspan</b> lives in New York City and is a freshman at Rice University who is majoring in computer science. Nicholas is interested in Machine Learning, Natural Language Processing, and their applications to various fields. Nicholas recently worked at the UTHealth School of Biomedical Informatics working on a Natural Language Processing project to help doctors find relevant treatments for their patients, and is excited to work on more interesting and meaningful problems at NLMatics. Outside of CS, Nicholas likes to read, play ice hockey, and listen to many genres of music including indie rock and electronic. Nicholas was one of NLMatics' 2020 summer interns. 
+
+___
+
+<br><br><br>
 <h1 align="center"> A Comprehensive Guide to Training a Machine Learning Model for Question Answering: </h1>
 <h2 align="center"> Fine-tuning ALBERT on Google Natural Questions </h2>
 
-By Nicholas Greenspan and Batya Stein
+
+
+
 
 ### Contents:
 1. [Setting up the EC2 Instance](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#part-1-setting-up-the-ec2-instance)

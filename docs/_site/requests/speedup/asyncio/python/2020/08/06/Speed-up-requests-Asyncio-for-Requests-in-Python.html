@@ -8,8 +8,8 @@
 <meta property="og:title" content="Speed up requests: Asyncio for Requests in Python" />
 <meta name="author" content="Connie Xu" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="Speed up requests: Asyncio for Requests in Python" />
-<meta property="og:description" content="Speed up requests: Asyncio for Requests in Python" />
+<meta name="description" content="by Connie Xu" />
+<meta property="og:description" content="by Connie Xu" />
 <link rel="canonical" href="http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html" />
 <meta property="og:url" content="http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html" />
 <meta property="og:site_name" content="nlmatics.github.io" />
@@ -17,7 +17,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-08-06T20:00:00-04:00" />
 <script type="application/ld+json">
-{"@type":"BlogPosting","headline":"Speed up requests: Asyncio for Requests in Python","datePublished":"2020-08-06T20:00:00-04:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html"},"url":"http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html","image":"http://localhost:4000/site_files/Asynciothumb.png","author":{"@type":"Person","name":"Connie Xu"},"description":"Speed up requests: Asyncio for Requests in Python","dateModified":"2020-08-06T20:00:00-04:00","@context":"https://schema.org"}</script>
+{"@type":"BlogPosting","headline":"Speed up requests: Asyncio for Requests in Python","datePublished":"2020-08-06T20:00:00-04:00","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html"},"url":"http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html","image":"http://localhost:4000/site_files/Asynciothumb.png","author":{"@type":"Person","name":"Connie Xu"},"description":"by Connie Xu","dateModified":"2020-08-06T20:00:00-04:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="nlmatics.github.io" /></head>
 <body><header class="site-header" role="banner">
@@ -31,8 +31,12 @@
           </span>
         </label>
 
-        <div class="trigger"><a class="page-link" href="https://nlmatics.com"> <h3><u> go to nlmatics.com </u></h3></a></div>
-      </nav></div>
+        <div class="trigger"></div>
+      </nav><a class="page-link" href="https://nlmatics.com"> <h3 class="redirect-link"><u> go to nlmatics.com </u></h3></a>
+    <div class="header-tagline"> What we’re learning about, thinking about, and building in the world of NLP, Machine Learning, and textual data at NLMatics.</div>
+    <span class="divider"></span>
+  </div>
+
 </header>
 <main class="page-content" aria-label="Content">
       <div class="wrapper">
@@ -43,7 +47,19 @@
   </header>
 
   <div class="post-content">
-    <h1 id="speed-up-requests-asyncio-for-requests-in-python">Speed up requests: Asyncio for Requests in Python</h1>
+    <h4 id="by-connie-xu">by Connie Xu</h4>
+
+<hr />
+
+<p><br /> 
+Connie Xu is currently studying Computer Science at Princeton University, where she has sharpened her skills in Algorithms and Data Structures as well as Linear Algebra. She is interested in learning more about Natural Language Processing and Machine Learning applications. In her free time, she watches cooking videos or practices beatboxing. Connie was one of NLMatics’ 2020 summer interns. 
+<br /></p>
+
+<hr />
+
+<p><br /><br /></p>
+
+<h1 id="speed-up-requests-asyncio-for-requests-in-python">Speed up requests: Asyncio for Requests in Python</h1>
 
 <h4 id="dont-be-like-this">Don’t be like this.</h4>
 <p><img src="https://memegenerator.net/img/instances/78137468/my-code-cant-run-slow-if-i-never-write-it.jpg" alt="" /></p>
@@ -59,15 +75,15 @@
   <li><strong>Asynchronous:</strong> you can start another task before the completion of the first task.</li>
 </ul>
 
-<p><img src="../site_files/connie_post_images/synchronous.png" alt="" />
-<img src="../site_files/connie_post_images/asynchronous.png" alt="" /></p>
+<p><img src="http://localhost:4000/site_files/connie_post_images/synchronous.png" alt="" />
+<img src="http://localhost:4000/site_files/connie_post_images/asynchronous.png" alt="" /></p>
 
 <p>For more information on the distinction between concurrency, parallelism, threads, sync, and async, check out this <a href="https://medium.com/swift-india/concurrency-parallelism-threads-processes-async-and-sync-related-39fd951bc61d">Medium article</a>.</p>
 
 <h2 id="simple-analogies">Simple analogies</h2>
 <h3 id="brick-and-mortar">Brick and Mortar</h3>
 
-<p><img src="../site_files/connie_post_images/brick-and-mortar.jpg" width="500" height="334" /></p>
+<p><img src="http://localhost:4000/site_files/connie_post_images/brick-and-mortar.jpg" width="500" height="334" /></p>
 
 <p>Simon and Ash are building 5 walls of brick.</p>
 <ul>
@@ -81,7 +97,7 @@ The lack of <strong><em>waiting</em></strong> is the key to why asynchronous pro
 
 <h3 id="laundry">Laundry</h3>
 
-<p><img src="../site_files/connie_post_images/laundry.jpg" width="500" /></p>
+<p><img src="http://localhost:4000/site_files/connie_post_images/laundry.jpg" width="500" /></p>
 
 <p>Be wary that an asynchronous approach does not provide any performance boost when all the tasks are <strong>dependent</strong> on each other. For example, if you are washing and drying clothes, you must wait for the clothes to finish washing first before drying them no matter what, because drying clothes is dependent on the output of the washing. There is no use in using an asynchronous approach, because the pipeline is just the same as a synchronous approach.</p>
 
@@ -123,7 +139,7 @@ The lack of <strong><em>waiting</em></strong> is the key to why asynchronous pro
     <tr>
       <td>asyncio.gather()</td>
       <td>Used to run the scheduled executions <br /> → Needs to be awaited <br /> → This is vital to the asynchronous program, because you let it know which is the next task it can pick up before finishing the previous one.</td>
-      <td><img src="../site_files/connie_post_images/gather.png" alt="" /></td>
+      <td><img src="http://localhost:4000/site_files/connie_post_images/gather.png" alt="" /></td>
     </tr>
   </tbody>
 </table>
@@ -246,7 +262,7 @@ async def fetch(url, responses, i):
 
 <h2 id="runtime-results">Runtime Results</h2>
 
-<p>|<img src="../site_files/connie_post_images/table.png" width="500" />|<img src="../site_files/connie_post_images/chart.png" width="500" />|
+<p>|<img src="http://localhost:4000/site_files/connie_post_images/table.png" width="500" />|<img src="http://localhost:4000/site_files/connie_post_images/chart.png" width="500" />|
 |—|—|</p>
 
 <p><code class="language-plaintext highlighter-rouge">synchronous</code> and <code class="language-plaintext highlighter-rouge">asynchronous_fail</code> have similar runtimes because the <code class="language-plaintext highlighter-rouge">asynchronous_fail</code> method was not implemented correctly and is in reality synchronous code.
@@ -280,20 +296,20 @@ async def fetch(url, responses, i):
   <data class="u-url" href="/"></data>
 
   <div class="wrapper">
-
+<!--
     <h2 class="footer-heading">nlmatics.github.io</h2>
 
     <div class="footer-col-wrapper">
       <div class="footer-col footer-col-1">
         <ul class="contact-list">
-          <li class="p-name">nlmatics.github.io</li><li><a class="u-email" href="mailto:your-email@example.com">your-email@example.com</a></li></ul>
+          <li class="p-name">nlmatics.github.io</li><li><a class="u-email" href="mailto:info@nlmatics.com">info@nlmatics.com</a></li></ul>
       </div>
 
       <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/nlmatics"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">nlmatics</span></a></li><li><a href="https://www.twitter.com/nlmatics"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">nlmatics</span></a></li></ul>
 </div>
-
+-->
       <div class="footer-col footer-col-3">
-        <p>This is a collection of blogs on various topics including Natural Language Understanding, etc.</p>
+        <p></p>
       </div>
     </div>
 

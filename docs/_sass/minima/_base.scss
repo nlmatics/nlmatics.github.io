@@ -16,7 +16,7 @@ dl, dd, ol, ul, figure {
 body {
   font: $base-font-weight #{$base-font-size}/#{$base-line-height} $base-font-family;
   color: $text-color;
-  background-color: $background-color;
+   background-color: #ffffff;
   -webkit-text-size-adjust: 100%;
   -webkit-font-feature-settings: "kern" 1;
      -moz-font-feature-settings: "kern" 1;
@@ -47,15 +47,49 @@ ul, ol, dl, figure,
  */
 main {
   display: block; /* Default value of `display` of `main` element is 'inline' in IE 11. */
+
+}
+
+/** header tagline styling **/
+
+.header-tagline {
+
+  text-align: left;
+font-size: 22px;
+letter-spacing: 0px;
+color: #9E5FFD;
+opacity: 1;
 }
 
 
 
-.featured-image{
-  background-image: url("site_files/SIFthumb.png");
+
+/** featured article's styling */
+
+.featured-container 
+{
+
+padding-top: $spacing-unit;
+
+  
 }
 
-.featured-title {
+
+.featured-thumb img
+{  
+
+width: 30%;
+float: left;
+display: block;
+  margin-left: auto;
+  margin-right: auto;
+  padding-right: $spacing-unit*4;
+}
+
+
+
+
+.featured-meta {
 text-align: left;
 font: Bold 20px/24px Roboto;
 letter-spacing: 3px;
@@ -63,55 +97,131 @@ color: #3F298B;
 opacity: 1;
 }
 
-.featured-text p {
-width: $spacing-unit*10;
-text-align: left;
-font: Regular 18px/24px Roboto;
-letter-spacing: 0.43px;
-color: #1D1D1DDD;
-opacity: 1;
-}
 
-.featured-author {
+.featured-title 
+{
 text-align: left;
-font: Regular 24px/33px Open Sans;
-letter-spacing: 0px;
-color: #3D61D8;
-opacity: 1;
-}
-
-.featured-text h1 {
-  text-align: left;
-font: Regular 30px/37px Roboto;
+font-size: 37px;
 letter-spacing: 0px;
 color: #5D5187;
 opacity: 1;
 }
 
+.featured-excerpt
+{
+text-align: left;
+font: Regular 18px/24px Roboto;
+letter-spacing: 0.43px;
+color: #1D1D1DDD;
+opacity: 1;
+
+}
+
+/** button that says read more **/
+
+.button {
+   background-color: white; 
+  color: black; 
+  border: 2px solid #6200EE;
+  padding: 16px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-family: Roboto;
+  font-size: 18px;
+  margin: 4px 2px;
+  transition-duration: 0.4s;
+  cursor: pointer;
+
+}
+
+
+
+.button:hover {
+  background-color: #6200EE; /* nlmatics purple */
+  color: white;
+}
+
+.post-list-heading {
+  clear: both;
+}
+
+/**divider lines **/
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+
+}
+
+/**Post styling: how the individual articles show up on the landing page**/
+
+
 .post-container{
-  position: relative;
+ 
+  background-color: #ffffff;
+  padding: 20px;
+
+}
+
+
+.post-container::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+
+.post-thumb {
+padding-bottom: $spacing-unit*4;
+width: 20%;
 
 }
 
 .post-thumb img {
-position: relative;
-width: 50%;
-padding-right: $spacing-unit*3;
-padding-bottom: $spacing-unit*4;
+  width: 10%;
+  float: left;
+  padding-right: $spacing-unit;
 }
+
 .post-text {
-  position: absolute;
-  width: $spacing-unit*18;
-  padding-left: $spacing-unit/2;
+
+width: 100%;
+
+
+}
+
+.post-meta {
+  text-align: left;
+font: Medium 14px/17px Roboto;
+letter-spacing: 1.26px;
+  color: #5B4F85;
+opacity: 1;
+}
+
+
+.post-author {
+  text-align: left;
+font: Regular 20px/27px Open Sans;
+letter-spacing: 0px;
+color: black;
+opacity: 1;
 
 }
 
 .divider {
-  padding: $spacing-unit*5;
+padding: $spacing-unit;
+clear: both;
 }
 
 
 
+.post-link {
+  color: #5B4F85;
+}
 
 
 /**
@@ -166,7 +276,7 @@ h1, h2, h3, h4, h5, h6 {
  * Links
  */
 a {
-  color: $brand-color;
+  color: #41298B;
   text-decoration: none;
 
   &:visited {
@@ -251,6 +361,12 @@ pre {
     max-width:         calc(#{$content-width} - (#{$spacing-unit}));
     padding-right: $spacing-unit / 2;
     padding-left: $spacing-unit / 2;
+  }
+  @include media-query($on-palm) {
+    max-width: -webkit-calc(#{$content-width} - (#{$spacing-unit}));
+    max-width:         calc(#{$content-width} - (#{$spacing-unit}));
+    padding-right: $spacing-unit ;
+    padding-left: $spacing-unit ;
   }
 }
 

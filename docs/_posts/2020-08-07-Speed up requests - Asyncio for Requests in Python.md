@@ -8,7 +8,17 @@ categories: REQUESTS SPEEDUP ASYNCIO PYTHON
 image: site_files/Asynciothumb.png
 
 ---
+#### by Connie Xu
 
+___
+
+<br> 
+Connie Xu is currently studying Computer Science at Princeton University, where she has sharpened her skills in Algorithms and Data Structures as well as Linear Algebra. She is interested in learning more about Natural Language Processing and Machine Learning applications. In her free time, she watches cooking videos or practices beatboxing. Connie was one of NLMatics' 2020 summer interns. 
+<br>
+
+___
+
+<br><br>
 
 # Speed up requests: Asyncio for Requests in Python
 
@@ -24,8 +34,8 @@ It is a Python library that uses the ```async/await``` syntax to make code run a
 - **Synchronous:** you must wait for the completion of the first task before starting another task.
 - **Asynchronous:** you can start another task before the completion of the first task.
 
-![](../site_files/connie_post_images/synchronous.png)
-![](../site_files/connie_post_images/asynchronous.png)
+![]({{site.url}}/site_files/connie_post_images/synchronous.png)
+![]({{site.url}}/site_files/connie_post_images/asynchronous.png)
 
 
 For more information on the distinction between concurrency, parallelism, threads, sync, and async, check out this [Medium article](https://medium.com/swift-india/concurrency-parallelism-threads-processes-async-and-sync-related-39fd951bc61d).
@@ -33,7 +43,7 @@ For more information on the distinction between concurrency, parallelism, thread
 ## Simple analogies
 ### Brick and Mortar
 
-<img src="../site_files/connie_post_images/brick-and-mortar.jpg" width="500" height="334">
+<img src="{{site.url}}/site_files/connie_post_images/brick-and-mortar.jpg" width="500" height="334">
 
 
 Simon and Ash are building 5 walls of brick. 
@@ -46,7 +56,7 @@ A good coding use case would be when you have a lot of time-consuming requests l
 
 ### Laundry
 
-<img src="../site_files/connie_post_images/laundry.jpg" width="500">
+<img src="{{site.url}}/site_files/connie_post_images/laundry.jpg" width="500">
 
 Be wary that an asynchronous approach does not provide any performance boost when all the tasks are **dependent** on each other. For example, if you are washing and drying clothes, you must wait for the clothes to finish washing first before drying them no matter what, because drying clothes is dependent on the output of the washing. There is no use in using an asynchronous approach, because the pipeline is just the same as a synchronous approach.
 
@@ -62,7 +72,7 @@ For a further look into when and when not to use asynchronous programming, check
 | await | Used to run a coroutine once an asynchronous event loop has already started running <br> &#8594; <code>await</code> can only be used inside a coroutine <br> &#8594; Coroutines must be called with `await`, otherwise there will be a <code>RuntimeWarning</code> about enabling <code>tracemalloc</code>. <br></br> | <img src="../site_files/connie_post_images/await.png" width="448"> |
 | asyncio.run() | Used to start running an asynchronous event loop from a normal program <br> &#8594; `asyncio.run()` cannot be called in a nested fashion. You have to use await instead. <br> &#8594; `asyncio.run()` cannot be used if you are running the Python file in a Jupyter Notebook because Jupyter Notebook already has a running asynchronous event loop. You have to use await. (More on this in the Running the Code section)| <img src="../site_files/connie_post_images/run.png" width="622"> |
 | asyncio.create_task() | Used to schedule a coroutine execution <br> &#8594; Does not need to be awaited <br> &#8594; Allows you to line things up without actually running them first. | <img src="../site_files/connie_post_images/create_task.png" width="822"> |
-| asyncio.gather() | Used to run the scheduled executions <br> &#8594; Needs to be awaited <br> &#8594; This is vital to the asynchronous program, because you let it know which is the next task it can pick up before finishing the previous one. | ![](../site_files/connie_post_images/gather.png) |
+| asyncio.gather() | Used to run the scheduled executions <br> &#8594; Needs to be awaited <br> &#8594; This is vital to the asynchronous program, because you let it know which is the next task it can pick up before finishing the previous one. | ![]({{site.url}}/site_files/connie_post_images/gather.png) |
 
 If you are thirsting for more in-depth knowledge on asyncio, check out these links: 
 - [Async IO in Python: A Complete Walkthrough](https://realpython.com/async-io-python/)
@@ -189,7 +199,7 @@ async def asynchronous_ordered_batched(urls, batch_size=10):
 
 ## Runtime Results
 
-|<img src="../site_files/connie_post_images/table.png" width="500">|<img src="../site_files/connie_post_images/chart.png" width="500">|
+|<img src="{{site.url}}/site_files/connie_post_images/table.png" width="500">|<img src="{{site.url}}/site_files/connie_post_images/chart.png" width="500">|
 |---|---|
 
 `synchronous` and `asynchronous_fail` have similar runtimes because the `asynchronous_fail` method was not implemented correctly and is in reality synchronous code.
