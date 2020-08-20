@@ -5,7 +5,7 @@ title: "Speed up requests: Asyncio for Requests in Python"
 author: Connie Xu
 date: 2020-08-07 00:00:00 -0000
 categories: REQUESTS SPEEDUP ASYNCIO PYTHON
-image: site_files/Asynciothumb.png
+image: site_files/asynciothumb.png
 
 ---
 #### by Connie Xu
@@ -68,10 +68,10 @@ For a further look into when and when not to use asynchronous programming, check
 
 | Syntax | Description | Example |
 | --- | --- | --- |
-| async | Used to indicate which methods are going to be run asynchronously <br> <p>&#9; &#8594; These new methods are called **coroutines**. | <img src="../site_files/connie_post_images/async.png" width="651"> |
-| await | Used to run a coroutine once an asynchronous event loop has already started running <br> &#8594; <code>await</code> can only be used inside a coroutine <br> &#8594; Coroutines must be called with `await`, otherwise there will be a <code>RuntimeWarning</code> about enabling <code>tracemalloc</code>. <br></br> | <img src="../site_files/connie_post_images/await.png" width="448"> |
-| asyncio.run() | Used to start running an asynchronous event loop from a normal program <br> &#8594; `asyncio.run()` cannot be called in a nested fashion. You have to use await instead. <br> &#8594; `asyncio.run()` cannot be used if you are running the Python file in a Jupyter Notebook because Jupyter Notebook already has a running asynchronous event loop. You have to use await. (More on this in the Running the Code section)| <img src="../site_files/connie_post_images/run.png" width="622"> |
-| asyncio.create_task() | Used to schedule a coroutine execution <br> &#8594; Does not need to be awaited <br> &#8594; Allows you to line things up without actually running them first. | <img src="../site_files/connie_post_images/create_task.png" width="822"> |
+| async | Used to indicate which methods are going to be run asynchronously <br> <p>&#9; &#8594; These new methods are called **coroutines**. | <img src="{{site.url}}/site_files/connie_post_images/async.png" width="651"> |
+| await | Used to run a coroutine once an asynchronous event loop has already started running <br> &#8594; <code>await</code> can only be used inside a coroutine <br> &#8594; Coroutines must be called with `await`, otherwise there will be a <code>RuntimeWarning</code> about enabling <code>tracemalloc</code>. <br></br> | <img src="{{site.url}}/site_files/connie_post_images/await.png" width="448"> |
+| asyncio.run() | Used to start running an asynchronous event loop from a normal program <br> &#8594; `asyncio.run()` cannot be called in a nested fashion. You have to use await instead. <br> &#8594; `asyncio.run()` cannot be used if you are running the Python file in a Jupyter Notebook because Jupyter Notebook already has a running asynchronous event loop. You have to use await. (More on this in the Running the Code section)| <img src="{{site.url}}/site_files/connie_post_images/run.png" width="622"> |
+| asyncio.create_task() | Used to schedule a coroutine execution <br> &#8594; Does not need to be awaited <br> &#8594; Allows you to line things up without actually running them first. | <img src="{{site.url}}/site_files/connie_post_images/create_task.png" width="822"> |
 | asyncio.gather() | Used to run the scheduled executions <br> &#8594; Needs to be awaited <br> &#8594; This is vital to the asynchronous program, because you let it know which is the next task it can pick up before finishing the previous one. | ![]({{site.url}}/site_files/connie_post_images/gather.png) |
 
 If you are thirsting for more in-depth knowledge on asyncio, check out these links: 
