@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url>
+<loc>http://localhost:4000/category-1/category-2/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html</loc>
+<lastmod>2020-08-06T06:30:00-04:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/category-1/category-2/2020/08/06/SQUAD-2.0-and-Google-Natural-Questions-A-Comparison-and-Investigation-into-Model-Performance.html</loc>
+<lastmod>2020-08-06T09:00:00-04:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html</loc>
+<lastmod>2020-08-06T20:00:00-04:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth-Inverse-Frequency-Frequency-(SIF)-Embeddings-in-Golang.html</loc>
+<lastmod>2020-08-07T05:45:00-04:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html</loc>
+<lastmod>2020-08-07T06:30:00-04:00</lastmod>
+</url>
+<url>
+<loc>http://localhost:4000/about/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/</loc>
+</url>
+<url>
+<loc>http://localhost:4000/google891e145e2cd55b4b.html</loc>
+<lastmod>2020-08-21T14:44:13-04:00</lastmod>
+</url>
+</urlset>

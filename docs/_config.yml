@@ -31,7 +31,7 @@ github_username:  nlmatics
 theme: minima
 plugins:
   - jekyll-feed
-
+  - jekyll-sitemap
 
 
 
