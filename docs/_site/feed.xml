@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-20T17:17:55-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><entry><title type="html">How to Extract Keyphrases and Visualize Text</title><link href="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html" rel="alternate" type="text/html" title="How to Extract Keyphrases and Visualize Text" /><published>2020-08-07T06:30:00-04:00</published><updated>2020-08-07T06:30:00-04:00</updated><id>http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text</id><content type="html" xml:base="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html">&lt;h4 id=&quot;by-cheyenne-zhang&quot;&gt;by Cheyenne Zhang&lt;/h4&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-21T12:49:31-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><entry><title type="html">How to Extract Keyphrases and Visualize Text</title><link href="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html" rel="alternate" type="text/html" title="How to Extract Keyphrases and Visualize Text" /><published>2020-08-07T06:30:00-04:00</published><updated>2020-08-07T06:30:00-04:00</updated><id>http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text</id><content type="html" xml:base="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html">&lt;h4 id=&quot;by-cheyenne-zhang&quot;&gt;by Cheyenne Zhang&lt;/h4&gt;
 
 &lt;p&gt;&lt;strong&gt;Cheyenne Zhang&lt;/strong&gt; is a rising junior at Princeton University studying Computer Science with certificates in East Asian Studies and Cognitive Science. She’s originally from just outside of Seattle, WA, and enjoys watching movies and learning languages in her free time. Cheyenne was one of NLMatics’ 2020 summer interns.&lt;/p&gt;
 
@@ -546,9 +546,9 @@ var label = node.append(&quot;text&quot;)
 
 &lt;p&gt;GoLang however, has no such restrictions and also provides built-in structures for concurrency through the form of Goroutines, a form of very lightweight threads.  They are organized by channels, which allow goroutines to either block on awaiting input or signal that they have completed.&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;tr&gt;
-    &lt;td&gt;func main() {
+&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;&amp;lt;table&amp;gt;
+  &amp;lt;tr&amp;gt;
+    &amp;lt;td&amp;gt;func main() {
     jobs := make(chan int, 100)
     results := make(chan int, 100)
     for i := 0; i &amp;lt; 4; i++ {
@@ -573,9 +573,11 @@ func fib(n int) int {
         return n
     }
     return fib(n-1) + fib(n-2)
-}&lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
+}&amp;lt;/td&amp;gt;
+  &amp;lt;/tr&amp;gt;
+&amp;lt;/table&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;&lt;em&gt;Basic architecture of a worker pool using goroutines&lt;/em&gt;&lt;/p&gt;
 
@@ -597,9 +599,9 @@ func fib(n int) int {
 
 &lt;p&gt;Developed by Google, gRPC is an open source Remote Procedure Call framework and is what I turned to in order to hopefully remove the size limit and connection overhead problems with Go’s http package. gRPC processes payloads from requests using buffers, so it removes the 1MB size cap on requests. It also maintains connections between individual clients, so a single user can make multiple requests without having to create a connection more than once. It has its own Interface Definition Language called protocol buffers that also serve as a mechanism for serializing structured data and uses HTTP/2 to transport data. gRPC services are defined in .proto files:&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;tr&gt;
-    &lt;td&gt;syntax = &quot;proto3&quot;
+&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;&amp;lt;table&amp;gt;
+  &amp;lt;tr&amp;gt;
+    &amp;lt;td&amp;gt;syntax = &quot;proto3&quot;
 option go_package = “greeter”
 package main
 // The greeter service definition.
@@ -617,15 +619,16 @@ message HelloRequest {
 message HelloReply {
   string message = 1;
 }
-&lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
+&amp;lt;/td&amp;gt;
+  &amp;lt;/tr&amp;gt;
+&amp;lt;/table&amp;gt;
 
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;You can then use the protoc command to compile your service into any of &lt;a href=&quot;https://grpc.io/docs/languages/&quot;&gt;gRPC’s supported languages&lt;/a&gt;.&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;tr&gt;
-    &lt;td&gt;// Code generated by protoc-gen-go. DO NOT EDIT.
+&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;&amp;lt;table&amp;gt;
+  &amp;lt;tr&amp;gt;
+    &amp;lt;td&amp;gt;// Code generated by protoc-gen-go. DO NOT EDIT.
 // versions:
 //  protoc-gen-go v1.23.0
 //  protoc        v3.6.1
@@ -660,10 +663,11 @@ type HelloRequest struct {
 
     Name string `protobuf:&quot;bytes,1,opt,name=name,proto3&quot; json:&quot;name,omitempty&quot;`
 }
-//... excess code has been left out&lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
+//... excess code has been left out&amp;lt;/td&amp;gt;
+  &amp;lt;/tr&amp;gt;
+&amp;lt;/table&amp;gt;
 
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Due to how gRPC buffers data being received and sent, we no longer had to worry about size limits on requests to our server. gRPC servers also have a very helpful feature in that connections between client and server are maintained across multiple requests, whereas with HTTP requests, a new connection has to be established for every POST. As a result, I saw more improvements in performance as this overhead was removed from the new system:&lt;/p&gt;
 
 &lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_7.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
@@ -678,9 +682,9 @@ type HelloRequest struct {
 
 &lt;p&gt;Python’s Numpy and sklearn packages have all the built-in tools needed to implement this algorithm, which you can find the code for &lt;a href=&quot;https://github.com/daniel-ye137/WordVectorProcessing&quot;&gt;here&lt;/a&gt;:&lt;/p&gt;
 
-&lt;table&gt;
-  &lt;tr&gt;
-    &lt;td&gt;import numpy as np
+&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;&amp;lt;table&amp;gt;
+  &amp;lt;tr&amp;gt;
+    &amp;lt;td&amp;gt;import numpy as np
 from sklearn.decomposition import PCA
 import argparse
 
@@ -762,57 +766,58 @@ for vec in embs:
     idx+=1
 file.close()
 
-print(&quot;Wrote: &quot;, len(embs), &quot;word embeddings&quot;)&lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
+print(&quot;Wrote: &quot;, len(embs), &quot;word embeddings&quot;)&amp;lt;/td&amp;gt;
+  &amp;lt;/tr&amp;gt;
+&amp;lt;/table&amp;gt;
 
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Using the new word embedding file, I saw meaningful improvements in semantic similarity tasks, similar to the results they found in their paper:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;&amp;lt;table&amp;gt;
+  &amp;lt;tr&amp;gt;
+    &amp;lt;td&amp;gt;Dataset&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;k&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;Original&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;Post-Processed Vectors&amp;lt;/td&amp;gt;
+  &amp;lt;/tr&amp;gt;
+  &amp;lt;tr&amp;gt;
+    &amp;lt;td&amp;gt;MSR Paraphrase&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;k = 1&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;76.43&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;78.34&amp;lt;/td&amp;gt;
+  &amp;lt;/tr&amp;gt;
+  &amp;lt;tr&amp;gt;
+    &amp;lt;td&amp;gt;MS MARCO, 10000&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;k = 1&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;18.2002&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;20.4&amp;lt;/td&amp;gt;
+  &amp;lt;/tr&amp;gt;
+  &amp;lt;tr&amp;gt;
+    &amp;lt;td&amp;gt;MSR Paraphrase&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;k = 3&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;87.122&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;88.84&amp;lt;/td&amp;gt;
+  &amp;lt;/tr&amp;gt;
+  &amp;lt;tr&amp;gt;
+    &amp;lt;td&amp;gt;MS MARCO, 10000&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;k = 3&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;26.915&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;29.37&amp;lt;/td&amp;gt;
+  &amp;lt;/tr&amp;gt;
+  &amp;lt;tr&amp;gt;
+    &amp;lt;td&amp;gt;MSR Paraphrase&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;k = 5&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;89.37944567&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;90.92&amp;lt;/td&amp;gt;
+  &amp;lt;/tr&amp;gt;
+  &amp;lt;tr&amp;gt;
+    &amp;lt;td&amp;gt;MS MARCO, 10000&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;k = 5&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;33.05634374&amp;lt;/td&amp;gt;
+    &amp;lt;td&amp;gt;36.2&amp;lt;/td&amp;gt;
+  &amp;lt;/tr&amp;gt;
+&amp;lt;/table&amp;gt;
 
-&lt;table&gt;
-  &lt;tr&gt;
-    &lt;td&gt;Dataset&lt;/td&gt;
-    &lt;td&gt;k&lt;/td&gt;
-    &lt;td&gt;Original&lt;/td&gt;
-    &lt;td&gt;Post-Processed Vectors&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;MSR Paraphrase&lt;/td&gt;
-    &lt;td&gt;k = 1&lt;/td&gt;
-    &lt;td&gt;76.43&lt;/td&gt;
-    &lt;td&gt;78.34&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;MS MARCO, 10000&lt;/td&gt;
-    &lt;td&gt;k = 1&lt;/td&gt;
-    &lt;td&gt;18.2002&lt;/td&gt;
-    &lt;td&gt;20.4&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;MSR Paraphrase&lt;/td&gt;
-    &lt;td&gt;k = 3&lt;/td&gt;
-    &lt;td&gt;87.122&lt;/td&gt;
-    &lt;td&gt;88.84&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;MS MARCO, 10000&lt;/td&gt;
-    &lt;td&gt;k = 3&lt;/td&gt;
-    &lt;td&gt;26.915&lt;/td&gt;
-    &lt;td&gt;29.37&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;MSR Paraphrase&lt;/td&gt;
-    &lt;td&gt;k = 5&lt;/td&gt;
-    &lt;td&gt;89.37944567&lt;/td&gt;
-    &lt;td&gt;90.92&lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-    &lt;td&gt;MS MARCO, 10000&lt;/td&gt;
-    &lt;td&gt;k = 5&lt;/td&gt;
-    &lt;td&gt;33.05634374&lt;/td&gt;
-    &lt;td&gt;36.2&lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
-
+&lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;I benchmarked the system on semantic text similarities tests using  the MSR Paraphrase dataset, as well as the first 10000 entries of the MS MARCO dataset using p@k with k = 1, 3, and 5. These tasks involved identifying a sentence from a large pool of candidates as being semantically equivalent to another. p@k testing introduces some leeway into the testing, where the program chooses the top K candidates from the pool as potential matches instead of only getting one attempt at the correct answer. This kind of testing is more representative of a search engine, where you care not only about getting the single best result, but also a reasonable amount of relevant information.&lt;/p&gt;
 
 &lt;p&gt;The post-processed vectors outperformed the original in every case. I also benchmarked our system using a word frequency file generated by fellow intern Connie Xu using a June snapshot of all of Wikipedia. It had a far more comprehensive vocabulary than our current word frequency file, with over 50x as many entries, but performance results were inconclusive. The results do indicate, however, that post-processed word vectors also increase performance of sentence embedding systems.&lt;/p&gt;
@@ -820,10 +825,9 @@ print(&quot;Wrote: &quot;, len(embs), &quot;word embeddings&quot;)&lt;/td&gt;
 &lt;p&gt;&lt;strong&gt;5. Productionalizing With Docker&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;After finishing the code for our new SIF, my final step was to prepare it for production, which meant an inevitable encounter with Docker. Here is my Dockerfile, which I got from &lt;a href=&quot;https://www.callicoder.com/docker-golang-image-container-example/&quot;&gt;this tutorial:&lt;/a&gt;&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;tr&gt;
-    &lt;td&gt;# Start from the latest golang base image
+&lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;&amp;lt;table&amp;gt;
+  &amp;lt;tr&amp;gt;
+    &amp;lt;td&amp;gt;# Start from the latest golang base image
 FROM golang:latest
 
 # Add Maintainer Info
@@ -848,9 +852,10 @@ RUN go build -o main .
 EXPOSE 8080
 
 # Command to run the executable
-CMD [&quot;./main&quot;]&lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/table&gt;
+CMD [&quot;./main&quot;]&amp;lt;/td&amp;gt;
+  &amp;lt;/tr&amp;gt;
+&amp;lt;/table&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
 
 &lt;p&gt;Most components are fairly self-explanatory. It does require that you use Go modules to manage your dependencies, which you can read about &lt;a href=&quot;https://blog.golang.org/using-go-modules&quot;&gt;here&lt;/a&gt;. The steps I took to compile my code into a Docker image were as follows:&lt;/p&gt;
 
