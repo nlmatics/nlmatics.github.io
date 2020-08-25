@@ -78,7 +78,7 @@ To analyze the results of my 4 model trainings, I first compared the performance
 
 (For consistency, results shown below are evaluated at the 7000th training step, towards the end of the 2nd epoch. The exception is the F1 score chart, which spans from beginning to end of training.)
 
-Metrics of 4 datasets, evaluated on their own dev sets at 7000th step
+_Metrics of 4 datasets, evaluated on their own dev sets at 7000th step_
 
 |              | Normal SQuAD (questions with question marks) | Phrases | Phrases with question marks | Questions without question marks |
 | ------------ | -------------------------------------------- | ------- | --------------------------- | -------------------------------- |
@@ -93,7 +93,7 @@ Metrics of 4 datasets, evaluated on their own dev sets at 7000th step
 
 ![](/site-files/batya-post-imgs/metrics.png)
 
-F1 scores for all models throughout training
+_F1 scores for all models throughout training_
 
 | Step | SQuAD | Phrases | Phrases with q marks | Q's without q marks |
 | ---- | ----- | ------- | -------------------- | ------------------- |
@@ -125,7 +125,7 @@ Adding question marks to phrases does yield slightly better F1 scores throughout
 
 For the second part of my analysis, I evaluated each of the models on the standard SQuAD dev set, and the standard SQuAD trained model on the phrase dev set. (All results evaluated at the 7000th step, as above). Through these evaluations I hoped to see how well a model trained on a modified dataset could perform on a differently formatted question. 
 
-Question-trained model evaluated on questions vs on phrases
+_Question-trained model evaluated on questions vs on phrases_
 
 |              | eval on phrase dev set | eval on question dev set |
 | ------------ | ---------------------- | ------------------------ |
@@ -144,7 +144,7 @@ Notably, <ins>a standard SQuAD-trained model performs really poorly when evaluat
 
 On the other hand, as shown in the charts below, a model trained on phrases performs almost as accurately on standard questions as it does on its own dev set - it’s well adapted to inputs of both phrases and questions. It does slightly better on the phrase evaluation, seemingly because the model learns weights corresponding to the format of its training data, but since here the second dev set (questions) introduces new information instead of taking away expected context, the extra input barely hurts. In other words, the phrase-trained model is more robust for a general set of inputs than a question-based model because it was forced to learn from less context per data point originally. However, it performs slightly less accurately on questions as compared to a question-trained model evaluated on questions (or as compared to its own performance on phrases). 
 
-Phrase trained model evaluated on phrases vs. questions
+_Phrase trained model evaluated on phrases vs. questions_
 
 |              | eval on phrase dev set | eval on question dev set |
 | ------------ | ---------------------- | ------------------------ |
@@ -163,7 +163,7 @@ Phrase trained model evaluated on phrases vs. questions
 
 One other interesting result came from the model trained on **questions without question marks**, shown in the charts below. When evaluated on **questions with question marks** (i.e. normal SQuAD) the metrics were slightly better than on its own dev set for the “HasAns” metrics, but slightly worse for the “NoAns”. I would guess this is because if the model isn’t exposed to question marks during training, but then is given a question with a question mark, it will be more likely to assume that the question is answerable given the extra input, which leads to increased accuracy if the question actually has an answer, but decreased accuracy when the question is impossible.
 
-Questions without question mark model evaluated on own dev set vs. normal SQuAD
+_Questions without question mark model evaluated on own dev set vs. normal SQuAD_
 
 |              | eval on q no q mark dev set | eval on question dev set |
 | ------------ | --------------------------- | ------------------------ |
