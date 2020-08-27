@@ -12,12 +12,12 @@ By Batya Stein
 ## Introduction
 
 Have you ever wondered what the most popular pizza topping in America is? To find out, you might Google “what is the most popular pizza topping in America?”. If you’re feeling lazy, maybe you’d leave out the question mark, or drop the question format altogether, and go with a simple “most popular pizza topping in America”. 
-![pizza phrases](/site-files/batya-post-imgs/pizza-phrases.png)
+![pizza phrases](/site_files/batya-post-imgs/pizza-phrases.png)
 This probably seems like an excessive amount of thought to put into a Google search query, especially since all the above prompts return the same information. (Pepperoni, for the curious.) With or without the question word and question mark, you can intuitively recognize that all these formulations are essentially asking for the same answer.  
 
 However, imagine that you wanted to train a machine learning model to complete a similar exercise. If you fed your model background material on America’s pizza-eating habits, and then asked it some variation of the topping question, you’d like it to identify the answer “pepperoni” within the text. Models are usually trained for this type of question-answering task using reading comprehension datasets, like the **S**tanford **Qu**estion **A**nswering **D**ataset ([SQuAD](https://rajpurkar.github.io/SQuAD-explorer/)). SQuAD’s examples consist of context paragraphs from Wikipedia, and questions which either have answers located within the context paragraphs, or are unanswerable. Each question is written as a full sentence, complete with a question mark at the end. Nearly all questions contain a question word (“who”, “what”, “where”, etc.). 
 
-![](/site-files/batya-post-imgs/squad-data-pt.png)
+![](/site_files/batya-post-imgs/squad-data-pt.png)
 
 *Example of SQuAD question and context paragraph*
 
@@ -56,13 +56,13 @@ To figure out which characteristics of a question were most important, I trained
 The four datasets I used were:
 
 1. **Normal SQuAD (2.0) dataset** - _a baseline for comparison_<br>
-![img](/site-files/batya-post-imgs/normal-q.png)
+![img](/site_files/batya-post-imgs/normal-q.png)
 2. **SQuAD converted to phrases** - _can the model match phrases to answers effectively since they are more open ended than questions?_<br>
-![img](/site-files/batya-post-imgs/phrase.png)
+![img](/site_files/batya-post-imgs/phrase.png)
 3. **SQuAD questions without question marks** - _how important is question mark in getting the model to recognize a question?_<br>
-![img](/site-files/batya-post-imgs/q-no-mark.png)
+![img](/site_files/batya-post-imgs/q-no-mark.png)
 4. **SQuAD converted to phrases, with question marks appended** - _does the addition of a question mark compensate for the lack of a question structure?_<br>
-![img](/site-files/batya-post-imgs/phrase-with-q.png)
+![img](/site_files/batya-post-imgs/phrase-with-q.png)
 
 The ALBERT XL model that I used came from Huggingface’s [transformer library](https://github.com/huggingface/transformers), and for training I used Huggingface’s [run_squad.py](https://github.com/huggingface/transformers/blob/master/examples/question-answering/run_squad.py) script. I used [wandb](https://www.wandb.com/), a web-based training visualization library, to monitor metrics throughout my trainings. The trainings were run on Amazon EC2 p2.8xl instances (8 NVIDIA K80 GPUs).
 
@@ -91,7 +91,7 @@ _Metrics of 4 datasets, evaluated on their own dev sets at 7000th step_
 | Best_f1      | 84.42                                        | 83.3    | 83.59                       | 84.23                            |
 | Best_exact   | 80.86                                        | 80.27   | 80.67                       | 81.24                            |
 
-![](/site-files/batya-post-imgs/metrics.png)
+![](/site_files/batya-post-imgs/metrics.png)
 
 _F1 scores for all models throughout training_
 
@@ -113,7 +113,7 @@ _F1 scores for all models throughout training_
 | 7000 | 84.42 | 83.30   | 83.59                | 84.23               |
 | 7500 | 84.80 | 83.01   | 83.54                | 84.83               |
 
-![](/site-imgs/batya-post-imgs/F1 Scores for all models throughout training.png)
+![](/site_files/batya-post-imgs/F1 Scores for all models throughout training.png)
 
 As expected, the **standard SQuAD-trained model** has high metrics across the board and high F1 scores throughout training, since its examples have the most context for the model to pick up on (question format and question marks). Interestingly, the **SQuAD without question marks model** does better than the standard SQuAD model for the “HasAns” metrics (HasAns F1 of 85.90 vs 83.20), and notably worse for the “NoAns” (NoAns F1 of 82.57 vs 85.63)- I am not sure exactly what to conclude from this (it may not be a conclusive trend, as the bar graph only represents one checkpoint from training). Overall though, throughout training, the F1 scores of the SQuAD without question marks model were equal to, or higher than, the standard SQuAD F1’s, showing that the inclusion or exclusion of question marks seems relatively insignificant for achieving accuracy. 
 
@@ -138,7 +138,7 @@ _Question-trained model evaluated on questions vs on phrases_
 | Best_f1      | 83.3                   | 81.12                    |
 | Best_exact   | 80.27                  | 77.83                    |
 
-![](/site-imgs/batya-post-imgs/question-trained model.png)
+![](/site_files/batya-post-imgs/question-trained model.png)
 
 Notably, <ins>a standard SQuAD-trained model performs really poorly when evaluated on phrases</ins>, as shown in the charts above. Its F1 score drops from 84.42 (evaluated on questions) to 64.11 (evaluated on phrases), and its HasAnsF1 score drops from 83.20 to 50.96. Practically, this proves the necessity of training models that are better equipped to deal with phrases. On a theoretical level, this indicates that the model comes to rely on question words/ structure for context when trained on questions, and therefore it can’t process questions accurately without them. (That’s not to say that question words are inherently necessary for achieving accuracy in training - see phrase-trained model metrics above - rather, once a model *is* trained on questions, it will become reliant on question characteristics).
 
@@ -157,7 +157,7 @@ _Phrase trained model evaluated on phrases vs. questions_
 | Best_f1      | 83.3                   | 81.12                    |
 | Best_exact   | 80.27                  | 77.83                    |
 
-![](/site-files/batya-post-imgs/phrase-trained model.png)
+![](/site_files/batya-post-imgs/phrase-trained model.png)
 
 ----------
 
@@ -176,7 +176,7 @@ _Questions without question mark model evaluated on own dev set vs. normal SQuAD
 | Best_f1      | 84.23                       | 83.25                    |
 | Best_exact   | 81.24                       | 80.13                    |
 
-![](/site-files/questions without q marks.png)
+![](/site_files/questions without q marks.png)
 
 -------------
 
