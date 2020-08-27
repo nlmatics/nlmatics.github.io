@@ -176,7 +176,7 @@ _Questions without question mark model evaluated on own dev set vs. normal SQuAD
 | Best_f1      | 84.23                       | 83.25                    |
 | Best_exact   | 81.24                       | 80.13                    |
 
-![](/site_files/questions without q marks.png)
+![](/site_files/batya-post-imgs/questions without q marks.png)
 
 -------------
 
