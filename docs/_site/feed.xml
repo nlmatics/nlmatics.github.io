@@ -1,4 +1,502 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-24T08:46:56-04:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><entry><title type="html">How to Extract Keyphrases and Visualize Text</title><link href="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html" rel="alternate" type="text/html" title="How to Extract Keyphrases and Visualize Text" /><published>2020-08-07T06:30:00-04:00</published><updated>2020-08-07T06:30:00-04:00</updated><id>http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text</id><content type="html" xml:base="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html">&lt;h4 id=&quot;by-cheyenne-zhang&quot;&gt;by Cheyenne Zhang&lt;/h4&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-29T04:21:39+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><entry><title type="html">Optimizing Transformer Q&amp;amp;A Models for Naturalistic Search</title><link href="http://localhost:4000/2020/08/25/Optimizing-Transformer-Q&A-Models-for-Naturalistic-Search.html" rel="alternate" type="text/html" title="Optimizing Transformer Q&amp;A Models for Naturalistic Search" /><published>2020-08-25T19:30:00+09:00</published><updated>2020-08-25T19:30:00+09:00</updated><id>http://localhost:4000/2020/08/25/Optimizing%20Transformer%20Q&amp;A%20Models%20%20for%20Naturalistic%20Search</id><content type="html" xml:base="http://localhost:4000/2020/08/25/Optimizing-Transformer-Q&amp;A-Models-for-Naturalistic-Search.html">&lt;h1 id=&quot;optimizing-transformer-qa-models-for-naturalistic-search&quot;&gt;Optimizing Transformer Q&amp;amp;A Models for Naturalistic Search&lt;/h1&gt;
+
+&lt;p&gt;By Batya Stein&lt;/p&gt;
+
+&lt;h2 id=&quot;introduction&quot;&gt;Introduction&lt;/h2&gt;
+
+&lt;p&gt;Have you ever wondered what the most popular pizza topping in America is? To find out, you might Google “what is the most popular pizza topping in America?”. If you’re feeling lazy, maybe you’d leave out the question mark, or drop the question format altogether, and go with a simple “most popular pizza topping in America”.
+&lt;img src=&quot;/site_files/batya-post-imgs/pizza-phrases.png&quot; alt=&quot;pizza phrases&quot; /&gt;
+This probably seems like an excessive amount of thought to put into a Google search query, especially since all the above prompts return the same information. (Pepperoni, for the curious.) With or without the question word and question mark, you can intuitively recognize that all these formulations are essentially asking for the same answer.&lt;/p&gt;
+
+&lt;p&gt;However, imagine that you wanted to train a machine learning model to complete a similar exercise. If you fed your model background material on America’s pizza-eating habits, and then asked it some variation of the topping question, you’d like it to identify the answer “pepperoni” within the text. Models are usually trained for this type of question-answering task using reading comprehension datasets, like the &lt;strong&gt;S&lt;/strong&gt;tanford &lt;strong&gt;Qu&lt;/strong&gt;estion &lt;strong&gt;A&lt;/strong&gt;nswering &lt;strong&gt;D&lt;/strong&gt;ataset (&lt;a href=&quot;https://rajpurkar.github.io/SQuAD-explorer/&quot;&gt;SQuAD&lt;/a&gt;). SQuAD’s examples consist of context paragraphs from Wikipedia, and questions which either have answers located within the context paragraphs, or are unanswerable. Each question is written as a full sentence, complete with a question mark at the end. Nearly all questions contain a question word (“who”, “what”, “where”, etc.).&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/site_files/batya-post-imgs/squad-data-pt.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Example of SQuAD question and context paragraph&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;Given that a model trained on SQuAD has only been exposed to prompts in the form of questions, the specific way a user words their query takes on new importance. Would a model trained only on questions be able to process phrases and match them to answers with the same accuracy as it can questions? In other words, which characteristics are most necessary for a prompt to be accurately understood by a SQuAD-trained model? Though it may seem obvious to you and me that “what is the most popular topping?” is basically synonymous with “the most popular topping”, it is not clear that the same would be apparent to a SQuAD-trained model.&lt;/p&gt;
+
+&lt;h2 id=&quot;experiment-motivation&quot;&gt;Experiment Motivation&lt;/h2&gt;
+
+&lt;p&gt;As an intern at NLMatics this summer, I ran a series of experiments using transformer-based question-answering models and the SQuAD 2.0 dataset to explore how the wording of a dataset’s questions impacts a model’s accuracy. My goal was to see if:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;a model &lt;strong&gt;trained&lt;/strong&gt; only on &lt;ins&gt;question&lt;/ins&gt;-answer pairs (e.g. the standard SQuAD dataset) would give accurate results when &lt;strong&gt;evaluated&lt;/strong&gt; on &lt;ins&gt;phrase&lt;/ins&gt;-answer pairs, and&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;If a model trained on phrase-answer pairs could achieve the same performance scores (F1 and exact match) when asked to predict answers for phrases, as a model trained on normal SQuAD achieves when asked to predict answers to questions.&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;I also trained models on different permutations of the phrase and question datasets - phrases with question marks, and questions without question marks - to isolate the characteristics that make a question answering model effective. Is it the presence of a question mark, or of a question word, or simply the keywords of a phrase?&lt;/p&gt;
+
+&lt;p&gt;The results of these experiments are relevant for any system where a user directly queries a text using a question-answering model. The designer of the system doesn’t necessarily have control over the questions users ask, or a way of knowing if they will choose to input questions (ex. “where is the building?”) or phrases (ex. “building location”). If a model could be trained for accuracy in phrase answering tasks without a significant decrease in accuracy on question answering tasks, users would be able to input a much broader range of questions, without the designer having to worry about precise wording.&lt;/p&gt;
+
+&lt;h2 id=&quot;question-to-phrase-conversion&quot;&gt;Question to Phrase Conversion&lt;/h2&gt;
+
+&lt;p&gt;In order to create a dataset of phrases directly comparable to a question dataset, I decided to reformat the SQuAD 2.0 dataset into phrases. (&lt;a href=&quot;https://ai.google.com/research/NaturalQuestions&quot;&gt;Google Natural Questions&lt;/a&gt;, another large reading comprehension dataset, has some examples that are already written as phrases and some written as questions, but the variability makes it less useful for direct comparisons.) My goal when converting the questions was to create phrases that sounded like something natural a user might type into a search engine, so that the training data would be similar to what would be seen in a real use case.&lt;/p&gt;
+
+&lt;p&gt;To this end, I wrote a &lt;a href=&quot;https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/code-examples/qs_to_phrases.py&quot;&gt;python script to process SQuAD&lt;/a&gt; that, besides deleting question words, changed tenses when necessary, moved verbs after subjects, and reordered the clauses of complex questions. I used the &lt;a href=&quot;https://spacy.io/&quot;&gt;spaCy&lt;/a&gt; NLP library for part-of-speech tagging and dependency parsing (ex. identifying the subject of a sentence), and the &lt;a href=&quot;https://github.com/clips/pattern#pattern&quot;&gt;pattern&lt;/a&gt; library for verb conjugation. The code had rules for handling questions based on the question words they began with, and a separate rule for handling questions with more complex structures.&lt;/p&gt;
+
+&lt;p&gt;Some example outputs from my phrase conversion code:&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Original Question&lt;/th&gt;
+      &lt;th&gt;New Phrase&lt;/th&gt;
+      &lt;th&gt;Comment&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;“On what date did Henry Kissinger negotiate an Israeli troop withdrawal from the Sinai Peninsula?”&lt;/td&gt;
+      &lt;td&gt;“date Henry Kissinger &lt;strong&gt;negotiated&lt;/strong&gt; an Israeli troop withdrawal from Sinai Peninsula on”&lt;/td&gt;
+      &lt;td&gt;To create a natural sounding phrase after deleting “did” from questions, I used the pattern library’s verb conjugation function to change remaining verbs to past tense&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;“Atticus Finch’s integrity has become a model for which job?”&lt;/td&gt;
+      &lt;td&gt;“job Atticus Finch’s integrity has become a model for”&lt;/td&gt;
+      &lt;td&gt;For examples where question words appeared mid-sentence (instead of as the first word), I split questions at the question word and moved the first clause to the back&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;“Where &lt;strong&gt;would&lt;/strong&gt; present day Joara be?”&lt;/td&gt;
+      &lt;td&gt;“present day Joara &lt;strong&gt;would&lt;/strong&gt; be”&lt;/td&gt;
+      &lt;td&gt;When a phrase wouldn’t make sense without an auxiliary verb like “would”, “could”, “can”, etc., I used spaCy to identify the question’s subject, and moved the auxiliary verb behind it (otherwise, I deleted unnecessary auxiliary verbs such as “are” or “is”)&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;model-training&quot;&gt;Model Training&lt;/h2&gt;
+
+&lt;p&gt;To figure out which characteristics of a question were most important, I trained four ALBERT models on four different datasets. ALBERT is a light variation of the BERT transformer model with fewer parameters for an even quicker training time than BERT. (See the original paper on BERT &lt;a href=&quot;https://arxiv.org/abs/1706.03762&quot;&gt;here&lt;/a&gt;, with a helpful explanation &lt;a href=&quot;https://mlexplained.com/2017/12/29/attention-is-all-you-need-explained/&quot;&gt;here&lt;/a&gt; and a general overview of transformer architecture &lt;a href=&quot;https://jalammar.github.io/illustrated-transformer/&quot;&gt;here&lt;/a&gt;.)&lt;/p&gt;
+
+&lt;p&gt;The four datasets I used were:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;strong&gt;Normal SQuAD (2.0) dataset&lt;/strong&gt; - &lt;em&gt;a baseline for comparison&lt;/em&gt;&lt;br /&gt;
+&lt;img src=&quot;/site_files/batya-post-imgs/normal-q.png&quot; alt=&quot;img&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;SQuAD converted to phrases&lt;/strong&gt; - &lt;em&gt;can the model match phrases to answers effectively since they are more open ended than questions?&lt;/em&gt;&lt;br /&gt;
+&lt;img src=&quot;/site_files/batya-post-imgs/phrase.png&quot; alt=&quot;img&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;SQuAD questions without question marks&lt;/strong&gt; - &lt;em&gt;how important is question mark in getting the model to recognize a question?&lt;/em&gt;&lt;br /&gt;
+&lt;img src=&quot;/site_files/batya-post-imgs/q-no-mark.png&quot; alt=&quot;img&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;SQuAD converted to phrases, with question marks appended&lt;/strong&gt; - &lt;em&gt;does the addition of a question mark compensate for the lack of a question structure?&lt;/em&gt;&lt;br /&gt;
+&lt;img src=&quot;/site_files/batya-post-imgs/phrase-with-q.png&quot; alt=&quot;img&quot; /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;The ALBERT XL model that I used came from Huggingface’s &lt;a href=&quot;https://github.com/huggingface/transformers&quot;&gt;transformer library&lt;/a&gt;, and for training I used Huggingface’s &lt;a href=&quot;https://github.com/huggingface/transformers/blob/master/examples/question-answering/run_squad.py&quot;&gt;run_squad.py&lt;/a&gt; script. I used &lt;a href=&quot;https://www.wandb.com/&quot;&gt;wandb&lt;/a&gt;, a web-based training visualization library, to monitor metrics throughout my trainings. The trainings were run on Amazon EC2 p2.8xl instances (8 NVIDIA K80 GPUs).&lt;/p&gt;
+
+&lt;h2 id=&quot;squad-metrics&quot;&gt;SQuAD Metrics&lt;/h2&gt;
+
+&lt;p&gt;The official metrics for evaluating a SQuAD trained model are calculated in the &lt;a href=&quot;https://worksheets.codalab.org/rest/bundles/0x6b567e1cf2e041ec80d7098f031c5c9e/contents/blob/&quot;&gt;evaluation script&lt;/a&gt; linked on SQuAD’s website. The two main metrics are “exact” and “F1”. Exact” returns the percentage of examples that the model predicted correct answers for out of all test examples. “&lt;a href=&quot;https://towardsdatascience.com/accuracy-precision-recall-or-f1-331fb37c5cb9&quot;&gt;F1&lt;/a&gt;” is an accuracy measure combining precision (number of true positives over total predicted positives) and recall (number of true positives over everything that should have been identified as positive). To calculate F1 scores for SQuAD, for each example in the evaluation set, precision is the number of overlapping words between the correct and predicted answers, divided by the number of words in the &lt;ins&gt;predicted&lt;/ins&gt; answer. Recall is the number of overlapping words divided by the number of words in the &lt;ins&gt;correct&lt;/ins&gt; answer.&lt;/p&gt;
+
+&lt;p&gt;The metrics return F1 and exact scores over all the evaluation set examples, as well as F1 and exact scores over the subset of evaluation examples that have answers, (“HasAns”) and over the subset of examples that are impossible to answer (“NoAns”).&lt;/p&gt;
+
+&lt;h2 id=&quot;results-and-discussion&quot;&gt;Results and Discussion&lt;/h2&gt;
+
+&lt;p&gt;To analyze the results of my 4 model trainings, I first compared the performances of each model evaluated on its own dev set (I used dev sets for evaluations since SQuAD’s test set is not publicly available). In other words, after training, how accurately would each model perform on unseen data formatted the same way as its training data?&lt;/p&gt;
+
+&lt;p&gt;(For consistency, results shown below are evaluated at the 7000th training step, towards the end of the 2nd epoch. The exception is the F1 score chart, which spans from beginning to end of training.)&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Metrics of 4 datasets, evaluated on their own dev sets at 7000th step&lt;/em&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt; &lt;/th&gt;
+      &lt;th&gt;Normal SQuAD (questions with question marks)&lt;/th&gt;
+      &lt;th&gt;Phrases&lt;/th&gt;
+      &lt;th&gt;Phrases with question marks&lt;/th&gt;
+      &lt;th&gt;Questions without question marks&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;F1&lt;/td&gt;
+      &lt;td&gt;84.42&lt;/td&gt;
+      &lt;td&gt;83.3&lt;/td&gt;
+      &lt;td&gt;83.59&lt;/td&gt;
+      &lt;td&gt;84.23&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Exact&lt;/td&gt;
+      &lt;td&gt;80.86&lt;/td&gt;
+      &lt;td&gt;80.27&lt;/td&gt;
+      &lt;td&gt;80.67&lt;/td&gt;
+      &lt;td&gt;81.24&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;HasAns_f1&lt;/td&gt;
+      &lt;td&gt;83.2&lt;/td&gt;
+      &lt;td&gt;80.77&lt;/td&gt;
+      &lt;td&gt;81.36&lt;/td&gt;
+      &lt;td&gt;85.9&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;HasAns_exact&lt;/td&gt;
+      &lt;td&gt;76.06&lt;/td&gt;
+      &lt;td&gt;74.7&lt;/td&gt;
+      &lt;td&gt;75.52&lt;/td&gt;
+      &lt;td&gt;79.91&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;NoAns_f1&lt;/td&gt;
+      &lt;td&gt;85.63&lt;/td&gt;
+      &lt;td&gt;85.82&lt;/td&gt;
+      &lt;td&gt;85.8&lt;/td&gt;
+      &lt;td&gt;82.57&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;NoAns_exact&lt;/td&gt;
+      &lt;td&gt;85.63&lt;/td&gt;
+      &lt;td&gt;85.82&lt;/td&gt;
+      &lt;td&gt;85.8&lt;/td&gt;
+      &lt;td&gt;82.57&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Best_f1&lt;/td&gt;
+      &lt;td&gt;84.42&lt;/td&gt;
+      &lt;td&gt;83.3&lt;/td&gt;
+      &lt;td&gt;83.59&lt;/td&gt;
+      &lt;td&gt;84.23&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Best_exact&lt;/td&gt;
+      &lt;td&gt;80.86&lt;/td&gt;
+      &lt;td&gt;80.27&lt;/td&gt;
+      &lt;td&gt;80.67&lt;/td&gt;
+      &lt;td&gt;81.24&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;img src=&quot;/site_files/batya-post-imgs/metrics.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;F1 scores for all models throughout training&lt;/em&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Step&lt;/th&gt;
+      &lt;th&gt;SQuAD&lt;/th&gt;
+      &lt;th&gt;Phrases&lt;/th&gt;
+      &lt;th&gt;Phrases with q marks&lt;/th&gt;
+      &lt;th&gt;Q’s without q marks&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;500&lt;/td&gt;
+      &lt;td&gt;64.98&lt;/td&gt;
+      &lt;td&gt;63.54&lt;/td&gt;
+      &lt;td&gt;68.50&lt;/td&gt;
+      &lt;td&gt;72.47&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;1000&lt;/td&gt;
+      &lt;td&gt;77.08&lt;/td&gt;
+      &lt;td&gt;76.08&lt;/td&gt;
+      &lt;td&gt;77.05&lt;/td&gt;
+      &lt;td&gt;77.86&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;1500&lt;/td&gt;
+      &lt;td&gt;77.75&lt;/td&gt;
+      &lt;td&gt;77.01&lt;/td&gt;
+      &lt;td&gt;77.40&lt;/td&gt;
+      &lt;td&gt;78.93&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;2000&lt;/td&gt;
+      &lt;td&gt;80.52&lt;/td&gt;
+      &lt;td&gt;79.35&lt;/td&gt;
+      &lt;td&gt;79.44&lt;/td&gt;
+      &lt;td&gt;80.93&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;2500&lt;/td&gt;
+      &lt;td&gt;80.82&lt;/td&gt;
+      &lt;td&gt;79.50&lt;/td&gt;
+      &lt;td&gt;79.05&lt;/td&gt;
+      &lt;td&gt;81.19&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;3000&lt;/td&gt;
+      &lt;td&gt;81.81&lt;/td&gt;
+      &lt;td&gt;79.05&lt;/td&gt;
+      &lt;td&gt;80.62&lt;/td&gt;
+      &lt;td&gt;82.22&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;3500&lt;/td&gt;
+      &lt;td&gt;80.91&lt;/td&gt;
+      &lt;td&gt;80.36&lt;/td&gt;
+      &lt;td&gt;80.71&lt;/td&gt;
+      &lt;td&gt;80.93&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;4000&lt;/td&gt;
+      &lt;td&gt;82.28&lt;/td&gt;
+      &lt;td&gt;80.37&lt;/td&gt;
+      &lt;td&gt;80.95&lt;/td&gt;
+      &lt;td&gt;83.07&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;4500&lt;/td&gt;
+      &lt;td&gt;83.09&lt;/td&gt;
+      &lt;td&gt;81.01&lt;/td&gt;
+      &lt;td&gt;81.15&lt;/td&gt;
+      &lt;td&gt;82.70&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;5000&lt;/td&gt;
+      &lt;td&gt;83.06&lt;/td&gt;
+      &lt;td&gt;81.65&lt;/td&gt;
+      &lt;td&gt;82.47&lt;/td&gt;
+      &lt;td&gt;83.59&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;5500&lt;/td&gt;
+      &lt;td&gt;83.84&lt;/td&gt;
+      &lt;td&gt;82.85&lt;/td&gt;
+      &lt;td&gt;82.50&lt;/td&gt;
+      &lt;td&gt;84.09&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;6000&lt;/td&gt;
+      &lt;td&gt;84.27&lt;/td&gt;
+      &lt;td&gt;82.48&lt;/td&gt;
+      &lt;td&gt;83.20&lt;/td&gt;
+      &lt;td&gt;84.46&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;6500&lt;/td&gt;
+      &lt;td&gt;84.46&lt;/td&gt;
+      &lt;td&gt;82.02&lt;/td&gt;
+      &lt;td&gt;83.38&lt;/td&gt;
+      &lt;td&gt;84.44&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;7000&lt;/td&gt;
+      &lt;td&gt;84.42&lt;/td&gt;
+      &lt;td&gt;83.30&lt;/td&gt;
+      &lt;td&gt;83.59&lt;/td&gt;
+      &lt;td&gt;84.23&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;7500&lt;/td&gt;
+      &lt;td&gt;84.80&lt;/td&gt;
+      &lt;td&gt;83.01&lt;/td&gt;
+      &lt;td&gt;83.54&lt;/td&gt;
+      &lt;td&gt;84.83&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;img src=&quot;/site_files/batya-post-imgs/F1 Scores for all models throughout training.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;As expected, the &lt;strong&gt;standard SQuAD-trained model&lt;/strong&gt; has high metrics across the board and high F1 scores throughout training, since its examples have the most context for the model to pick up on (question format and question marks). Interestingly, the &lt;strong&gt;SQuAD without question marks model&lt;/strong&gt; does better than the standard SQuAD model for the “HasAns” metrics (HasAns F1 of 85.90 vs 83.20), and notably worse for the “NoAns” (NoAns F1 of 82.57 vs 85.63)- I am not sure exactly what to conclude from this (it may not be a conclusive trend, as the bar graph only represents one checkpoint from training). Overall though, throughout training, the F1 scores of the SQuAD without question marks model were equal to, or higher than, the standard SQuAD F1’s, showing that the inclusion or exclusion of question marks seems relatively insignificant for achieving accuracy.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;phrase-trained model&lt;/strong&gt; metrics are equal to, or 1-3 points lower than the standard SQuAD metrics, and its F1 scores throughout training are lower overall but not to a super significant extent. This answers one of my main beginning questions, indicating that while there is some increased accuracy associated with the additional context of a question structure, &lt;ins&gt;a model trained on phrase-answer pairs does not show a significant decrease in accuracy&lt;/ins&gt;.&lt;/p&gt;
+
+&lt;p&gt;Adding question marks to phrases does yield slightly better F1 scores throughout training (see graph above). A possible interpretation of this trend is that all the contextual question information is present, question marks are essentially negligible, but with less information presented, as in phrases, the question mark does help increase accuracy.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;For the second part of my analysis, I evaluated each of the models on the standard SQuAD dev set, and the standard SQuAD trained model on the phrase dev set. (All results evaluated at the 7000th step, as above). Through these evaluations I hoped to see how well a model trained on a modified dataset could perform on a differently formatted question.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Question-trained model evaluated on questions vs on phrases&lt;/em&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt; &lt;/th&gt;
+      &lt;th&gt;eval on phrase dev set&lt;/th&gt;
+      &lt;th&gt;eval on question dev set&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;F1&lt;/td&gt;
+      &lt;td&gt;83.3&lt;/td&gt;
+      &lt;td&gt;81.12&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Exact&lt;/td&gt;
+      &lt;td&gt;80.27&lt;/td&gt;
+      &lt;td&gt;77.83&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;HasAns_f1&lt;/td&gt;
+      &lt;td&gt;80.77&lt;/td&gt;
+      &lt;td&gt;80.64&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;HasAns_exact&lt;/td&gt;
+      &lt;td&gt;74.7&lt;/td&gt;
+      &lt;td&gt;74.06&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;NoAns_f1&lt;/td&gt;
+      &lt;td&gt;85.82&lt;/td&gt;
+      &lt;td&gt;81.6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;NoAns_exact&lt;/td&gt;
+      &lt;td&gt;85.82&lt;/td&gt;
+      &lt;td&gt;81.6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Best_f1&lt;/td&gt;
+      &lt;td&gt;83.3&lt;/td&gt;
+      &lt;td&gt;81.12&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Best_exact&lt;/td&gt;
+      &lt;td&gt;80.27&lt;/td&gt;
+      &lt;td&gt;77.83&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;img src=&quot;/site_files/batya-post-imgs/question-trained model.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Notably, &lt;ins&gt;a standard SQuAD-trained model performs really poorly when evaluated on phrases&lt;/ins&gt;, as shown in the charts above. Its F1 score drops from 84.42 (evaluated on questions) to 64.11 (evaluated on phrases), and its HasAnsF1 score drops from 83.20 to 50.96. Practically, this proves the necessity of training models that are better equipped to deal with phrases. On a theoretical level, this indicates that the model comes to rely on question words/ structure for context when trained on questions, and therefore it can’t process questions accurately without them. (That’s not to say that question words are inherently necessary for achieving accuracy in training - see phrase-trained model metrics above - rather, once a model &lt;em&gt;is&lt;/em&gt; trained on questions, it will become reliant on question characteristics).&lt;/p&gt;
+
+&lt;p&gt;On the other hand, as shown in the charts below, a model trained on phrases performs almost as accurately on standard questions as it does on its own dev set - it’s well adapted to inputs of both phrases and questions. It does slightly better on the phrase evaluation, seemingly because the model learns weights corresponding to the format of its training data, but since here the second dev set (questions) introduces new information instead of taking away expected context, the extra input barely hurts. In other words, the phrase-trained model is more robust for a general set of inputs than a question-based model because it was forced to learn from less context per data point originally. However, it performs slightly less accurately on questions as compared to a question-trained model evaluated on questions (or as compared to its own performance on phrases).&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Phrase trained model evaluated on phrases vs. questions&lt;/em&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt; &lt;/th&gt;
+      &lt;th&gt;eval on phrase dev set&lt;/th&gt;
+      &lt;th&gt;eval on question dev set&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;F1&lt;/td&gt;
+      &lt;td&gt;83.3&lt;/td&gt;
+      &lt;td&gt;81.12&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Exact&lt;/td&gt;
+      &lt;td&gt;80.27&lt;/td&gt;
+      &lt;td&gt;77.83&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;HasAns_f1&lt;/td&gt;
+      &lt;td&gt;80.77&lt;/td&gt;
+      &lt;td&gt;80.64&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;HasAns_exact&lt;/td&gt;
+      &lt;td&gt;74.7&lt;/td&gt;
+      &lt;td&gt;74.06&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;NoAns_f1&lt;/td&gt;
+      &lt;td&gt;85.82&lt;/td&gt;
+      &lt;td&gt;81.6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;NoAns_exact&lt;/td&gt;
+      &lt;td&gt;85.82&lt;/td&gt;
+      &lt;td&gt;81.6&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Best_f1&lt;/td&gt;
+      &lt;td&gt;83.3&lt;/td&gt;
+      &lt;td&gt;81.12&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Best_exact&lt;/td&gt;
+      &lt;td&gt;80.27&lt;/td&gt;
+      &lt;td&gt;77.83&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;img src=&quot;/site_files/batya-post-imgs/phrase-trained model.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;One other interesting result came from the model trained on &lt;strong&gt;questions without question marks&lt;/strong&gt;, shown in the charts below. When evaluated on &lt;strong&gt;questions with question marks&lt;/strong&gt; (i.e. normal SQuAD) the metrics were slightly better than on its own dev set for the “HasAns” metrics, but slightly worse for the “NoAns”. I would guess this is because if the model isn’t exposed to question marks during training, but then is given a question with a question mark, it will be more likely to assume that the question is answerable given the extra input, which leads to increased accuracy if the question actually has an answer, but decreased accuracy when the question is impossible.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Questions without question mark model evaluated on own dev set vs. normal SQuAD&lt;/em&gt;&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt; &lt;/th&gt;
+      &lt;th&gt;eval on q no q mark dev set&lt;/th&gt;
+      &lt;th&gt;eval on question dev set&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;F1&lt;/td&gt;
+      &lt;td&gt;84.23&lt;/td&gt;
+      &lt;td&gt;83.24&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Exact&lt;/td&gt;
+      &lt;td&gt;81.24&lt;/td&gt;
+      &lt;td&gt;80.12&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;HasAns_f1&lt;/td&gt;
+      &lt;td&gt;85.9&lt;/td&gt;
+      &lt;td&gt;87.76&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;HasAns_exact&lt;/td&gt;
+      &lt;td&gt;79.91&lt;/td&gt;
+      &lt;td&gt;81.51&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;NoAns_f1&lt;/td&gt;
+      &lt;td&gt;82.57&lt;/td&gt;
+      &lt;td&gt;78.73&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;NoAns_exact&lt;/td&gt;
+      &lt;td&gt;82.57&lt;/td&gt;
+      &lt;td&gt;78.73&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Best_f1&lt;/td&gt;
+      &lt;td&gt;84.23&lt;/td&gt;
+      &lt;td&gt;83.25&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Best_exact&lt;/td&gt;
+      &lt;td&gt;81.24&lt;/td&gt;
+      &lt;td&gt;80.13&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;img src=&quot;/site_files/batya-post-imgs/questions without q marks.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;In conclusion, it seems that BERT transformer models begin to recognize and expect specific characteristics from their training data. This affects the results when a model is evaluated on data formatted differently from its original training set, but to a much less dramatic extent if information is being added rather than taken away.
+On the other hand, the initial dataset a model is trained on doesn’t affect accuracy as much as you might think it would - a model trained on phrases will be within a few points of a question-trained model’s accuracy, and adding or taking away question marks makes a mostly negligible difference.
+Running these experiments was cool because I was able to get a better feel for how a model actually adapts to a dataset when training on it. I also think the results I found can be practically pretty helpful for anyone designing a question-answering system and wondering what types of input would be most effective.&lt;/p&gt;
+
+&lt;h2 id=&quot;further-developments&quot;&gt;Further Developments&lt;/h2&gt;
+
+&lt;p&gt;Each model presented here was only trained once. To run this as a full experiment, ensuring that the results are significant, you would have to set random seeds and run each training about ten times to get standard deviations.&lt;/p&gt;
+
+&lt;p&gt;Additionally, there are a few ways to build on this project that I think could be interesting. You could train an ALBERT model twice, on normal SQuAD and then on SQuAD converted to phrases, to see if it achieves better results on both questions and phrases. However, training a model twice on the same data might lead to overfitting on SQuAD. An alternative would be to train a model using MAML, &lt;a href=&quot;https://towardsdatascience.com/model-agnostic-meta-learning-maml-8a245d9bc4ac&quot;&gt;Model Agnostic Meta Learning&lt;/a&gt;, which allows a model to learn multiple different tasks, treating questions and phrases as two separate tasks. It would also be interesting to train a model on the full &lt;a href=&quot;https://ai.google.com/research/NaturalQuestions&quot;&gt;Google Natural Questions&lt;/a&gt; dataset, which is already a mixture of questions and phrases, and evaluate it just with a question dataset and just with a phrase dataset to see how the mixture and larger dataset size affect the results.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;Thank you to my supervisor, Sonia Joseph, who initially proposed this idea to me, helped along the way, and introduced me to MAML.&lt;/p&gt;</content><author><name>Batya Stein</name></author><summary type="html">Optimizing Transformer Q&amp;amp;A Models for Naturalistic Search</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/Placeholder-thumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/Placeholder-thumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">How to Extract Keyphrases and Visualize Text</title><link href="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html" rel="alternate" type="text/html" title="How to Extract Keyphrases and Visualize Text" /><published>2020-08-07T19:30:00+09:00</published><updated>2020-08-07T19:30:00+09:00</updated><id>http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text</id><content type="html" xml:base="http://localhost:4000/keyphrase-extraction/visualization/text/nlp/python/javascript/keppler-mapper/d3/2020/08/07/How-to-Extract-Keyphrases-and-Visualize-Text.html">&lt;h4 id=&quot;by-cheyenne-zhang&quot;&gt;by Cheyenne Zhang&lt;/h4&gt;
 
 &lt;p&gt;&lt;strong&gt;Cheyenne Zhang&lt;/strong&gt; is a rising junior at Princeton University studying Computer Science with certificates in East Asian Studies and Cognitive Science. She’s originally from just outside of Seattle, WA, and enjoys watching movies and learning languages in her free time. Cheyenne was one of NLMatics’ 2020 summer interns.&lt;/p&gt;
 
@@ -454,9 +952,9 @@ var label = node.append(&quot;text&quot;)
   &lt;li&gt;&lt;a href=&quot;http://bl.ocks.org/sathomas/11550728&quot;&gt;Understanding d3 v3 Forces&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://www.d3indepth.com/force-layout/&quot;&gt;Understanding d3 v5 Forces&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://cran.r-project.org/web/packages/viridis/vignettes/intro-to-viridis.html&quot;&gt;viridis color palettes&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Cheyenne Zhang</name></author><summary type="html">by Cheyenne Zhang</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/kepmapthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/kepmapthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Smooth Inverse Frequency (SIF) Embeddings in Golang</title><link href="http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth-Inverse-Frequency-Frequency-(SIF)-Embeddings-in-Golang.html" rel="alternate" type="text/html" title="Smooth Inverse Frequency (SIF) Embeddings in Golang" /><published>2020-08-07T05:45:00-04:00</published><updated>2020-08-07T05:45:00-04:00</updated><id>http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth%20Inverse%20Frequency%20Frequency%20(SIF)%20Embeddings%20in%20Golang</id><content type="html" xml:base="http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth-Inverse-Frequency-Frequency-(SIF)-Embeddings-in-Golang.html">&lt;h4 id=&quot;by-daniel-ye&quot;&gt;by Daniel Ye&lt;/h4&gt;
+&lt;/ul&gt;</content><author><name>Cheyenne Zhang</name></author><summary type="html">by Cheyenne Zhang</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/kepmapthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/kepmapthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Smooth Inverse Frequency (SIF) Embeddings in Golang</title><link href="http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth-Inverse-Frequency-Frequency-(SIF)-Embeddings-in-Golang.html" rel="alternate" type="text/html" title="Smooth Inverse Frequency (SIF) Embeddings in Golang" /><published>2020-08-07T18:45:00+09:00</published><updated>2020-08-07T18:45:00+09:00</updated><id>http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth%20Inverse%20Frequency%20Frequency%20(SIF)%20Embeddings%20in%20Golang</id><content type="html" xml:base="http://localhost:4000/nlp/sentence-embeddings/2020/08/07/Smooth-Inverse-Frequency-Frequency-(SIF)-Embeddings-in-Golang.html">&lt;h4 id=&quot;by-daniel-ye&quot;&gt;by Daniel Ye&lt;/h4&gt;
 
-&lt;p&gt;&lt;br /&gt; 
+&lt;p&gt;&lt;br /&gt;
 &lt;strong&gt;&lt;em&gt;Daniel Ye&lt;/em&gt;&lt;/strong&gt; is a sophomore at Cornell University majoring in Computer Science and minoring in Operations Research and Information Engineering. I am interested in machine learning, natural language processing, and data science. I have worked on projects involving manufacturing data collection/analysis, greenhouse environmental regulation, and a multiplayer programming game. In my free time I enjoy playing tennis, running, hiking, and playing cello or guitar.Daniel was one of NLMatics’ 2020 summer interns.
 &lt;br /&gt;&lt;/p&gt;
 
@@ -472,35 +970,35 @@ var label = node.append(&quot;text&quot;)
 
 &lt;ol&gt;
   &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;#bookmark=id.uv0gxlx5wixm&quot;&gt;Introduction &lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;#introduction&quot;&gt;Introduction&lt;/a&gt;&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;#bookmark=id.pcgyzkz8chfm&quot;&gt;Motivation&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;#motivation&quot;&gt;Motivation&lt;/a&gt;&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;#bookmark=id.vij0hbt6t1id&quot;&gt;Why GoLang?&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;#golang&quot;&gt;Why GoLang?&lt;/a&gt;&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;#bookmark=id.mmsg2fvvb5zz&quot;&gt;GRPC Improvements&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;#grpc&quot;&gt;GRPC Improvements&lt;/a&gt;&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;#bookmark=id.i0zeii5wg08t&quot;&gt;Post-Processing Improvements&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;#postprocess&quot;&gt;Post-Processing Improvements&lt;/a&gt;&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;#bookmark=id.aol4ijt37be&quot;&gt;Productionalizing With Docker&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;#docker&quot;&gt;Productionalizing With Docker&lt;/a&gt;&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;&lt;a href=&quot;#bookmark=id.ouhqmef3a5d5&quot;&gt;Conclusion&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;a href=&quot;#conclusion&quot;&gt;Conclusion&lt;/a&gt;&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;**1. Introduction **&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a name=&quot;introduction&quot;&gt;&lt;/a&gt;1. Introduction&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;I am a rising junior majoring in computer science and minoring in operations research and information engineering at Cornell Engineering. This summer, I interned at NLMatics, and one of the projects I worked on was implementing a &lt;a href=&quot;https://openreview.net/pdf?id=SyK00v5xx#page=12&amp;amp;zoom=100,110,217&quot;&gt;Smooth Inverse Frequency&lt;/a&gt; model using Golang. This is able to calculate sentence embeddings from sequences of words in the form of vectors, which mathematically represent the meaning of the sentence. We use it to encode documents and queries into embeddings which are then processed further using other natural language processing models to get search results. However, our original Python implementation was fairly slow at calculating these embeddings, and it scaled poorly with increasing document sizes or concurrent requests, so we needed to find a way to speed up the service.&lt;/p&gt;
 
 &lt;p&gt;Over the course of about four weeks, I worked on combating this issue by developing a Golang implementation of the model and switching from HTTP 1.0 protocol to gRPC protocol for the server. This increased the amount of concurrent processing we were able to utilize, and reduced overhead for connecting and sending requests to the server, speeding up the service greatly. Ultimately, I was able to build a system that generated more accurate sentence embeddings at much faster speeds.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;2. Motivation&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a name=&quot;motivation&quot;&gt;&lt;/a&gt;2. Motivation&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;Word embeddings are one of the most important developments in the field of modern Natural Language Processing. Translating the meaning behind words and the semantic relationships between them into measurable quantities is a crucial step in processing language. Many words, such as “cat” and “dog” or “Mozart” and “Beethoven” have almost no physical characteristics that would reveal their similarities. Instead, modern algorithms like Google’s &lt;a href=&quot;https://arxiv.org/abs/1301.3781&quot;&gt;Word2Vec&lt;/a&gt; developed in 2013 or Stanford’s &lt;a href=&quot;https://nlp.stanford.edu/pubs/glove.pdf&quot;&gt;GloVe&lt;/a&gt; essentially count the cooccurrences of words with other words, and condense these values into dense, relatively low-dimensional vectors. Their models train on massive corpora of English text such as all of Wikipedia, and embed words as vectors based on which other words they appear in proximity to. So, if “cat” and “dog” are found together in many sentences or documents, they will have very similar vector values. This method is able to capture not only semantic similarity, but also analogies (woman is to man as king is to __) and the effects of prefixes or suffixes.&lt;/p&gt;
 
@@ -512,19 +1010,19 @@ var label = node.append(&quot;text&quot;)
 
 &lt;ul&gt;
   &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Tf%E2%80%93idf&quot;&gt;TF-ID**F&lt;/a&gt;&lt;/strong&gt; **&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Tf%E2%80%93idf&quot;&gt;TF-IDF&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;**&lt;a href=&quot;https://arxiv.org/pdf/1511.08198.pdf&quot;&gt;Paragram Phrase (PP**)&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://arxiv.org/pdf/1511.08198.pdf&quot;&gt;Paragram Phrase (PP)&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;**&lt;a href=&quot;https://en.wikipedia.org/wiki/Recurrent_neural_network&quot;&gt;Recurrent Neural Network (RNN**)&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://en.wikipedia.org/wiki/Recurrent_neural_network&quot;&gt;Recurrent Neural Network (RNN)&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;**&lt;a href=&quot;https://arxiv.org/pdf/1503.00075.pdf&quot;&gt;Long Short-Term Memory Networks (LSTM**)&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://arxiv.org/pdf/1503.00075.pdf&quot;&gt;Long Short-Term Memory Networks (LSTM)&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
   &lt;/li&gt;
   &lt;li&gt;
-    &lt;p&gt;**&lt;a href=&quot;https://people.cs.umass.edu/~miyyer/pubs/2015_acl_dan.pdf&quot;&gt;Deep Averaging Network (DAN**)&lt;/a&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;strong&gt;&lt;a href=&quot;https://people.cs.umass.edu/~miyyer/pubs/2015_acl_dan.pdf&quot;&gt;Deep Averaging Network (DAN)&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
@@ -540,7 +1038,7 @@ var label = node.append(&quot;text&quot;)
 
 &lt;p&gt;Due to its effectiveness and simplicity, SIF is an incredibly practical method of embedding sentences for commercial or enterprise products that rely on both accurate and fast results while consuming low amounts of resources.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;2. Why Golang?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a name=&quot;golang&quot;&gt;&lt;/a&gt;3. Why Golang?&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;The &lt;a href=&quot;https://github.com/PrincetonML/SIF&quot;&gt;original code&lt;/a&gt; corresponding to the paper describing SIF is implemented in Python, which by design has a &lt;a href=&quot;https://wiki.python.org/moin/GlobalInterpreterLock&quot;&gt;Global Interpreter Lock (GIL)&lt;/a&gt;, a mutex that prevents multi threaded processes from utilizing multiple cores of a processor. We hosted our Cython implementation of the SIF embedding model on a cloud service, which provided us with multiple cores of processing power. However, the GIL meant that we could not make use of the full processing power we were paying for.&lt;/p&gt;
 
@@ -585,17 +1083,15 @@ func fib(n int) int {
 
 &lt;p&gt;Our API allowed for clients to send multiple sentences at a time to be encoded by the SIF, often many at a time, and implementing the SIF in Golang allowed us to leverage powerful concurrency to speed up our calculations. My first iteration of the SIF server used &lt;a href=&quot;https://golang.org/pkg/net/http/&quot;&gt;Golang’s http package&lt;/a&gt; to host the model on an HTTP 1.0 server. I compared it with  our old system, as well as the original Python implementation. I used three different independent variables to benchmark how the performance scaled up: total words per ‘sentence’ to be embedded, total number of calls with fixed number of concurrent requests, and number of concurrent requests with fixed total number of calls. These benchmarks were made using &lt;a href=&quot;https://httpd.apache.org/docs/2.4/programs/ab.html&quot;&gt;Apache Benchmark&lt;/a&gt;, a software that allows you to make many concurrent requests to a server and reports significant timing data.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_4.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_5.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_6.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/site_files/daniels_post/image_4.png&quot; class=&quot;graph&quot; /&gt;
+&lt;img src=&quot;/site_files/daniels_post/image_7.png&quot; class=&quot;graph&quot; /&gt;
+&lt;img src=&quot;/site_files/daniels_post/image_6.png&quot; class=&quot;graph&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The results were impressive, to say the least. At a sentence level, around 10-100 words, the new implementation outperforms the old by up to &lt;strong&gt;30x&lt;/strong&gt; and at a document level, around 1000-10000+ words, it is still &lt;strong&gt;10x&lt;/strong&gt;** **faster in almost every scenario. The improved speed for sentence level embeddings is really useful, since it means that we can embed at lower levels of granularity much more easily. For example, if you were searching “who was Mozart” and only had embeddings for each document, your system might flag a document about Joseph Haydn, friend and mentor of Mozart, as relevant. As you descend levels of granularity of embeddings however, you can much more easily locate relevant information about your query. Perhaps it allows you to find a paragraph detailing their time in Vienna together, or a specific sentence about the pieces of music they worked on together.&lt;/p&gt;
 
 &lt;p&gt;I found that Go works incredibly well for creating a web service capable of handling many concurrent requests efficiently. However, Go’s build in functionality does have a significant limitation of restricting HTTP requests to sizes of 1MB or less, which was not ideal for our use cases where we had to embed large amounts of text in a single request. For example, a legal company looking to process Google’s 2019 environmental and sustainability report would need about 11 MB of payload. Or a stressed-out undergraduate trying to find tips in &lt;em&gt;Cracking the Coding Interview&lt;/em&gt; would require around 90 MB of allowance. Additionally, every HTTP request requires a new connection to be made between the server and client, which adds a significant amount of overhead to our typical use case which often requires embedding many documents at once and sending many requests.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;3. GRPC Improvements&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a name=&quot;grpc&quot;&gt;&lt;/a&gt;4. GRPC Improvements&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;Developed by Google, gRPC is an open source Remote Procedure Call framework and is what I turned to in order to hopefully remove the size limit and connection overhead problems with Go’s http package. gRPC processes payloads from requests using buffers, so it removes the 1MB size cap on requests. It also maintains connections between individual clients, so a single user can make multiple requests without having to create a connection more than once. It has its own Interface Definition Language called protocol buffers that also serve as a mechanism for serializing structured data and uses HTTP/2 to transport data. gRPC services are defined in .proto files:&lt;/p&gt;
 
@@ -670,11 +1166,11 @@ type HelloRequest struct {
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;Due to how gRPC buffers data being received and sent, we no longer had to worry about size limits on requests to our server. gRPC servers also have a very helpful feature in that connections between client and server are maintained across multiple requests, whereas with HTTP requests, a new connection has to be established for every POST. As a result, I saw more improvements in performance as this overhead was removed from the new system:&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/daniels_post/image_7.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/site_files/daniels_post/image_7.png&quot; class=&quot;graph&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;The largest improvements are seen when requests have very small payloads, so the majority of time is spent on overhead from connecting to the server. However, once you get to larger payloads, the times converge to become about equal.&lt;/p&gt;
 
-&lt;p&gt;**4. Post-Processing Improvements **&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a name=&quot;postprocess&quot;&gt;&lt;/a&gt;5. Post-Processing Improvements&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;A coworker sent me this &lt;a href=&quot;https://arxiv.org/pdf/1702.01417.pdf&quot;&gt;paper about post-processing word vectors&lt;/a&gt; in order to improve their representation of meaning. The algorithm essentially takes a list of pre-computed word vectors and performs principal component analysis on them, and then removes the top N components from every vector via Gram-Schmidt. Here is their formal algorithm:&lt;/p&gt;
 
@@ -702,13 +1198,13 @@ dimension = 0
 #append each vector to a 2-D matrix and calculate average vector
 with open(embedding_file, 'rb') as f:
     first_line = []
-    for line in f: 
+    for line in f:
         first_line = line.rstrip().split()
         dimension = len(first_line) - 1
         if dimension &amp;lt; 100 :
             continue
         print(&quot;dimension: &quot;, dimension)
-        
+
         break
     avg_vec = [0] * dimension
     vocab_size = 0
@@ -822,7 +1318,7 @@ print(&quot;Wrote: &quot;, len(embs), &quot;word embeddings&quot;)&amp;lt;/td&am
 
 &lt;p&gt;The post-processed vectors outperformed the original in every case. I also benchmarked our system using a word frequency file generated by fellow intern Connie Xu using a June snapshot of all of Wikipedia. It had a far more comprehensive vocabulary than our current word frequency file, with over 50x as many entries, but performance results were inconclusive. The results do indicate, however, that post-processed word vectors also increase performance of sentence embedding systems.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;5. Productionalizing With Docker&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a name=&quot;docker&quot;&gt;&lt;/a&gt;6. Productionalizing With Docker&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;After finishing the code for our new SIF, my final step was to prepare it for production, which meant an inevitable encounter with Docker. Here is my Dockerfile, which I got from &lt;a href=&quot;https://www.callicoder.com/docker-golang-image-container-example/&quot;&gt;this tutorial:&lt;/a&gt;&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&quot;language-Python&quot;&gt;&amp;lt;table&amp;gt;
@@ -877,14 +1373,14 @@ CMD [&quot;./main&quot;]&amp;lt;/td&amp;gt;
   &lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;strong&gt;6. Conclusion&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a name=&quot;conclusion&quot;&gt;&lt;/a&gt;7. Conclusion&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;Improving the SIF implementation was a really interesting project. There were a lot of fun challenges involved like solving the ordering of goroutines and dealing with concurrent writes to map. It was incredibly satisfying to run my own benchmarks and see quantitative improvements in performance go as high as 30x the original speed. Of course, more improvements can still be made. &lt;a href=&quot;https://arxiv.org/pdf/2005.09069.pdf&quot;&gt;This paper&lt;/a&gt; details how SIF embeddings of documents can be improved by producing and then combining topic vectors. Other models for embedding sentences such as &lt;a href=&quot;https://arxiv.org/pdf/1803.11175.pdf&quot;&gt;Universal Sentence Encoder&lt;/a&gt; or &lt;a href=&quot;https://arxiv.org/pdf/1908.10084.pdf&quot;&gt;Sentence-BERT&lt;/a&gt; have been developed in recent years as well and are able to outperform SIF in certain categories of NLP tasks.&lt;/p&gt;</content><author><name>Daniel Ye</name></author><summary type="html">by Daniel Ye</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/SIFthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/SIFthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Speed up requests: Asyncio for Requests in Python</title><link href="http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html" rel="alternate" type="text/html" title="Speed up requests: Asyncio for Requests in Python" /><published>2020-08-06T20:00:00-04:00</published><updated>2020-08-06T20:00:00-04:00</updated><id>http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed%20up%20requests%20-%20Asyncio%20for%20Requests%20in%20Python</id><content type="html" xml:base="http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html">&lt;h4 id=&quot;by-connie-xu&quot;&gt;by Connie Xu&lt;/h4&gt;
+&lt;p&gt;Improving the SIF implementation was a really interesting project. There were a lot of fun challenges involved like solving the ordering of goroutines and dealing with concurrent writes to map. It was incredibly satisfying to run my own benchmarks and see quantitative improvements in performance go as high as 30x the original speed. Of course, more improvements can still be made. &lt;a href=&quot;https://arxiv.org/pdf/2005.09069.pdf&quot;&gt;This paper&lt;/a&gt; details how SIF embeddings of documents can be improved by producing and then combining topic vectors. Other models for embedding sentences such as &lt;a href=&quot;https://arxiv.org/pdf/1803.11175.pdf&quot;&gt;Universal Sentence Encoder&lt;/a&gt; or &lt;a href=&quot;https://arxiv.org/pdf/1908.10084.pdf&quot;&gt;Sentence-BERT&lt;/a&gt; have been developed in recent years as well and are able to outperform SIF in certain categories of NLP tasks.&lt;/p&gt;</content><author><name>Daniel Ye</name></author><summary type="html">by Daniel Ye</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/SIFthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/SIFthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">Speed up requests: Asyncio for Requests in Python</title><link href="http://localhost:4000/requests/speedup/asyncio/python/2020/08/07/Speed-up-requests-Asyncio-for-Requests-in-Python.html" rel="alternate" type="text/html" title="Speed up requests: Asyncio for Requests in Python" /><published>2020-08-07T09:00:00+09:00</published><updated>2020-08-07T09:00:00+09:00</updated><id>http://localhost:4000/requests/speedup/asyncio/python/2020/08/07/Speed%20up%20requests%20-%20Asyncio%20for%20Requests%20in%20Python</id><content type="html" xml:base="http://localhost:4000/requests/speedup/asyncio/python/2020/08/07/Speed-up-requests-Asyncio-for-Requests-in-Python.html">&lt;h4 id=&quot;by-connie-xu&quot;&gt;by Connie Xu&lt;/h4&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt; 
-Connie Xu is currently studying Computer Science at Princeton University, where she has sharpened her skills in Algorithms and Data Structures as well as Linear Algebra. She is interested in learning more about Natural Language Processing and Machine Learning applications. In her free time, she watches cooking videos or practices beatboxing. Connie was one of NLMatics’ 2020 summer interns. 
+&lt;p&gt;&lt;br /&gt;
+Connie Xu is currently studying Computer Science at Princeton University, where she has sharpened her skills in Algorithms and Data Structures as well as Linear Algebra. She is interested in learning more about Natural Language Processing and Machine Learning applications. In her free time, she watches cooking videos or practices beatboxing. Connie was one of NLMatics’ 2020 summer interns.
 &lt;br /&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -1094,8 +1590,8 @@ async def fetch(url, responses, i):
 
 &lt;h2 id=&quot;runtime-results&quot;&gt;Runtime Results&lt;/h2&gt;
 
-&lt;p&gt;|&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/table.png&quot; width=&quot;500&quot; /&gt;|&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/chart.png&quot; width=&quot;500&quot; /&gt;|
-|—|—|&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/table.png&quot; width=&quot;500&quot; /&gt;
+&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/chart.png&quot; width=&quot;500&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronous&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_fail&lt;/code&gt; have similar runtimes because the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_fail&lt;/code&gt; method was not implemented correctly and is in reality synchronous code.
 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_ordered&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_ordered_batched&lt;/code&gt; have noticeably better runtimes in comparison to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronous&lt;/code&gt; - up to 4 times as fast.&lt;/p&gt;
@@ -1117,7 +1613,7 @@ async def fetch(url, responses, i):
   &lt;li&gt;&lt;a href=&quot;https://stackify.com/when-to-use-asynchronous-programming/&quot;&gt;When/when not to use asynchronous programming&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://realpython.com/async-io-python/&quot;&gt;Async IO in Python: A Complete Walkthrough&lt;/a&gt;&lt;/li&gt;
   &lt;li&gt;&lt;a href=&quot;https://docs.python.org/3/library/asyncio.html&quot;&gt;asyncio: Python Documentation&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Connie Xu</name><email>rob@sor.com</email></author><summary type="html">by Connie Xu</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/asynciothumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/asynciothumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">SQUAD 2.0 and Google Natural Questions: A Comparison and Investigation into Model Performance</title><link href="http://localhost:4000/2020/08/06/SQUAD-2.0-and-Google-Natural-Questions-A-Comparison-and-Investigation-into-Model-Performance.html" rel="alternate" type="text/html" title="SQUAD 2.0 and Google Natural Questions: A Comparison and Investigation into Model Performance" /><published>2020-08-06T09:00:00-04:00</published><updated>2020-08-06T09:00:00-04:00</updated><id>http://localhost:4000/2020/08/06/SQUAD%202.0%20and%20Google%20Natural%20Questions-%20A%20Comparison%20and%20Investigation%20into%20Model%20Performance</id><content type="html" xml:base="http://localhost:4000/2020/08/06/SQUAD-2.0-and-Google-Natural-Questions-A-Comparison-and-Investigation-into-Model-Performance.html">&lt;h4 id=&quot;by-nick-greenspan&quot;&gt;by Nick Greenspan&lt;/h4&gt;
+&lt;/ul&gt;</content><author><name>Connie Xu</name><email>rob@sor.com</email></author><summary type="html">by Connie Xu</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/asynciothumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/asynciothumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">SQUAD 2.0 and Google Natural Questions: A Comparison and Investigation into Model Performance</title><link href="http://localhost:4000/2020/08/06/SQUAD-2.0-and-Google-Natural-Questions-A-Comparison-and-Investigation-into-Model-Performance.html" rel="alternate" type="text/html" title="SQUAD 2.0 and Google Natural Questions: A Comparison and Investigation into Model Performance" /><published>2020-08-06T22:00:00+09:00</published><updated>2020-08-06T22:00:00+09:00</updated><id>http://localhost:4000/2020/08/06/SQUAD%202.0%20and%20Google%20Natural%20Questions-%20A%20Comparison%20and%20Investigation%20into%20Model%20Performance</id><content type="html" xml:base="http://localhost:4000/2020/08/06/SQUAD-2.0-and-Google-Natural-Questions-A-Comparison-and-Investigation-into-Model-Performance.html">&lt;h4 id=&quot;by-nick-greenspan&quot;&gt;by Nick Greenspan&lt;/h4&gt;
 
 &lt;p&gt;&lt;br /&gt; 
 &lt;strong&gt;&lt;em&gt;Nicholas Greenspan&lt;/em&gt;&lt;/strong&gt; lives in New York City and is a freshman at Rice University who is majoring in computer science. Nicholas is interested in Machine Learning, Natural Language Processing, and their applications to various fields. Nicholas recently worked at the UTHealth School of Biomedical Informatics working on a Natural Language Processing project to help doctors find relevant treatments for their patients, and is excited to work on more interesting and meaningful problems at NLMatics. Outside of CS, Nicholas likes to read, play ice hockey, and listen to many genres of music including indie rock and electronic. Nicholas was one of NLMatics’ 2020 summer interns
@@ -1342,7 +1838,7 @@ The fact that question distribution is much more balanced for Google Natural Que
 &lt;p&gt;&lt;a href=&quot;https://rajpurkar.github.io/SQuAD-explorer/&quot;&gt;SQuAD Website&lt;/a&gt;\
 &lt;a href=&quot;https://ai.google.com/research/NaturalQuestions&quot;&gt;SQuAD Paper&lt;/a&gt;\
 &lt;a href=&quot;https://arxiv.org/pdf/1806.03822.pdf&quot;&gt;Google Natural Questions Website&lt;/a&gt;\
-&lt;a href=&quot;https://storage.googleapis.com/pub-tools-public-publication-data/pdf/1f7b46b5378d757553d3e92ead36bda2e4254244.pdf&quot;&gt;Google Natural Questions Paper&lt;/a&gt;&lt;/p&gt;</content><author><name>Nick Greenspan</name></author><summary type="html">by Nick Greenspan</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/squadthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/squadthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">A Comprehensive Guide to Training a Machine Learning Model for Question Answering</title><link href="http://localhost:4000/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html" rel="alternate" type="text/html" title="A Comprehensive Guide to Training a Machine Learning Model for Question Answering" /><published>2020-08-06T06:30:00-04:00</published><updated>2020-08-06T06:30:00-04:00</updated><id>http://localhost:4000/2020/08/06/A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_</id><content type="html" xml:base="http://localhost:4000/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html">&lt;h4 id=&quot;by-batya-stein--nicholas-greenspan&quot;&gt;by Batya Stein &amp;amp; Nicholas Greenspan&lt;/h4&gt;
+&lt;a href=&quot;https://storage.googleapis.com/pub-tools-public-publication-data/pdf/1f7b46b5378d757553d3e92ead36bda2e4254244.pdf&quot;&gt;Google Natural Questions Paper&lt;/a&gt;&lt;/p&gt;</content><author><name>Nick Greenspan</name></author><summary type="html">by Nick Greenspan</summary><media:thumbnail xmlns:media="http://search.yahoo.com/mrss/" url="http://localhost:4000/site_files/squadthumb.png" /><media:content medium="image" url="http://localhost:4000/site_files/squadthumb.png" xmlns:media="http://search.yahoo.com/mrss/" /></entry><entry><title type="html">A Comprehensive Guide to Training a Machine Learning Model for Question Answering</title><link href="http://localhost:4000/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html" rel="alternate" type="text/html" title="A Comprehensive Guide to Training a Machine Learning Model for Question Answering" /><published>2020-08-06T19:30:00+09:00</published><updated>2020-08-06T19:30:00+09:00</updated><id>http://localhost:4000/2020/08/06/A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_</id><content type="html" xml:base="http://localhost:4000/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html">&lt;h4 id=&quot;by-batya-stein--nicholas-greenspan&quot;&gt;by Batya Stein &amp;amp; Nicholas Greenspan&lt;/h4&gt;
 
 &lt;p&gt;&lt;br /&gt; 
 &lt;strong&gt;&lt;em&gt;Batya Stein&lt;/em&gt;&lt;/strong&gt; is a rising junior at Princeton University studying Computer Science and English Literature. Her research interests include Natural Language Processing and Software Engineering and Design. Previously, she has interned at a non-profit, designing a project to interface between its CRM softwares. When not coding, she enjoys drawing, swimming, and reading fiction. Batya was one of NLMatics’ 2020 summer interns. 

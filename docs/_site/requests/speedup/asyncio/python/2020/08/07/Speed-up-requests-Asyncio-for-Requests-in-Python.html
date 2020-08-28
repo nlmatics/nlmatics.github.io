@@ -10,16 +10,18 @@
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="by Connie Xu" />
 <meta property="og:description" content="by Connie Xu" />
-<link rel="canonical" href="http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html" />
-<meta property="og:url" content="http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html" />
+<link rel="canonical" href="http://localhost:4000/requests/speedup/asyncio/python/2020/08/07/Speed-up-requests-Asyncio-for-Requests-in-Python.html" />
+<meta property="og:url" content="http://localhost:4000/requests/speedup/asyncio/python/2020/08/07/Speed-up-requests-Asyncio-for-Requests-in-Python.html" />
 <meta property="og:site_name" content="nlmatics.github.io" />
 <meta property="og:image" content="http://localhost:4000/site_files/asynciothumb.png" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-08-06T20:00:00-04:00" />
+<meta property="article:published_time" content="2020-08-07T09:00:00+09:00" />
 <script type="application/ld+json">
-{"@type":"BlogPosting","headline":"Speed up requests: Asyncio for Requests in Python","dateModified":"2020-08-06T20:00:00-04:00","datePublished":"2020-08-06T20:00:00-04:00","url":"http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/requests/speedup/asyncio/python/2020/08/06/Speed-up-requests-Asyncio-for-Requests-in-Python.html"},"author":{"@type":"Person","name":"Connie Xu"},"image":"http://localhost:4000/site_files/asynciothumb.png","description":"by Connie Xu","@context":"https://schema.org"}</script>
+{"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/requests/speedup/asyncio/python/2020/08/07/Speed-up-requests-Asyncio-for-Requests-in-Python.html"},"url":"http://localhost:4000/requests/speedup/asyncio/python/2020/08/07/Speed-up-requests-Asyncio-for-Requests-in-Python.html","image":"http://localhost:4000/site_files/asynciothumb.png","author":{"@type":"Person","name":"Connie Xu"},"description":"by Connie Xu","headline":"Speed up requests: Asyncio for Requests in Python","dateModified":"2020-08-07T09:00:00+09:00","datePublished":"2020-08-07T09:00:00+09:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="nlmatics.github.io" /></head>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="nlmatics.github.io" /></head>
 <body><header class="site-header" role="banner">
 
   <div class="wrapper"><a class="header-logo" rel="author" href="/"><img src="http://localhost:4000/site_files/Header.png"></a><nav class="site-nav">
@@ -51,8 +53,8 @@
 
 <hr />
 
-<p><br /> 
-Connie Xu is currently studying Computer Science at Princeton University, where she has sharpened her skills in Algorithms and Data Structures as well as Linear Algebra. She is interested in learning more about Natural Language Processing and Machine Learning applications. In her free time, she watches cooking videos or practices beatboxing. Connie was one of NLMatics’ 2020 summer interns. 
+<p><br />
+Connie Xu is currently studying Computer Science at Princeton University, where she has sharpened her skills in Algorithms and Data Structures as well as Linear Algebra. She is interested in learning more about Natural Language Processing and Machine Learning applications. In her free time, she watches cooking videos or practices beatboxing. Connie was one of NLMatics’ 2020 summer interns.
 <br /></p>
 
 <hr />
@@ -262,8 +264,8 @@ async def fetch(url, responses, i):
 
 <h2 id="runtime-results">Runtime Results</h2>
 
-<p>|<img src="http://localhost:4000/site_files/connie_post_images/table.png" width="500" />|<img src="http://localhost:4000/site_files/connie_post_images/chart.png" width="500" />|
-|—|—|</p>
+<p><img src="http://localhost:4000/site_files/connie_post_images/table.png" width="500" />
+<img src="http://localhost:4000/site_files/connie_post_images/chart.png" width="500" /></p>
 
 <p><code class="language-plaintext highlighter-rouge">synchronous</code> and <code class="language-plaintext highlighter-rouge">asynchronous_fail</code> have similar runtimes because the <code class="language-plaintext highlighter-rouge">asynchronous_fail</code> method was not implemented correctly and is in reality synchronous code.
 <code class="language-plaintext highlighter-rouge">asynchronous</code>, <code class="language-plaintext highlighter-rouge">asynchronous_ordered</code>, and <code class="language-plaintext highlighter-rouge">asynchronous_ordered_batched</code> have noticeably better runtimes in comparison to <code class="language-plaintext highlighter-rouge">synchronous</code> - up to 4 times as fast.</p>
