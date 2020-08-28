@@ -1,9 +1,9 @@
 ---
 
-layout: page 
-title: "Smooth Inverse Frequency (SIF) Embeddings in Golang" 
+layout: page
+title: "Smooth Inverse Frequency (SIF) Embeddings in Golang"
 author: Daniel Ye
-date: 2020-08-07 09:45:00 -0000 
+date: 2020-08-07 09:45:00 -0000
 categories: NLP Sentence-Embeddings
 image: site_files/SIFthumb.png
 
@@ -13,7 +13,7 @@ image: site_files/SIFthumb.png
 #### by Daniel Ye
 
 
-<br> 
+<br>
 ***Daniel Ye*** is a sophomore at Cornell University majoring in Computer Science and minoring in Operations Research and Information Engineering. I am interested in machine learning, natural language processing, and data science. I have worked on projects involving manufacturing data collection/analysis, greenhouse environmental regulation, and a multiplayer programming game. In my free time I enjoy playing tennis, running, hiking, and playing cello or guitar.Daniel was one of NLMatics' 2020 summer interns.
 <br>
 
@@ -27,29 +27,29 @@ Daniel Ye
 
 **Table of Contents**
 
-1. [Introduction ](#bookmark=id.uv0gxlx5wixm) 
+1. [Introduction](#introduction)
 
-2. [Motivation](#bookmark=id.pcgyzkz8chfm)
+2. [Motivation](#motivation)
 
-3. [Why GoLang?](#bookmark=id.vij0hbt6t1id)
+3. [Why GoLang?](#golang)
 
-4. [GRPC Improvements](#bookmark=id.mmsg2fvvb5zz)
+4. [GRPC Improvements](#grpc)
 
-5. [Post-Processing Improvements](#bookmark=id.i0zeii5wg08t)
+5. [Post-Processing Improvements](#postprocess)
 
-6. [Productionalizing With Docker](#bookmark=id.aol4ijt37be)
+6. [Productionalizing With Docker](#docker)
 
-7. [Conclusion](#bookmark=id.ouhqmef3a5d5)
+7. [Conclusion](#conclusion)
 
-**1. Introduction **
+**<a name="introduction"></a>1. Introduction**
 
-I am a rising junior majoring in computer science and minoring in operations research and information engineering at Cornell Engineering. This summer, I interned at NLMatics, and one of the projects I worked on was implementing a [Smooth Inverse Frequency](https://openreview.net/pdf?id=SyK00v5xx#page=12&zoom=100,110,217) model using Golang. This is able to calculate sentence embeddings from sequences of words in the form of vectors, which mathematically represent the meaning of the sentence. We use it to encode documents and queries into embeddings which are then processed further using other natural language processing models to get search results. However, our original Python implementation was fairly slow at calculating these embeddings, and it scaled poorly with increasing document sizes or concurrent requests, so we needed to find a way to speed up the service. 
+I am a rising junior majoring in computer science and minoring in operations research and information engineering at Cornell Engineering. This summer, I interned at NLMatics, and one of the projects I worked on was implementing a [Smooth Inverse Frequency](https://openreview.net/pdf?id=SyK00v5xx#page=12&zoom=100,110,217) model using Golang. This is able to calculate sentence embeddings from sequences of words in the form of vectors, which mathematically represent the meaning of the sentence. We use it to encode documents and queries into embeddings which are then processed further using other natural language processing models to get search results. However, our original Python implementation was fairly slow at calculating these embeddings, and it scaled poorly with increasing document sizes or concurrent requests, so we needed to find a way to speed up the service.
 
 Over the course of about four weeks, I worked on combating this issue by developing a Golang implementation of the model and switching from HTTP 1.0 protocol to gRPC protocol for the server. This increased the amount of concurrent processing we were able to utilize, and reduced overhead for connecting and sending requests to the server, speeding up the service greatly. Ultimately, I was able to build a system that generated more accurate sentence embeddings at much faster speeds.
 
-**2. Motivation**
+**<a name="motivation"></a>2. Motivation**
 
-	
+
 
 Word embeddings are one of the most important developments in the field of modern Natural Language Processing. Translating the meaning behind words and the semantic relationships between them into measurable quantities is a crucial step in processing language. Many words, such as "cat" and “dog” or “Mozart” and “Beethoven” have almost no physical characteristics that would reveal their similarities. Instead, modern algorithms like Google’s [Word2Vec](https://arxiv.org/abs/1301.3781) developed in 2013 or Stanford’s [GloVe](https://nlp.stanford.edu/pubs/glove.pdf) essentially count the cooccurrences of words with other words, and condense these values into dense, relatively low-dimensional vectors. Their models train on massive corpora of English text such as all of Wikipedia, and embed words as vectors based on which other words they appear in proximity to. So, if “cat” and “dog” are found together in many sentences or documents, they will have very similar vector values. This method is able to capture not only semantic similarity, but also analogies (woman is to man as king is to __) and the effects of prefixes or suffixes.
 
@@ -59,19 +59,19 @@ Word embeddings are one of the most important developments in the field of moder
 
 A natural next step in the field was the development of sentence embeddings, or being able to extract meaning from a sequence of words. Early methods include:
 
-* **[TF-ID**F](https://en.wikipedia.org/wiki/Tf%E2%80%93idf)** **
+* **[TF-IDF](https://en.wikipedia.org/wiki/Tf%E2%80%93idf)**
 
-* **[Paragram Phrase (PP**)](https://arxiv.org/pdf/1511.08198.pdf)
+* **[Paragram Phrase (PP)](https://arxiv.org/pdf/1511.08198.pdf)**
 
-* **[Recurrent Neural Network (RNN**)](https://en.wikipedia.org/wiki/Recurrent_neural_network)
+* **[Recurrent Neural Network (RNN)](https://en.wikipedia.org/wiki/Recurrent_neural_network)**
 
-* **[Long Short-Term Memory Networks (LSTM**)](https://arxiv.org/pdf/1503.00075.pdf)
+* **[Long Short-Term Memory Networks (LSTM)](https://arxiv.org/pdf/1503.00075.pdf)**
 
-* **[Deep Averaging Network (DAN**)](https://people.cs.umass.edu/~miyyer/pubs/2015_acl_dan.pdf)
+* **[Deep Averaging Network (DAN)](https://people.cs.umass.edu/~miyyer/pubs/2015_acl_dan.pdf)**
 
 In 2017, Arora et. al proposed SIF, or [Smooth Inverse Frequency](https://openreview.net/pdf?id=SyK00v5xx#page=12&zoom=100,110,217), a weighting scheme to improve performance of sentence embeddings. When encoding a sentence, it is important to identify which words in the sentence are more significant. For example, if calculating the embedding of the sentence "who was Mozart?" the word “was” doesn’t add much meaning; looking for sentences or documents relating to the word “was” will not yield any useful results for the original question. It’s clear that “Mozart” holds the most meaning in the question from a human standpoint, but how do you program a machine to identify that? SIF operates under the assumption that the most important words tend to also be used less frequently. If you counted all the words in Wikipedia, the word “was” would most likely appear much more frequently than in “Mozart”. Weights of a word *w* are computed by *a/(a + p(w))* where a is a parameter and p(w) is the word frequency of w, which can be estimated by scraping a large corpus.* *The hyperparameter *a* adjusts which words are quantitatively “common” and “uncommon.” Here is the formal algorithm:
 
-![]({{site.url}}/site_files/daniels_post/image_1.png) 
+![]({{site.url}}/site_files/daniels_post/image_1.png)
 
 Arora et. al found that despite its simplicity, SIF worked surprisingly well on semantic text similarity (STS), entailment, and sentiment tasks. STS tasks involve scoring pairs of sentences from 0-5 based on how similar their meanings are, which are then checked against a golden standard of human generated scores. For example, "The bird is bathing in the sink" and “Birdie is washing itself in the water basin” should receive a 5. Entailment tasks involve identifying if one sentence *entails* that another one is true. For example, if you read the sentence “There is a soccer game with multiple males playing,” you could infer that the sentence “Several men are playing a sport” is true. Thus the first sentence, commonly referred to as the *text* entails the following, also known as the *hypothesis*.
 
@@ -79,11 +79,11 @@ Arora et. al found that despite its simplicity, SIF worked surprisingly well on 
 
 *Tables detailing SIF performance on various semantic tasks. "GloVe + WR", “PSL + WR”, and “Ours” correspond to SIF systems.*
 
-Due to its effectiveness and simplicity, SIF is an incredibly practical method of embedding sentences for commercial or enterprise products that rely on both accurate and fast results while consuming low amounts of resources. 
+Due to its effectiveness and simplicity, SIF is an incredibly practical method of embedding sentences for commercial or enterprise products that rely on both accurate and fast results while consuming low amounts of resources.
 
-**2. Why Golang?**
+**<a name="golang"></a>3. Why Golang?**
 
-The [original code](https://github.com/PrincetonML/SIF) corresponding to the paper describing SIF is implemented in Python, which by design has a [Global Interpreter Lock (GIL)](https://wiki.python.org/moin/GlobalInterpreterLock), a mutex that prevents multi threaded processes from utilizing multiple cores of a processor. We hosted our Cython implementation of the SIF embedding model on a cloud service, which provided us with multiple cores of processing power. However, the GIL meant that we could not make use of the full processing power we were paying for. 
+The [original code](https://github.com/PrincetonML/SIF) corresponding to the paper describing SIF is implemented in Python, which by design has a [Global Interpreter Lock (GIL)](https://wiki.python.org/moin/GlobalInterpreterLock), a mutex that prevents multi threaded processes from utilizing multiple cores of a processor. We hosted our Cython implementation of the SIF embedding model on a cloud service, which provided us with multiple cores of processing power. However, the GIL meant that we could not make use of the full processing power we were paying for.
 
 GoLang however, has no such restrictions and also provides built-in structures for concurrency through the form of Goroutines, a form of very lightweight threads.  They are organized by channels, which allow goroutines to either block on awaiting input or signal that they have completed.
 
@@ -127,17 +127,16 @@ It is important to note that this structure does not enforce the order in which 
 
 Our API allowed for clients to send multiple sentences at a time to be encoded by the SIF, often many at a time, and implementing the SIF in Golang allowed us to leverage powerful concurrency to speed up our calculations. My first iteration of the SIF server used [Golang’s http package](https://golang.org/pkg/net/http/) to host the model on an HTTP 1.0 server. I compared it with  our old system, as well as the original Python implementation. I used three different independent variables to benchmark how the performance scaled up: total words per ‘sentence’ to be embedded, total number of calls with fixed number of concurrent requests, and number of concurrent requests with fixed total number of calls. These benchmarks were made using [Apache Benchmark](https://httpd.apache.org/docs/2.4/programs/ab.html), a software that allows you to make many concurrent requests to a server and reports significant timing data.
 
-![]({{site.url}}/site_files/daniels_post/image_4.png)
+<img src="/site_files/daniels_post/image_4.png" class="graph"/>
+<img src="/site_files/daniels_post/image_7.png" class="graph"/>
+<img src="/site_files/daniels_post/image_6.png" class="graph"/>
 
-![]({{site.url}}/site_files/daniels_post/image_5.png)
 
-![]({{site.url}}/site_files/daniels_post/image_6.png)
-
-The results were impressive, to say the least. At a sentence level, around 10-100 words, the new implementation outperforms the old by up to **30x** and at a document level, around 1000-10000+ words, it is still **10x**** **faster in almost every scenario. The improved speed for sentence level embeddings is really useful, since it means that we can embed at lower levels of granularity much more easily. For example, if you were searching "who was Mozart" and only had embeddings for each document, your system might flag a document about Joseph Haydn, friend and mentor of Mozart, as relevant. As you descend levels of granularity of embeddings however, you can much more easily locate relevant information about your query. Perhaps it allows you to find a paragraph detailing their time in Vienna together, or a specific sentence about the pieces of music they worked on together. 
+The results were impressive, to say the least. At a sentence level, around 10-100 words, the new implementation outperforms the old by up to **30x** and at a document level, around 1000-10000+ words, it is still **10x**** **faster in almost every scenario. The improved speed for sentence level embeddings is really useful, since it means that we can embed at lower levels of granularity much more easily. For example, if you were searching "who was Mozart" and only had embeddings for each document, your system might flag a document about Joseph Haydn, friend and mentor of Mozart, as relevant. As you descend levels of granularity of embeddings however, you can much more easily locate relevant information about your query. Perhaps it allows you to find a paragraph detailing their time in Vienna together, or a specific sentence about the pieces of music they worked on together.
 
 I found that Go works incredibly well for creating a web service capable of handling many concurrent requests efficiently. However, Go’s build in functionality does have a significant limitation of restricting HTTP requests to sizes of 1MB or less, which was not ideal for our use cases where we had to embed large amounts of text in a single request. For example, a legal company looking to process Google’s 2019 environmental and sustainability report would need about 11 MB of payload. Or a stressed-out undergraduate trying to find tips in *Cracking the Coding Interview* would require around 90 MB of allowance. Additionally, every HTTP request requires a new connection to be made between the server and client, which adds a significant amount of overhead to our typical use case which often requires embedding many documents at once and sending many requests.
 
-**3. GRPC Improvements**
+**<a name="grpc"></a>4. GRPC Improvements**
 
 Developed by Google, gRPC is an open source Remote Procedure Call framework and is what I turned to in order to hopefully remove the size limit and connection overhead problems with Go’s http package. gRPC processes payloads from requests using buffers, so it removes the 1MB size cap on requests. It also maintains connections between individual clients, so a single user can make multiple requests without having to create a connection more than once. It has its own Interface Definition Language called protocol buffers that also serve as a mechanism for serializing structured data and uses HTTP/2 to transport data. gRPC services are defined in .proto files:
 
@@ -214,11 +213,11 @@ type HelloRequest struct {
 ```
 Due to how gRPC buffers data being received and sent, we no longer had to worry about size limits on requests to our server. gRPC servers also have a very helpful feature in that connections between client and server are maintained across multiple requests, whereas with HTTP requests, a new connection has to be established for every POST. As a result, I saw more improvements in performance as this overhead was removed from the new system:
 
-![]({{site.url}}/site_files/daniels_post/image_7.png)
+<img src="/site_files/daniels_post/image_7.png" class="graph"/>
 
 The largest improvements are seen when requests have very small payloads, so the majority of time is spent on overhead from connecting to the server. However, once you get to larger payloads, the times converge to become about equal.
 
-**4. Post-Processing Improvements **
+**<a name="postprocess"></a>5. Post-Processing Improvements**
 
 A coworker sent me this [paper about post-processing word vectors](https://arxiv.org/pdf/1702.01417.pdf) in order to improve their representation of meaning. The algorithm essentially takes a list of pre-computed word vectors and performs principal component analysis on them, and then removes the top N components from every vector via Gram-Schmidt. Here is their formal algorithm:
 
@@ -247,13 +246,13 @@ dimension = 0
 #append each vector to a 2-D matrix and calculate average vector
 with open(embedding_file, 'rb') as f:
     first_line = []
-    for line in f: 
+    for line in f:
         first_line = line.rstrip().split()
         dimension = len(first_line) - 1
         if dimension < 100 :
             continue
         print("dimension: ", dimension)
-        
+
         break
     avg_vec = [0] * dimension
     vocab_size = 0
@@ -368,7 +367,7 @@ I benchmarked the system on semantic text similarities tests using  the MSR Para
 
 The post-processed vectors outperformed the original in every case. I also benchmarked our system using a word frequency file generated by fellow intern Connie Xu using a June snapshot of all of Wikipedia. It had a far more comprehensive vocabulary than our current word frequency file, with over 50x as many entries, but performance results were inconclusive. The results do indicate, however, that post-processed word vectors also increase performance of sentence embedding systems.
 
-**5. Productionalizing With Docker**
+**<a name="docker"></a>6. Productionalizing With Docker**
 
 After finishing the code for our new SIF, my final step was to prepare it for production, which meant an inevitable encounter with Docker. Here is my Dockerfile, which I got from [this tutorial:](https://www.callicoder.com/docker-golang-image-container-example/)
 ```Python
@@ -406,7 +405,7 @@ CMD ["./main"]</td>
 
 Most components are fairly self-explanatory. It does require that you use Go modules to manage your dependencies, which you can read about [here](https://blog.golang.org/using-go-modules). The steps I took to compile my code into a Docker image were as follows:
 
-1. Create a go mod file in the root directory of your Golang project using go mod init <project name>. Your project name can be anything you want, it does not have to correspond to any file or package names, although it probably should. 
+1. Create a go mod file in the root directory of your Golang project using go mod init <project name>. Your project name can be anything you want, it does not have to correspond to any file or package names, although it probably should.
 
 2. Populate your go mod file with dependencies using go build. This will automatically detect the packages used by your project, and write them to your go mod file
 
@@ -416,7 +415,7 @@ Most components are fairly self-explanatory. It does require that you use Go mod
 
 5. Run your project with docker run -d -p 8080:8080 <project name>
 
-**6. Conclusion**
+**<a name="conclusion"></a>7. Conclusion**
 
-Improving the SIF implementation was a really interesting project. There were a lot of fun challenges involved like solving the ordering of goroutines and dealing with concurrent writes to map. It was incredibly satisfying to run my own benchmarks and see quantitative improvements in performance go as high as 30x the original speed. Of course, more improvements can still be made. [This paper](https://arxiv.org/pdf/2005.09069.pdf) details how SIF embeddings of documents can be improved by producing and then combining topic vectors. Other models for embedding sentences such as [Universal Sentence Encoder](https://arxiv.org/pdf/1803.11175.pdf) or [Sentence-BERT](https://arxiv.org/pdf/1908.10084.pdf) have been developed in recent years as well and are able to outperform SIF in certain categories of NLP tasks. 
+Improving the SIF implementation was a really interesting project. There were a lot of fun challenges involved like solving the ordering of goroutines and dealing with concurrent writes to map. It was incredibly satisfying to run my own benchmarks and see quantitative improvements in performance go as high as 30x the original speed. Of course, more improvements can still be made. [This paper](https://arxiv.org/pdf/2005.09069.pdf) details how SIF embeddings of documents can be improved by producing and then combining topic vectors. Other models for embedding sentences such as [Universal Sentence Encoder](https://arxiv.org/pdf/1803.11175.pdf) or [Sentence-BERT](https://arxiv.org/pdf/1908.10084.pdf) have been developed in recent years as well and are able to outperform SIF in certain categories of NLP tasks.
 

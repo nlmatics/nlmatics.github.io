@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Optimizing Transformer Q&amp;A Models for Naturalistic Search | nlmatics.github.io</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="Optimizing Transformer Q&amp;A Models for Naturalistic Search" />
+<meta name="author" content="Batya Stein" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Optimizing Transformer Q&amp;A Models for Naturalistic Search" />
+<meta property="og:description" content="Optimizing Transformer Q&amp;A Models for Naturalistic Search" />
+<link rel="canonical" href="http://localhost:4000/2020/08/25/Optimizing-Transformer-Q&A-Models-for-Naturalistic-Search.html" />
+<meta property="og:url" content="http://localhost:4000/2020/08/25/Optimizing-Transformer-Q&A-Models-for-Naturalistic-Search.html" />
+<meta property="og:site_name" content="nlmatics.github.io" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-25T19:30:00+09:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/08/25/Optimizing-Transformer-Q&A-Models-for-Naturalistic-Search.html"},"url":"http://localhost:4000/2020/08/25/Optimizing-Transformer-Q&A-Models-for-Naturalistic-Search.html","author":{"@type":"Person","name":"Batya Stein"},"description":"Optimizing Transformer Q&amp;A Models for Naturalistic Search","headline":"Optimizing Transformer Q&amp;A Models for Naturalistic Search","dateModified":"2020-08-25T19:30:00+09:00","datePublished":"2020-08-25T19:30:00+09:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="nlmatics.github.io" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="header-logo" rel="author" href="/"><img src="http://localhost:4000/site_files/Header.png"></a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+
+            
+          </span>
+        </label>
+
+        <div class="trigger"></div>
+      </nav><a class="page-link" href="https://nlmatics.com"> <h3 class="redirect-link"><u> go to nlmatics.com </u></h3></a>
+    <div class="header-tagline"> What we’re learning about, thinking about, and building in the world of NLP, Machine Learning, and textual data at NLMatics.</div>
+    <span class="divider"></span>
+  </div>
+
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Optimizing Transformer Q&amp;A Models for Naturalistic Search</h1>
+  </header>
+
+  <div class="post-content">
+    <h1 id="optimizing-transformer-qa-models-for-naturalistic-search">Optimizing Transformer Q&amp;A Models for Naturalistic Search</h1>
+
+<p>By Batya Stein</p>
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Have you ever wondered what the most popular pizza topping in America is? To find out, you might Google “what is the most popular pizza topping in America?”. If you’re feeling lazy, maybe you’d leave out the question mark, or drop the question format altogether, and go with a simple “most popular pizza topping in America”. 
+<img src="/site_files/batya-post-imgs/pizza-phrases.png" alt="pizza phrases" />
+This probably seems like an excessive amount of thought to put into a Google search query, especially since all the above prompts return the same information. (Pepperoni, for the curious.) With or without the question word and question mark, you can intuitively recognize that all these formulations are essentially asking for the same answer.</p>
+
+<p>However, imagine that you wanted to train a machine learning model to complete a similar exercise. If you fed your model background material on America’s pizza-eating habits, and then asked it some variation of the topping question, you’d like it to identify the answer “pepperoni” within the text. Models are usually trained for this type of question-answering task using reading comprehension datasets, like the <strong>S</strong>tanford <strong>Qu</strong>estion <strong>A</strong>nswering <strong>D</strong>ataset (<a href="https://rajpurkar.github.io/SQuAD-explorer/">SQuAD</a>). SQuAD’s examples consist of context paragraphs from Wikipedia, and questions which either have answers located within the context paragraphs, or are unanswerable. Each question is written as a full sentence, complete with a question mark at the end. Nearly all questions contain a question word (“who”, “what”, “where”, etc.).</p>
+
+<p><img src="/site_files/batya-post-imgs/squad-data-pt.png" alt="" /></p>
+
+<p><em>Example of SQuAD question and context paragraph</em></p>
+
+<p>Given that a model trained on SQuAD has only been exposed to prompts in the form of questions, the specific way a user words their query takes on new importance. Would a model trained only on questions be able to process phrases and match them to answers with the same accuracy as it can questions? In other words, which characteristics are most necessary for a prompt to be accurately understood by a SQuAD-trained model? Though it may seem obvious to you and me that “what is the most popular topping?” is basically synonymous with “the most popular topping”, it is not clear that the same would be apparent to a SQuAD-trained model.</p>
+
+<h2 id="experiment-motivation">Experiment Motivation</h2>
+
+<p>As an intern at NLMatics this summer, I ran a series of experiments using transformer-based question-answering models and the SQuAD 2.0 dataset to explore how the wording of a dataset’s questions impacts a model’s accuracy. My goal was to see if:</p>
+
+<ol>
+  <li>
+    <p>a model <strong>trained</strong> only on <ins>question</ins>-answer pairs (e.g. the standard SQuAD dataset) would give accurate results when <strong>evaluated</strong> on <ins>phrase</ins>-answer pairs, and</p>
+  </li>
+  <li>
+    <p>If a model trained on phrase-answer pairs could achieve the same performance scores (F1 and exact match) when asked to predict answers for phrases, as a model trained on normal SQuAD achieves when asked to predict answers to questions.</p>
+  </li>
+</ol>
+
+<p>I also trained models on different permutations of the phrase and question datasets - phrases with question marks, and questions without question marks - to isolate the characteristics that make a question answering model effective. Is it the presence of a question mark, or of a question word, or simply the keywords of a phrase?</p>
+
+<p>The results of these experiments are relevant for any system where a user directly queries a text using a question-answering model. The designer of the system doesn’t necessarily have control over the questions users ask, or a way of knowing if they will choose to input questions (ex. “where is the building?”) or phrases (ex. “building location”). If a model could be trained for accuracy in phrase answering tasks without a significant decrease in accuracy on question answering tasks, users would be able to input a much broader range of questions, without the designer having to worry about precise wording.</p>
+
+<h2 id="question-to-phrase-conversion">Question to Phrase Conversion</h2>
+
+<p>In order to create a dataset of phrases directly comparable to a question dataset, I decided to reformat the SQuAD 2.0 dataset into phrases. (<a href="https://ai.google.com/research/NaturalQuestions">Google Natural Questions</a>, another large reading comprehension dataset, has some examples that are already written as phrases and some written as questions, but the variability makes it less useful for direct comparisons.) My goal when converting the questions was to create phrases that sounded like something natural a user might type into a search engine, so that the training data would be similar to what would be seen in a real use case.</p>
+
+<p>To this end, I wrote a <a href="https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/code-examples/qs_to_phrases.py">python script to process SQuAD</a> that, besides deleting question words, changed tenses when necessary, moved verbs after subjects, and reordered the clauses of complex questions. I used the <a href="https://spacy.io/">spaCy</a> NLP library for part-of-speech tagging and dependency parsing (ex. identifying the subject of a sentence), and the <a href="https://github.com/clips/pattern#pattern">pattern</a> library for verb conjugation. The code had rules for handling questions based on the question words they began with, and a separate rule for handling questions with more complex structures.</p>
+
+<p>Some example outputs from my phrase conversion code:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Original Question</th>
+      <th>New Phrase</th>
+      <th>Comment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>“On what date did Henry Kissinger negotiate an Israeli troop withdrawal from the Sinai Peninsula?”</td>
+      <td>“date Henry Kissinger <strong>negotiated</strong> an Israeli troop withdrawal from Sinai Peninsula on”</td>
+      <td>To create a natural sounding phrase after deleting “did” from questions, I used the pattern library’s verb conjugation function to change remaining verbs to past tense</td>
+    </tr>
+    <tr>
+      <td>“Atticus Finch’s integrity has become a model for which job?”</td>
+      <td>“job Atticus Finch’s integrity has become a model for”</td>
+      <td>For examples where question words appeared mid-sentence (instead of as the first word), I split questions at the question word and moved the first clause to the back</td>
+    </tr>
+    <tr>
+      <td>“Where <strong>would</strong> present day Joara be?”</td>
+      <td>“present day Joara <strong>would</strong> be”</td>
+      <td>When a phrase wouldn’t make sense without an auxiliary verb like “would”, “could”, “can”, etc., I used spaCy to identify the question’s subject, and moved the auxiliary verb behind it (otherwise, I deleted unnecessary auxiliary verbs such as “are” or “is”)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="model-training">Model Training</h2>
+
+<p>To figure out which characteristics of a question were most important, I trained four ALBERT models on four different datasets. ALBERT is a light variation of the BERT transformer model with fewer parameters for an even quicker training time than BERT. (See the original paper on BERT <a href="https://arxiv.org/abs/1706.03762">here</a>, with a helpful explanation <a href="https://mlexplained.com/2017/12/29/attention-is-all-you-need-explained/">here</a> and a general overview of transformer architecture <a href="https://jalammar.github.io/illustrated-transformer/">here</a>.)</p>
+
+<p>The four datasets I used were:</p>
+
+<ol>
+  <li><strong>Normal SQuAD (2.0) dataset</strong> - <em>a baseline for comparison</em><br />
+<img src="/site_files/batya-post-imgs/normal-q.png" alt="img" /></li>
+  <li><strong>SQuAD converted to phrases</strong> - <em>can the model match phrases to answers effectively since they are more open ended than questions?</em><br />
+<img src="/site_files/batya-post-imgs/phrase.png" alt="img" /></li>
+  <li><strong>SQuAD questions without question marks</strong> - <em>how important is question mark in getting the model to recognize a question?</em><br />
+<img src="/site_files/batya-post-imgs/q-no-mark.png" alt="img" /></li>
+  <li><strong>SQuAD converted to phrases, with question marks appended</strong> - <em>does the addition of a question mark compensate for the lack of a question structure?</em><br />
+<img src="/site_files/batya-post-imgs/phrase-with-q.png" alt="img" /></li>
+</ol>
+
+<p>The ALBERT XL model that I used came from Huggingface’s <a href="https://github.com/huggingface/transformers">transformer library</a>, and for training I used Huggingface’s <a href="https://github.com/huggingface/transformers/blob/master/examples/question-answering/run_squad.py">run_squad.py</a> script. I used <a href="https://www.wandb.com/">wandb</a>, a web-based training visualization library, to monitor metrics throughout my trainings. The trainings were run on Amazon EC2 p2.8xl instances (8 NVIDIA K80 GPUs).</p>
+
+<h2 id="squad-metrics">SQuAD Metrics</h2>
+
+<p>The official metrics for evaluating a SQuAD trained model are calculated in the <a href="https://worksheets.codalab.org/rest/bundles/0x6b567e1cf2e041ec80d7098f031c5c9e/contents/blob/">evaluation script</a> linked on SQuAD’s website. The two main metrics are “exact” and “F1”. Exact” returns the percentage of examples that the model predicted correct answers for out of all test examples. “<a href="https://towardsdatascience.com/accuracy-precision-recall-or-f1-331fb37c5cb9">F1</a>” is an accuracy measure combining precision (number of true positives over total predicted positives) and recall (number of true positives over everything that should have been identified as positive). To calculate F1 scores for SQuAD, for each example in the evaluation set, precision is the number of overlapping words between the correct and predicted answers, divided by the number of words in the <ins>predicted</ins> answer. Recall is the number of overlapping words divided by the number of words in the <ins>correct</ins> answer.</p>
+
+<p>The metrics return F1 and exact scores over all the evaluation set examples, as well as F1 and exact scores over the subset of evaluation examples that have answers, (“HasAns”) and over the subset of examples that are impossible to answer (“NoAns”).</p>
+
+<h2 id="results-and-discussion">Results and Discussion</h2>
+
+<p>To analyze the results of my 4 model trainings, I first compared the performances of each model evaluated on its own dev set (I used dev sets for evaluations since SQuAD’s test set is not publicly available). In other words, after training, how accurately would each model perform on unseen data formatted the same way as its training data?</p>
+
+<p>(For consistency, results shown below are evaluated at the 7000th training step, towards the end of the 2nd epoch. The exception is the F1 score chart, which spans from beginning to end of training.)</p>
+
+<p><em>Metrics of 4 datasets, evaluated on their own dev sets at 7000th step</em></p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>Normal SQuAD (questions with question marks)</th>
+      <th>Phrases</th>
+      <th>Phrases with question marks</th>
+      <th>Questions without question marks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>F1</td>
+      <td>84.42</td>
+      <td>83.3</td>
+      <td>83.59</td>
+      <td>84.23</td>
+    </tr>
+    <tr>
+      <td>Exact</td>
+      <td>80.86</td>
+      <td>80.27</td>
+      <td>80.67</td>
+      <td>81.24</td>
+    </tr>
+    <tr>
+      <td>HasAns_f1</td>
+      <td>83.2</td>
+      <td>80.77</td>
+      <td>81.36</td>
+      <td>85.9</td>
+    </tr>
+    <tr>
+      <td>HasAns_exact</td>
+      <td>76.06</td>
+      <td>74.7</td>
+      <td>75.52</td>
+      <td>79.91</td>
+    </tr>
+    <tr>
+      <td>NoAns_f1</td>
+      <td>85.63</td>
+      <td>85.82</td>
+      <td>85.8</td>
+      <td>82.57</td>
+    </tr>
+    <tr>
+      <td>NoAns_exact</td>
+      <td>85.63</td>
+      <td>85.82</td>
+      <td>85.8</td>
+      <td>82.57</td>
+    </tr>
+    <tr>
+      <td>Best_f1</td>
+      <td>84.42</td>
+      <td>83.3</td>
+      <td>83.59</td>
+      <td>84.23</td>
+    </tr>
+    <tr>
+      <td>Best_exact</td>
+      <td>80.86</td>
+      <td>80.27</td>
+      <td>80.67</td>
+      <td>81.24</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/site_files/batya-post-imgs/metrics.png" alt="" /></p>
+
+<p><em>F1 scores for all models throughout training</em></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Step</th>
+      <th>SQuAD</th>
+      <th>Phrases</th>
+      <th>Phrases with q marks</th>
+      <th>Q’s without q marks</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>500</td>
+      <td>64.98</td>
+      <td>63.54</td>
+      <td>68.50</td>
+      <td>72.47</td>
+    </tr>
+    <tr>
+      <td>1000</td>
+      <td>77.08</td>
+      <td>76.08</td>
+      <td>77.05</td>
+      <td>77.86</td>
+    </tr>
+    <tr>
+      <td>1500</td>
+      <td>77.75</td>
+      <td>77.01</td>
+      <td>77.40</td>
+      <td>78.93</td>
+    </tr>
+    <tr>
+      <td>2000</td>
+      <td>80.52</td>
+      <td>79.35</td>
+      <td>79.44</td>
+      <td>80.93</td>
+    </tr>
+    <tr>
+      <td>2500</td>
+      <td>80.82</td>
+      <td>79.50</td>
+      <td>79.05</td>
+      <td>81.19</td>
+    </tr>
+    <tr>
+      <td>3000</td>
+      <td>81.81</td>
+      <td>79.05</td>
+      <td>80.62</td>
+      <td>82.22</td>
+    </tr>
+    <tr>
+      <td>3500</td>
+      <td>80.91</td>
+      <td>80.36</td>
+      <td>80.71</td>
+      <td>80.93</td>
+    </tr>
+    <tr>
+      <td>4000</td>
+      <td>82.28</td>
+      <td>80.37</td>
+      <td>80.95</td>
+      <td>83.07</td>
+    </tr>
+    <tr>
+      <td>4500</td>
+      <td>83.09</td>
+      <td>81.01</td>
+      <td>81.15</td>
+      <td>82.70</td>
+    </tr>
+    <tr>
+      <td>5000</td>
+      <td>83.06</td>
+      <td>81.65</td>
+      <td>82.47</td>
+      <td>83.59</td>
+    </tr>
+    <tr>
+      <td>5500</td>
+      <td>83.84</td>
+      <td>82.85</td>
+      <td>82.50</td>
+      <td>84.09</td>
+    </tr>
+    <tr>
+      <td>6000</td>
+      <td>84.27</td>
+      <td>82.48</td>
+      <td>83.20</td>
+      <td>84.46</td>
+    </tr>
+    <tr>
+      <td>6500</td>
+      <td>84.46</td>
+      <td>82.02</td>
+      <td>83.38</td>
+      <td>84.44</td>
+    </tr>
+    <tr>
+      <td>7000</td>
+      <td>84.42</td>
+      <td>83.30</td>
+      <td>83.59</td>
+      <td>84.23</td>
+    </tr>
+    <tr>
+      <td>7500</td>
+      <td>84.80</td>
+      <td>83.01</td>
+      <td>83.54</td>
+      <td>84.83</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/site_files/batya-post-imgs/F1 Scores for all models throughout training.png" alt="" /></p>
+
+<p>As expected, the <strong>standard SQuAD-trained model</strong> has high metrics across the board and high F1 scores throughout training, since its examples have the most context for the model to pick up on (question format and question marks). Interestingly, the <strong>SQuAD without question marks model</strong> does better than the standard SQuAD model for the “HasAns” metrics (HasAns F1 of 85.90 vs 83.20), and notably worse for the “NoAns” (NoAns F1 of 82.57 vs 85.63)- I am not sure exactly what to conclude from this (it may not be a conclusive trend, as the bar graph only represents one checkpoint from training). Overall though, throughout training, the F1 scores of the SQuAD without question marks model were equal to, or higher than, the standard SQuAD F1’s, showing that the inclusion or exclusion of question marks seems relatively insignificant for achieving accuracy.</p>
+
+<p>The <strong>phrase-trained model</strong> metrics are equal to, or 1-3 points lower than the standard SQuAD metrics, and its F1 scores throughout training are lower overall but not to a super significant extent. This answers one of my main beginning questions, indicating that while there is some increased accuracy associated with the additional context of a question structure, <ins>a model trained on phrase-answer pairs does not show a significant decrease in accuracy</ins>.</p>
+
+<p>Adding question marks to phrases does yield slightly better F1 scores throughout training (see graph above). A possible interpretation of this trend is that all the contextual question information is present, question marks are essentially negligible, but with less information presented, as in phrases, the question mark does help increase accuracy.</p>
+
+<hr />
+
+<p>For the second part of my analysis, I evaluated each of the models on the standard SQuAD dev set, and the standard SQuAD trained model on the phrase dev set. (All results evaluated at the 7000th step, as above). Through these evaluations I hoped to see how well a model trained on a modified dataset could perform on a differently formatted question.</p>
+
+<p><em>Question-trained model evaluated on questions vs on phrases</em></p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>eval on phrase dev set</th>
+      <th>eval on question dev set</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>F1</td>
+      <td>83.3</td>
+      <td>81.12</td>
+    </tr>
+    <tr>
+      <td>Exact</td>
+      <td>80.27</td>
+      <td>77.83</td>
+    </tr>
+    <tr>
+      <td>HasAns_f1</td>
+      <td>80.77</td>
+      <td>80.64</td>
+    </tr>
+    <tr>
+      <td>HasAns_exact</td>
+      <td>74.7</td>
+      <td>74.06</td>
+    </tr>
+    <tr>
+      <td>NoAns_f1</td>
+      <td>85.82</td>
+      <td>81.6</td>
+    </tr>
+    <tr>
+      <td>NoAns_exact</td>
+      <td>85.82</td>
+      <td>81.6</td>
+    </tr>
+    <tr>
+      <td>Best_f1</td>
+      <td>83.3</td>
+      <td>81.12</td>
+    </tr>
+    <tr>
+      <td>Best_exact</td>
+      <td>80.27</td>
+      <td>77.83</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/site_files/batya-post-imgs/question-trained model.png" alt="" /></p>
+
+<p>Notably, <ins>a standard SQuAD-trained model performs really poorly when evaluated on phrases</ins>, as shown in the charts above. Its F1 score drops from 84.42 (evaluated on questions) to 64.11 (evaluated on phrases), and its HasAnsF1 score drops from 83.20 to 50.96. Practically, this proves the necessity of training models that are better equipped to deal with phrases. On a theoretical level, this indicates that the model comes to rely on question words/ structure for context when trained on questions, and therefore it can’t process questions accurately without them. (That’s not to say that question words are inherently necessary for achieving accuracy in training - see phrase-trained model metrics above - rather, once a model <em>is</em> trained on questions, it will become reliant on question characteristics).</p>
+
+<p>On the other hand, as shown in the charts below, a model trained on phrases performs almost as accurately on standard questions as it does on its own dev set - it’s well adapted to inputs of both phrases and questions. It does slightly better on the phrase evaluation, seemingly because the model learns weights corresponding to the format of its training data, but since here the second dev set (questions) introduces new information instead of taking away expected context, the extra input barely hurts. In other words, the phrase-trained model is more robust for a general set of inputs than a question-based model because it was forced to learn from less context per data point originally. However, it performs slightly less accurately on questions as compared to a question-trained model evaluated on questions (or as compared to its own performance on phrases).</p>
+
+<p><em>Phrase trained model evaluated on phrases vs. questions</em></p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>eval on phrase dev set</th>
+      <th>eval on question dev set</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>F1</td>
+      <td>83.3</td>
+      <td>81.12</td>
+    </tr>
+    <tr>
+      <td>Exact</td>
+      <td>80.27</td>
+      <td>77.83</td>
+    </tr>
+    <tr>
+      <td>HasAns_f1</td>
+      <td>80.77</td>
+      <td>80.64</td>
+    </tr>
+    <tr>
+      <td>HasAns_exact</td>
+      <td>74.7</td>
+      <td>74.06</td>
+    </tr>
+    <tr>
+      <td>NoAns_f1</td>
+      <td>85.82</td>
+      <td>81.6</td>
+    </tr>
+    <tr>
+      <td>NoAns_exact</td>
+      <td>85.82</td>
+      <td>81.6</td>
+    </tr>
+    <tr>
+      <td>Best_f1</td>
+      <td>83.3</td>
+      <td>81.12</td>
+    </tr>
+    <tr>
+      <td>Best_exact</td>
+      <td>80.27</td>
+      <td>77.83</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/site_files/batya-post-imgs/phrase-trained model.png" alt="" /></p>
+
+<hr />
+
+<p>One other interesting result came from the model trained on <strong>questions without question marks</strong>, shown in the charts below. When evaluated on <strong>questions with question marks</strong> (i.e. normal SQuAD) the metrics were slightly better than on its own dev set for the “HasAns” metrics, but slightly worse for the “NoAns”. I would guess this is because if the model isn’t exposed to question marks during training, but then is given a question with a question mark, it will be more likely to assume that the question is answerable given the extra input, which leads to increased accuracy if the question actually has an answer, but decreased accuracy when the question is impossible.</p>
+
+<p><em>Questions without question mark model evaluated on own dev set vs. normal SQuAD</em></p>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>eval on q no q mark dev set</th>
+      <th>eval on question dev set</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>F1</td>
+      <td>84.23</td>
+      <td>83.24</td>
+    </tr>
+    <tr>
+      <td>Exact</td>
+      <td>81.24</td>
+      <td>80.12</td>
+    </tr>
+    <tr>
+      <td>HasAns_f1</td>
+      <td>85.9</td>
+      <td>87.76</td>
+    </tr>
+    <tr>
+      <td>HasAns_exact</td>
+      <td>79.91</td>
+      <td>81.51</td>
+    </tr>
+    <tr>
+      <td>NoAns_f1</td>
+      <td>82.57</td>
+      <td>78.73</td>
+    </tr>
+    <tr>
+      <td>NoAns_exact</td>
+      <td>82.57</td>
+      <td>78.73</td>
+    </tr>
+    <tr>
+      <td>Best_f1</td>
+      <td>84.23</td>
+      <td>83.25</td>
+    </tr>
+    <tr>
+      <td>Best_exact</td>
+      <td>81.24</td>
+      <td>80.13</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><img src="/site_files/batya-post-imgs/questions without q marks.png" alt="" /></p>
+
+<hr />
+
+<p>In conclusion, it seems that BERT transformer models begin to recognize and expect specific characteristics from their training data. This affects the results when a model is evaluated on data formatted differently from its original training set, but to a much less dramatic extent if information is being added rather than taken away. 
+On the other hand, the initial dataset a model is trained on doesn’t affect accuracy as much as you might think it would - a model trained on phrases will be within a few points of a question-trained model’s accuracy, and adding or taking away question marks makes a mostly negligible difference.
+Running these experiments was cool because I was able to get a better feel for how a model actually adapts to a dataset when training on it. I also think the results I found can be practically pretty helpful for anyone designing a question-answering system and wondering what types of input would be most effective.</p>
+
+<h2 id="further-developments">Further Developments</h2>
+
+<p>Each model presented here was only trained once. To run this as a full experiment, ensuring that the results are significant, you would have to set random seeds and run each training about ten times to get standard deviations.</p>
+
+<p>Additionally, there are a few ways to build on this project that I think could be interesting. You could train an ALBERT model twice, on normal SQuAD and then on SQuAD converted to phrases, to see if it achieves better results on both questions and phrases. However, training a model twice on the same data might lead to overfitting on SQuAD. An alternative would be to train a model using MAML, <a href="https://towardsdatascience.com/model-agnostic-meta-learning-maml-8a245d9bc4ac">Model Agnostic Meta Learning</a>, which allows a model to learn multiple different tasks, treating questions and phrases as two separate tasks. It would also be interesting to train a model on the full <a href="https://ai.google.com/research/NaturalQuestions">Google Natural Questions</a> dataset, which is already a mixture of questions and phrases, and evaluate it just with a question dataset and just with a phrase dataset to see how the mixture and larger dataset size affect the results.</p>
+
+<hr />
+
+<p>Thank you to my supervisor, Sonia Joseph, who initially proposed this idea to me, helped along the way, and introduced me to MAML.</p>
+
+  </div>
+
+</article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/"></data>
+
+  <div class="wrapper">
+<!--
+    <h2 class="footer-heading">nlmatics.github.io</h2>
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-1">
+        <ul class="contact-list">
+          <li class="p-name">nlmatics.github.io</li><li><a class="u-email" href="mailto:info@nlmatics.com">info@nlmatics.com</a></li></ul>
+      </div>
+
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/nlmatics"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#github"></use></svg> <span class="username">nlmatics</span></a></li><li><a href="https://www.twitter.com/nlmatics"><svg class="svg-icon"><use xlink:href="/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">nlmatics</span></a></li></ul>
+</div>
+-->
+      <div class="footer-col footer-col-3">
+        <p></p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
