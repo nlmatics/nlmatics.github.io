@@ -1,7 +1,7 @@
 ---
 
-layout: page 
-title: "Speed up requests: Asyncio for Requests in Python" 
+layout: page
+title: "Speed up requests: Asyncio for Requests in Python"
 author: Connie Xu
 date: 2020-08-07 00:00:00 -0000
 categories: REQUESTS SPEEDUP ASYNCIO PYTHON
@@ -12,8 +12,8 @@ image: site_files/asynciothumb.png
 
 ___
 
-<br> 
-Connie Xu is currently studying Computer Science at Princeton University, where she has sharpened her skills in Algorithms and Data Structures as well as Linear Algebra. She is interested in learning more about Natural Language Processing and Machine Learning applications. In her free time, she watches cooking videos or practices beatboxing. Connie was one of NLMatics' 2020 summer interns. 
+<br>
+Connie Xu is currently studying Computer Science at Princeton University, where she has sharpened her skills in Algorithms and Data Structures as well as Linear Algebra. She is interested in learning more about Natural Language Processing and Machine Learning applications. In her free time, she watches cooking videos or practices beatboxing. Connie was one of NLMatics' 2020 summer interns.
 <br>
 
 ___
@@ -46,8 +46,8 @@ For more information on the distinction between concurrency, parallelism, thread
 <img src="{{site.url}}/site_files/connie_post_images/brick-and-mortar.jpg" width="500" height="334">
 
 
-Simon and Ash are building 5 walls of brick. 
-- Simon builds one wall and waits for it to set before starting to build the next wall (synchronous). 
+Simon and Ash are building 5 walls of brick.
+- Simon builds one wall and waits for it to set before starting to build the next wall (synchronous).
 - Ash, on the other hand, starts building the next wall before the first one sets (asynchronous).  <br></br>
 Ash starts the next task whereas Simon **waits**, so Ash (asynchronous) will finish faster.
 The lack of ***waiting*** is the key to why asynchronous programming provides a performance boost.
@@ -74,7 +74,7 @@ For a further look into when and when not to use asynchronous programming, check
 | asyncio.create_task() | Used to schedule a coroutine execution <br> &#8594; Does not need to be awaited <br> &#8594; Allows you to line things up without actually running them first. | <img src="{{site.url}}/site_files/connie_post_images/create_task.png" width="822"> |
 | asyncio.gather() | Used to run the scheduled executions <br> &#8594; Needs to be awaited <br> &#8594; This is vital to the asynchronous program, because you let it know which is the next task it can pick up before finishing the previous one. | ![]({{site.url}}/site_files/connie_post_images/gather.png) |
 
-If you are thirsting for more in-depth knowledge on asyncio, check out these links: 
+If you are thirsting for more in-depth knowledge on asyncio, check out these links:
 - [Async IO in Python: A Complete Walkthrough](https://realpython.com/async-io-python/)
 - [asyncio: Python Documentation](https://docs.python.org/3/library/asyncio.html)
 
@@ -110,7 +110,7 @@ def synchronous(urls):
 
 ### Asynchronous
 
-#### Incorrect Alteration 
+#### Incorrect Alteration
 The following is an understandable but bad alteration to the synchronous code. The runtime for this is the same as the runtime for the synchronous method, because you have not created a list of tasks that the program knows it needs to execute together, thus you essentially still have synchronous code.
 ```Python
 async def asynchronous_fail(urls):
@@ -120,7 +120,7 @@ async def asynchronous_fail(urls):
 ```
 
 #### Correct Alteration
-Create a list of tasks, and run all of them together using ```asyncio.gather()```. 
+Create a list of tasks, and run all of them together using ```asyncio.gather()```.
 ```Python
 async def asynchronous(urls):
     tasks = []
@@ -199,8 +199,8 @@ async def asynchronous_ordered_batched(urls, batch_size=10):
 
 ## Runtime Results
 
-|<img src="{{site.url}}/site_files/connie_post_images/table.png" width="500">|<img src="{{site.url}}/site_files/connie_post_images/chart.png" width="500">|
-|---|---|
+<img src="{{site.url}}/site_files/connie_post_images/table.png" width="500">
+<img src="{{site.url}}/site_files/connie_post_images/chart.png" width="500">
 
 `synchronous` and `asynchronous_fail` have similar runtimes because the `asynchronous_fail` method was not implemented correctly and is in reality synchronous code.
 `asynchronous`, `asynchronous_ordered`, and `asynchronous_ordered_batched` have noticeably better runtimes in comparison to `synchronous` - up to 4 times as fast.

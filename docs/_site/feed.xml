@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-29T04:08:35+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><entry><title type="html">Optimizing Transformer Q&amp;amp;A Models for Naturalistic Search</title><link href="http://localhost:4000/2020/08/25/Optimizing-Transformer-Q&A-Models-for-Naturalistic-Search.html" rel="alternate" type="text/html" title="Optimizing Transformer Q&amp;A Models for Naturalistic Search" /><published>2020-08-25T19:30:00+09:00</published><updated>2020-08-25T19:30:00+09:00</updated><id>http://localhost:4000/2020/08/25/Optimizing%20Transformer%20Q&amp;A%20Models%20%20for%20Naturalistic%20Search</id><content type="html" xml:base="http://localhost:4000/2020/08/25/Optimizing-Transformer-Q&amp;A-Models-for-Naturalistic-Search.html">&lt;h1 id=&quot;optimizing-transformer-qa-models-for-naturalistic-search&quot;&gt;Optimizing Transformer Q&amp;amp;A Models for Naturalistic Search&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator><link href="http://localhost:4000/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/" rel="alternate" type="text/html" /><updated>2020-08-29T04:12:40+09:00</updated><id>http://localhost:4000/feed.xml</id><title type="html">nlmatics.github.io</title><entry><title type="html">Optimizing Transformer Q&amp;amp;A Models for Naturalistic Search</title><link href="http://localhost:4000/2020/08/25/Optimizing-Transformer-Q&A-Models-for-Naturalistic-Search.html" rel="alternate" type="text/html" title="Optimizing Transformer Q&amp;A Models for Naturalistic Search" /><published>2020-08-25T19:30:00+09:00</published><updated>2020-08-25T19:30:00+09:00</updated><id>http://localhost:4000/2020/08/25/Optimizing%20Transformer%20Q&amp;A%20Models%20%20for%20Naturalistic%20Search</id><content type="html" xml:base="http://localhost:4000/2020/08/25/Optimizing-Transformer-Q&amp;A-Models-for-Naturalistic-Search.html">&lt;h1 id=&quot;optimizing-transformer-qa-models-for-naturalistic-search&quot;&gt;Optimizing Transformer Q&amp;amp;A Models for Naturalistic Search&lt;/h1&gt;
 
 &lt;p&gt;By Batya Stein&lt;/p&gt;
 
@@ -1379,8 +1379,8 @@ CMD [&quot;./main&quot;]&amp;lt;/td&amp;gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;br /&gt; 
-Connie Xu is currently studying Computer Science at Princeton University, where she has sharpened her skills in Algorithms and Data Structures as well as Linear Algebra. She is interested in learning more about Natural Language Processing and Machine Learning applications. In her free time, she watches cooking videos or practices beatboxing. Connie was one of NLMatics’ 2020 summer interns. 
+&lt;p&gt;&lt;br /&gt;
+Connie Xu is currently studying Computer Science at Princeton University, where she has sharpened her skills in Algorithms and Data Structures as well as Linear Algebra. She is interested in learning more about Natural Language Processing and Machine Learning applications. In her free time, she watches cooking videos or practices beatboxing. Connie was one of NLMatics’ 2020 summer interns.
 &lt;br /&gt;&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -1590,8 +1590,8 @@ async def fetch(url, responses, i):
 
 &lt;h2 id=&quot;runtime-results&quot;&gt;Runtime Results&lt;/h2&gt;
 
-&lt;p&gt;|&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/table.png&quot; width=&quot;500&quot; /&gt;|&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/chart.png&quot; width=&quot;500&quot; /&gt;|
-|—|—|&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/table.png&quot; width=&quot;500&quot; /&gt;
+&lt;img src=&quot;http://localhost:4000/site_files/connie_post_images/chart.png&quot; width=&quot;500&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronous&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_fail&lt;/code&gt; have similar runtimes because the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_fail&lt;/code&gt; method was not implemented correctly and is in reality synchronous code.
 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_ordered&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;asynchronous_ordered_batched&lt;/code&gt; have noticeably better runtimes in comparison to &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;synchronous&lt;/code&gt; - up to 4 times as fast.&lt;/p&gt;
