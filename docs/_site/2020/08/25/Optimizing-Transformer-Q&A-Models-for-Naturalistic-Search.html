@@ -13,12 +13,15 @@
 <link rel="canonical" href="http://localhost:4000/2020/08/25/Optimizing-Transformer-Q&A-Models-for-Naturalistic-Search.html" />
 <meta property="og:url" content="http://localhost:4000/2020/08/25/Optimizing-Transformer-Q&A-Models-for-Naturalistic-Search.html" />
 <meta property="og:site_name" content="nlmatics.github.io" />
+<meta property="og:image" content="http://localhost:4000/site_files/Placeholder-thumb.png" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-08-25T19:30:00+09:00" />
 <script type="application/ld+json">
-{"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/08/25/Optimizing-Transformer-Q&A-Models-for-Naturalistic-Search.html"},"url":"http://localhost:4000/2020/08/25/Optimizing-Transformer-Q&A-Models-for-Naturalistic-Search.html","author":{"@type":"Person","name":"Batya Stein"},"description":"Optimizing Transformer Q&amp;A Models for Naturalistic Search","headline":"Optimizing Transformer Q&amp;A Models for Naturalistic Search","dateModified":"2020-08-25T19:30:00+09:00","datePublished":"2020-08-25T19:30:00+09:00","@context":"https://schema.org"}</script>
+{"@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/2020/08/25/Optimizing-Transformer-Q&A-Models-for-Naturalistic-Search.html"},"url":"http://localhost:4000/2020/08/25/Optimizing-Transformer-Q&A-Models-for-Naturalistic-Search.html","image":"http://localhost:4000/site_files/Placeholder-thumb.png","author":{"@type":"Person","name":"Batya Stein"},"description":"Optimizing Transformer Q&amp;A Models for Naturalistic Search","headline":"Optimizing Transformer Q&amp;A Models for Naturalistic Search","dateModified":"2020-08-25T19:30:00+09:00","datePublished":"2020-08-25T19:30:00+09:00","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="nlmatics.github.io" /></head>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="nlmatics.github.io" /></head>
 <body><header class="site-header" role="banner">
 
   <div class="wrapper"><a class="header-logo" rel="author" href="/"><img src="http://localhost:4000/site_files/Header.png"></a><nav class="site-nav">
@@ -52,7 +55,7 @@
 
 <h2 id="introduction">Introduction</h2>
 
-<p>Have you ever wondered what the most popular pizza topping in America is? To find out, you might Google “what is the most popular pizza topping in America?”. If you’re feeling lazy, maybe you’d leave out the question mark, or drop the question format altogether, and go with a simple “most popular pizza topping in America”. 
+<p>Have you ever wondered what the most popular pizza topping in America is? To find out, you might Google “what is the most popular pizza topping in America?”. If you’re feeling lazy, maybe you’d leave out the question mark, or drop the question format altogether, and go with a simple “most popular pizza topping in America”.
 <img src="/site_files/batya-post-imgs/pizza-phrases.png" alt="pizza phrases" />
 This probably seems like an excessive amount of thought to put into a Google search query, especially since all the above prompts return the same information. (Pepperoni, for the curious.) With or without the question word and question mark, you can intuitively recognize that all these formulations are essentially asking for the same answer.</p>
 
@@ -532,7 +535,7 @@ This probably seems like an excessive amount of thought to put into a Google sea
 
 <hr />
 
-<p>In conclusion, it seems that BERT transformer models begin to recognize and expect specific characteristics from their training data. This affects the results when a model is evaluated on data formatted differently from its original training set, but to a much less dramatic extent if information is being added rather than taken away. 
+<p>In conclusion, it seems that BERT transformer models begin to recognize and expect specific characteristics from their training data. This affects the results when a model is evaluated on data formatted differently from its original training set, but to a much less dramatic extent if information is being added rather than taken away.
 On the other hand, the initial dataset a model is trained on doesn’t affect accuracy as much as you might think it would - a model trained on phrases will be within a few points of a question-trained model’s accuracy, and adding or taking away question marks makes a mostly negligible difference.
 Running these experiments was cool because I was able to get a better feel for how a model actually adapts to a dataset when training on it. I also think the results I found can be practically pretty helpful for anyone designing a question-answering system and wondering what types of input would be most effective.</p>
 
