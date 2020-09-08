@@ -14,7 +14,7 @@ image: site_files/SIFthumb.png
 
 
 <br>
-***Daniel Ye*** is a sophomore at Cornell University majoring in Computer Science and minoring in Operations Research and Information Engineering. He is interested in machine learning, natural language processing, and data science. He has worked on projects involving manufacturing data collection/analysis, greenhouse environmental regulation, and a multiplayer programming game. In his free time he enjoys playing tennis, running, hiking, and playing cello or guitar. Daniel was one of NLMatics' 2020 summer interns.
+***Daniel Ye*** is a junior at Cornell University majoring in Computer Science and minoring in Operations Research and Information Engineering. He is interested in machine learning, natural language processing, and data science. He has worked on projects involving manufacturing data collection/analysis, greenhouse environmental regulation, and a multiplayer programming game. In his free time he enjoys playing tennis, running, hiking, and playing cello or guitar. Daniel was one of NLMatics' 2020 summer interns.
 <br>
 
 ___
