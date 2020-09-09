@@ -15,7 +15,7 @@ image: site_files/MLQAthumb.png
 <br> 
 ***Batya Stein*** is a rising junior at Princeton University studying Computer Science and English Literature. Her research interests include Natural Language Processing and Software Engineering and Design. Previously, she has interned at a non-profit, designing a project to interface between its CRM softwares. When not coding, she enjoys drawing, swimming, and reading fiction. Batya was one of NLMatics' 2020 summer interns. 
 <br><br><br>
-<b>Nicholas Greenspan</b> lives in New York City and is a freshman at Rice University who is majoring in computer science. Nicholas is interested in Machine Learning, Natural Language Processing, and their applications to various fields. Nicholas recently worked at the UTHealth School of Biomedical Informatics working on a Natural Language Processing project to help doctors find relevant treatments for their patients, and is excited to work on more interesting and meaningful problems at NLMatics. Outside of CS, Nicholas likes to read, play ice hockey, and listen to many genres of music including indie rock and electronic. Nicholas was one of NLMatics' 2020 summer interns. 
+***Nicholas Greenspan*** lives in New York City and is a freshman at Rice University who is majoring in computer science. Nicholas is interested in Machine Learning, Natural Language Processing, and their applications to various fields. Nicholas recently worked at the UTHealth School of Biomedical Informatics working on a Natural Language Processing project to help doctors find relevant treatments for their patients, and is excited to work on more interesting and meaningful problems at NLMatics. Outside of CS, Nicholas likes to read, play ice hockey, and listen to many genres of music including indie rock and electronic. Nicholas was one of NLMatics' 2020 summer interns. 
 
 ___
 
@@ -28,22 +28,23 @@ ___
 
 
 ### Contents:
-1. [Setting up the EC2 Instance](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#part-1-setting-up-the-ec2-instance)
-   - [Choosing and launching EC2 Instance](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#choosing-and-launching-an-ec2-instance)
-   - [Preparing instance for training](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#preparing-the-instance-for-training)
-   - [Setting up Wandb logging](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#setting-up-wandb-logging)
-2. [Downloading and Formatting Data](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#part-2-downloading-and-formatting-data)
-   - [About the datasets](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#about-the-datasets)
-   - [Downloading the data](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#downloading-the-data)
-   - [Processing from zip file](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#processing-data-from-a-zip-file)
-   - [Reformatting Google Natural Questions to SQuAD format](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#reformatting-google-nq-data-to-squad-format)
-3. [Training the Model](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#part-3-training-the-model)
-   - [Model comparisons](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#model-comparisons)
-   - [Understanding run_squad.py parameters](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#understanding-the-parameters-of-run_squadpy)
-   - [Common errors encountered during training](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#common-errors-we-encountered-and-how-to-fix-them)
-   - [Restoring from a checkpoint](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#restoring-training-from-a-checkpoint)
-   - [Understanding model outputs](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#understanding-your-model-outputs)
-   - [Downloading your model and uploading to an S3 bucket](https://github.com/nlmatics/nlmatics.github.io/blob/gh-pages/docs/_posts/2020-08-06-A%20Comprehensive%20Guide%20to%20Training%20a%20Machine%20Learning%20Model%20for%20Question%20Answering_.md#downloading-your-model-uploading-to-s3-bucket)
+1. [Setting up the EC2 Instance](https://blogs.nlmatics.com/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html#part-1-setting-up-the-ec2-instance)
+   - [Choosing and launching EC2 Instance](https://blogs.nlmatics.com/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html#choosing-and-launching-an-ec2-instance)
+   - [Preparing instance for training](https://blogs.nlmatics.com/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html#preparing-the-instance-for-training)
+   - [Setting up Wandb logging](https://blogs.nlmatics.com/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html#setting-up-wandb-logging)
+2. [Downloading and Formatting Data](https://blogs.nlmatics.com/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html#part-2-downloading-and-formatting-data)
+   - [About the datasets](https://blogs.nlmatics.com/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html#about-the-datasets)
+   - [Downloading the data](https://blogs.nlmatics.com/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html#downloading-the-data)
+   - [Processing from zip file](https://blogs.nlmatics.com/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html#processing-data-from-a-zip-file)
+   - [Reformatting Google Natural Questions to SQuAD format](https://blogs.nlmatics.com/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html#reformatting-google-nq-data-to-squad-format)
+3. [Training the Model](https://blogs.nlmatics.com/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html#part-3-training-the-model)
+   - [Model comparisons](https://blogs.nlmatics.com/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html#model-comparisons)
+   - [Understanding run_squad.py parameters](https://blogs.nlmatics.com/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html#understanding-the-parameters-of-run_squadpy)
+   - [Common errors encountered during training](https://blogs.nlmatics.com/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html#common-errors-we-encountered-and-how-to-fix-them)
+   - [Restoring from a checkpoint](https://blogs.nlmatics.com/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html#restoring-training-from-a-checkpoint)
+   - [Understanding model outputs](https://blogs.nlmatics.com/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html#understanding-your-model-outputs)
+   - [Downloading your model and uploading to an S3 bucket](https://blogs.nlmatics.com/2020/08/06/A-Comprehensive-Guide-to-Training-a-Machine-Learning-Model-for-Question-Answering_.html#downloading-your-model-uploading-to-s3-bucket)
+
 
 ## Intro:
  
