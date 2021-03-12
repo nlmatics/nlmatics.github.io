@@ -4,7 +4,6 @@ title: "Boolean Question Answering with Neutral Labels"
 date: 2020-3-12 10:30:00 -0000
 author: Evan Li
 image: site_files/Placeholder-thumb.png
-
 ---
 
 # Boolean Question Answering with Neutral Labels
@@ -35,9 +34,9 @@ Based on this sentence, humans arguably have enough information to answer these 
 
 A single sentence can provide answers to a many Yes/No questions. Some of these questions are obvious, while others take reasoning to answer. 
 
-Given a passage and boolean question, transformer Q&A models can be trained to predict whether the answer is Yes/No. However, what if someone asks the question "Is Messi better than Ronaldo?". The sentence above does not contain enough information to answer the question. In that case, the the model should predict something along the lines of "I don't know". Single sentences are only able to answer a tiny subset of Yes/No questions, so it is quite embarrassing for a model to always be confident it has an answer.
+Given a passage and boolean question, [transformer](https://jalammar.github.io/illustrated-transformer/) Q&A models can be trained to predict whether the answer is Yes/No. However, what if someone asks the question "Is Messi better than Ronaldo?". Then the context passage does not contain enough information to answer the question. In that case, the the model should predict something along the lines of "I don't know". Single sentences are only able to answer a tiny subset of Yes/No questions, so it is quite embarrassing for a model to always be confident it has an answer.
 
-However, there is a problem: current datasets for boolean question answering only contain Yes/No labels. Is there a way to train a boolean QA model to be able to predict neutral without having additionally hand-annotate thousands of neutral samples?
+The problem is that current datasets for boolean question answering only contain Yes/No labels. Is there a way to train a boolean QA model to be able to predict neutral without having additionally hand-annotate thousands of neutral samples?
 
 ## Our Approach
 
@@ -59,7 +58,7 @@ We use Spacy NER to convert boolean questions to phrases. [Code can be found her
 
 1) Find the boolean question word. Usually the first word is a boolean question word. If it isn't, then we scan the rest of the question for the boolean question word.
 
-2) Find the noun subject of the question. Place the boolean question word after the noun subject, and we are done
+2) Find the noun subject of the question. Place the boolean question word after the noun subject, and we are done.
 
 3) if a noun subject is not found, then place the question word in between the first noun followed by a verb or adjective.
 
@@ -77,19 +76,19 @@ _Examples of the question to phrase conversions_
 
 ## BoolQ
 
-In the paper "BoolQ: Exploring the Surprising Difficulty of Natural Yes/No Questions", researchers gathered 16,000 boolean questions. Passages were collected from Wikipedia and questions were natural questions. Natural questions are written by people who did not know the answer to the question, as opposed to those who are prompted to write a particular kind of question. In other words, they are realistic questions people would actually ask in a real world context. 
+In the paper ["BoolQ: Exploring the Surprising Difficulty of Natural Yes/No Questions"](https://arxiv.org/abs/1905.10044), researchers gathered 16,000 boolean question and passage pairs. Passages were collected from Wikipedia and questions were natural questions. Natural questions are written by people who did not know the answer to the question, as opposed to those who are prompted to write a particular kind of question. In other words, they are realistic questions people would actually ask in a real world context. 
 
 ![img](/site_files/evan-post-imgs/BoolQ_Dataset.png)
 
 ## MNLI
 
-The Multi-Genre Natural Language Inference (MNLI) corpus contains 433K sentence pairs annotated with textual entailment information. The MNLI corpus covers a wide range of genres.
+The Multi-Genre Natural Language Inference ([MNLI](https://cims.nyu.edu/~sbowman/multinli/)) corpus contains 433K sentence pairs annotated with textual entailment information. The MNLI corpus covers a wide range of genres.
 
 ![img](/site_files/evan-post-imgs/mnli_dataset.png)
 
 ## SQuAD
 
-The SQuAD dataset is a general question answering dataset. It contains some boolean questions, which we will steal to create neutral samples.
+The [SQuAD](https://rajpurkar.github.io/SQuAD-explorer/) dataset is a general question answering dataset. It contains some boolean questions, which we will steal to create neutral samples.
 
 ## Combined Dataset
 
@@ -108,13 +107,13 @@ The SQuAD dataset is a general question answering dataset. It contains some bool
 - boolq contradict converted to phrase
 - mnli contradict
 
-Our artificial neutral samples are SQUAD boolean questions paired with the most similar BoolQ context to that question. The assumption is that the squad question and boolq context will be on the same topic, except the boolq context will not contain the direct answer to the question. Similarity was calculated using the TF-DF algorithm in Elasticsearch. We input artificial neutral samples so that each label is mixed with contexts from both boolq and mnli datasets, combatting any arbitrary differences in the data distribution (e.g. mnli contexts are generally shorter than boolq contexts).
+Our artificial neutral samples are SQUAD boolean questions paired with the most similar BoolQ context to that question. The assumption is that the squad question and boolq context will be on the same topic, except the boolq context will not contain the direct answer to the question. Similarity was calculated using the [TF-IDF algorithm in Elasticsearch](https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules-similarity.html). We input artificial neutral samples so that each label is mixed with contexts from both boolq and mnli datasets, combatting any arbitrary differences in the data distribution (e.g. mnli contexts are generally shorter than boolq contexts).
 
 ## Model Training
 
 ### roberta.large.mnli
-RoBERTa is a transformers language model with 110M parameters that builds on [BERT](https://arxiv.org/abs/1706.03762). See the paper [here](https://arxiv.org/abs/1907.11692). RoBERTa was trained on the MultiNLI corpus and achieved a [90.2% accuracy on the mismatched development set for MNLI](https://paperswithcode.com/sota/natural-language-inference-on-multinli). We will refer to this model as roberta.large.mnli.
-For training, we fine-tune roberta.large.mnli on this new dataset for 10 epochs with a batch size of 24.
+[RoBERTa] (https://arxiv.org/abs/1907.11692) is a transformers language model with 110M parameters that builds on [BERT](https://arxiv.org/abs/1706.03762). RoBERTa was trained on the MultiNLI corpus and achieved a [90.2% accuracy on the mismatched development set for MNLI](https://paperswithcode.com/sota/natural-language-inference-on-multinli). We will refer to this model as roberta.large.mnli.
+For training, we fine-tune roberta.large.mnli on our custom dataset for 10 epochs with a batch size of 24.
 
 # Results 
 
@@ -124,15 +123,15 @@ We did two preliminary tests to justify some of our design choices for the fine-
 
 **1) Converting to phrases improves accuracy for MNLI.**
 
-We tested the accuracy for roberta.large.mnli on the boolq dev set. Like the boolq training set, the BoolQ dev set only contains True/False labels, so any Neutral predictions by any model is wrong. Here, we treated the entail prediction as the True label and contradict prediction as the False label. **With question words,** the accuracy was **54%**, and **with phrases** the accuracy was **60%.** 
+We tested the accuracy for roberta.large.mnli on the boolq dev set. Like the boolq training set, the BoolQ dev set only contains True/False labels, so any Neutral predictions by any model is wrong. Here, we treated the entail prediction as the True label and contradict prediction as the False label. **With question words,** the accuracy was **27%** since the model predicted neutral for the majority of the samples, and **with phrases** the accuracy was bumped to **60%.** 
 
 **2) RoBERTa achieves state of the art accuracy on boolean question answering.** 
 
-We trained roberta.mnli on top of BoolQ without neutral samples and obtained an accuracy of 85.84% on the boolq dev set. This beats the benchmark set in the paper of 80.4%, which fine-tunes a BERT-MNLI model on BoolQ.
+We trained roberta.mnli on top of BoolQ without neutral samples and obtained an accuracy of 85.84% on the boolq dev set. This beats the benchmark set in the BoolQ paper of 80.4%, which fine-tunes a BERT-MNLI model on BoolQ.
 
 ## Results and Discussion
 
-Our final results beats the benchmark set in the BoolQ paper by 3% with the added ability to predict neutral, while remembering general entailment information as evidenced by our models performance on the mnli mismatched dev set. Removing the artificial neutrals in the training process drops the accuracy for neutral predictions. Accuracy on boolq dev set was 83.82% and accuracy on mnli mismatched was 0.84.45%, a 6 percent drop from the baseline of 90% from roberta-mnli. 
+Our final results beats the benchmark set in the BoolQ paper by 3.4% with the added ability to predict neutral, while remembering general entailment information as evidenced by our models performance on the mnli mismatched dev set. Accuracy on boolq dev set was 83.82% and accuracy on mnli mismatched was 84.45%, a 6 percent drop from the baseline of 90.2% from roberta.large.mnli. 
 
 _A comparison of flat accuracies_
 
