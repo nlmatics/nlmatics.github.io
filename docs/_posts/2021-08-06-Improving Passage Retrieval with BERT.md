@@ -17,6 +17,7 @@ By Ashlan Ahmed and Yael Stochel
 Open-domain question-answering tasks involve identifying answers to questions from a large corpus of documents. To get accurate answers to a given question, it is first necessary to narrow down “candidate” passages from the large corpus, and then search for the answer in the selected passages. The former operation, called retrieval, is essential, allowing the correct answer to be returned without the inefficiency and risk of looking through superfluous, irrelevant passages.
 
 One of the most popular methods for retrieval is BM25, BM meaning “best matching”. It is a function that ranks a given set of documents based on how relevant they are to a query. On a simple level, it uses a formula to calculate a “score” for each document based on a number of factors, including query frequency in the document and average document length in the corpus. Since BM25 is term-based, high-dimensional vector representations for documents can be stored and quickly accessed, allowing for efficient retrieval even over a large number of documents.
+![yesno](/site_files/evan-post-imgs/yesno.jpeg)
 
 ![](/site_files/ash-yael-post-imgs/bm25.png)
 
